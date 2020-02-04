@@ -1,7 +1,7 @@
-package com.example.golie.ui.home
+package com.example.golie.ui.shop
 
 import androidx.lifecycle.ViewModel
 
-class HomeViewModel : ViewModel() {
+class ShopViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 }
