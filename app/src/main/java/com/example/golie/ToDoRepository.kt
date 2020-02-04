@@ -1,4 +1,4 @@
-package com.example.androidlab1
+package com.example.golie
 
 
 // Global variable to store all ToDos

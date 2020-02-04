@@ -1,4 +1,4 @@
-package com.example.androidlab1
+package com.example.golie
 
 data class ToDo(
     val id: Int, // Val is same as const. Cannot be changed.
