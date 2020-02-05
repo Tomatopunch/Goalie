@@ -1,5 +1,6 @@
 package com.example.golie
 
+import android.app.Activity
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -27,3 +28,4 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 }
+
