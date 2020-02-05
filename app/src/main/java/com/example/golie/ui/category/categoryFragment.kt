@@ -14,6 +14,7 @@ import com.example.golie.MainActivity
 import com.example.golie.R
 import com.example.golie.ToDo
 import com.example.golie.toDoRepository
+import kotlinx.android.synthetic.main.category_fragment.view.*
 
 class categoryFragment : Fragment() {
 
@@ -31,26 +32,39 @@ class categoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val mainActivity = MainActivity()
-        val listView = getView()?.findViewById<ListView>(R.id.category_listView)
-        adapter = ArrayAdapter(
-            mainActivity, // Var den ligger
-            android.R.layout.simple_list_item_1, //Förutbestämd layout
-            android.R.id.text1,
-            toDoRepository.getAllToDos()
-        )
+        val mainActivity = activity
+        val categoryFragment = inflater!!.inflate(R.layout.category_fragment, container, false)
+        val listView = categoryFragment.category_listView
 
-        listView?.adapter = adapter
+        //val listView = getView()?.findViewById<ListView>(R.id.category_listView)
 
-        listView?.setOnItemClickListener{ parent, view, position, id ->
+        if (mainActivity != null) {
+            adapter = ArrayAdapter(
+                mainActivity.applicationContext, // Var den ligger
+                android.R.layout.simple_list_item_1, //Förutbestämd layout
+                android.R.id.text1,
+                toDoRepository.getAllToDos()
+            )
+        }
+
+        listView.adapter = adapter
+
+        /*listView.setOnItemClickListener{ parent, view, position, id ->
 
             var clickedToDo = listView.adapter.getItem(position) as ToDo
             var id = clickedToDo.id
 
             //TODO: Add an alert to decide to check an item off or not.
-        }
+        }*/
 
         return inflater.inflate(R.layout.category_fragment, container, false)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        adapter.notifyDataSetChanged()
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

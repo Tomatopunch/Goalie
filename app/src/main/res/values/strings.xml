@@ -2,5 +2,6 @@
     <string name="app_name">Golie</string>
     <string name="title_home">Home</string>
     <string name="title_favorite">Favorite</string>
+    <string name="title_category">Specific Category</string>
     <string name="title_shop">Shop</string>
 </resources>
