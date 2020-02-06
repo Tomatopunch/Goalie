@@ -4,4 +4,8 @@
     <string name="title_favorite">Favorite</string>
     <string name="title_category">Specific Category</string>
     <string name="title_shop">Shop</string>
+    <string name="yourpoints">Your points:</string>
+    <string name="create_reward">Create Reward</string>
+    <string name="create_title">Title:</string>
+    <string name="create_points">points:</string>
 </resources>
