@@ -14,7 +14,7 @@ import com.example.golie.ui.category.categoryFragment
 import com.example.golie.ui.category.goal.AddGoalFragment
 import com.example.golie.ui.home.HomeFragment
 
-class MainActivity : AppCompatActivity(), categoryFragment.Interface {
+class MainActivity : AppCompatActivity() {
 
     var newFragment = AddGoalFragment()
 
@@ -38,16 +38,19 @@ class MainActivity : AppCompatActivity(), categoryFragment.Interface {
         navView.setupWithNavController(navController)
     }
 
-    override fun theButtonWasClicked() {
+
+    // Sparat för att Linus ska se skillnaden.
+
+    /*override fun theButtonWasClicked() {
         Log.d("test", "händer inget")
-        val homeFragment = supportFragmentManager.findFragmentById(R.id.addGoalFragment) as AddGoalFragment?
+        /*val homeFragment = supportFragmentManager.findFragmentById(R.id.addGoalFragment) as AddGoalFragment?
 
         if(homeFragment != null){
             // We're in two-pane layout. This is for bigger screens.
             Log.d("kaos", "Det blev feeeeeel")
         }
 
-        else{
+        else{*/
             // This is a one-pane layout. This is what we always use.
             val args = Bundle()
             // args.putInt(categoryFragment.ARG_POSITION, position)
@@ -56,10 +59,11 @@ class MainActivity : AppCompatActivity(), categoryFragment.Interface {
             val transaction = supportFragmentManager.beginTransaction()
 
             transaction.add(R.id.nav_host_fragment, newFragment)
-            //transaction.addToBackStack(null)
+                transaction.setReorderingAllowed(true)
+            transaction.addToBackStack(null)
 
             transaction.commit()
-        }
+        //}
     }
 
     override fun onBackPressed() {
@@ -70,7 +74,7 @@ class MainActivity : AppCompatActivity(), categoryFragment.Interface {
         transaction.remove(newFragment)
         transaction.commit()
 
-    }
+    }*/
 
 }
 

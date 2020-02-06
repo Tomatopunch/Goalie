@@ -4,4 +4,5 @@
     <string name="title_favorite">Favorite</string>
     <string name="title_category">Specific Category</string>
     <string name="title_shop">Shop</string>
+    <string name="addGoal_titleText">Title:</string>
 </resources>

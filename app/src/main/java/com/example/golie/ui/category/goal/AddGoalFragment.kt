@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.example.golie.R
+import java.util.zip.Inflater
 
 class AddGoalFragment : Fragment() {
 
@@ -21,6 +22,12 @@ class AddGoalFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val view = inflater!!.inflate(R.layout.add_goal_fragment, container, false)
+
+
+
+
         return inflater.inflate(R.layout.add_goal_fragment, container, false)
     }
 

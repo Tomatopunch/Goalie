@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.findNavController
 import com.example.golie.MainActivity
 
 import com.example.golie.R
@@ -93,12 +94,21 @@ class categoryFragment : Fragment() {
             // Here we cast main activity to the interface (below) and this is possible because
             // main activity extends this interface
 
-            var intf = context!! as Interface
-            intf.theButtonWasClicked()
+            val navController = findNavController()
+
+            val args = Bundle()
+
+
+
+            navController.navigate(R.id.navigation_addGoal)
+
+
+            //var intf = context!! as Interface
+            //intf.theButtonWasClicked()
         }
     }
 
-    public interface  Interface {
+    /*public interface  Interface {
         fun theButtonWasClicked()
     }
 
@@ -107,7 +117,7 @@ class categoryFragment : Fragment() {
 
 
 
-    }
+    }*/
 
 
     override fun onStart() {
