@@ -5,4 +5,9 @@
     <string name="title_category">Specific Category</string>
     <string name="title_shop">Shop</string>
     <string name="addGoal_titleText">Title:</string>
+    <string name="addGoal_invalidTitleMinLength">You must enter a title!</string>
+    <string name="addGoal_invalidTitleMaxLength">Title is too long! Max 30 characters</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

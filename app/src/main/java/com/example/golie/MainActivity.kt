@@ -5,14 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.add
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.golie.ui.category.categoryFragment
 import com.example.golie.ui.category.goal.AddGoalFragment
-import com.example.golie.ui.home.HomeFragment
 
 class MainActivity : AppCompatActivity() {
 

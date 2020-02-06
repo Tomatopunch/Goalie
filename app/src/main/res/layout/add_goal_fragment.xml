@@ -8,7 +8,7 @@
     tools:context=".ui.category.goal.AddGoalFragment">
 
     <TextView
-        android:id="@+id/addGoal_title"
+        android:id="@+id/addGoal_titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -32,7 +32,7 @@
         android:autofillHints="" />
 
     <TextView
-        android:id="@+id/addGoal_timeSpan"
+        android:id="@+id/addGoal_timeSpanText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -40,29 +40,16 @@
         android:text="Time span:"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addGoal_title" />
-
-    <EditText
-        android:id="@+id/addGoal_timeSpanEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Choose a date..."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addGoal_titleEditText"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/addGoal_titleText" />
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/addGoal_reoccurringCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toEndOf="@+id/addGoal_ReoccuringText"
-        app:layout_constraintTop_toBottomOf="@+id/addGoal_timeSpanEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/addGoal_timeSpanDate" />
 
     <TextView
         android:id="@+id/addGoal_ReoccuringText"
@@ -73,7 +60,7 @@
         android:text="Reoccuring: "
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addGoal_timeSpan" />
+        app:layout_constraintTop_toBottomOf="@+id/addGoal_timeSpanText" />
 
     <TextView
         android:id="@+id/addGoal_pointsText"
@@ -122,5 +109,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addGoal_pointsEditText" />
+
+    <TextView
+        android:id="@+id/addGoal_invalidInputText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="30sp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addGoal_pointsEditText" />
+
+    <EditText
+        android:id="@+id/addGoal_timeSpanDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:ems="10"
+        android:inputType="date"
+        android:focusable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addGoal_titleEditText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
