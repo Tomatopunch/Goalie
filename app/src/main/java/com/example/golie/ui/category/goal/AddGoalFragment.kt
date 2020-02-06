@@ -15,6 +15,7 @@ import com.example.golie.R
 import com.example.golie.ui.category.categoryFragment
 import kotlinx.android.synthetic.main.add_goal_fragment.view.*
 import kotlinx.android.synthetic.main.category_fragment.view.*
+import java.util.*
 import java.util.zip.Inflater
 
 class AddGoalFragment : Fragment() {
@@ -37,31 +38,52 @@ class AddGoalFragment : Fragment() {
         timeSpan.setOnClickListener{
             val dialogFragment = DatePickerFragment()
             dialogFragment.show(activity!!.supportFragmentManager, "FragmentManager")
-
-
         }
+
+        Log.d("test", "hellooooo")
+
+        val checkTimeSpan = timeSpan.editableText.toString()
+        Log.d("checkSpan", "$checkTimeSpan")
 
         createButton.setOnClickListener{
             val title = view.addGoal_titleEditText.editableText.toString() // Måste vara editable för att se texten
             val timeSpan = view.addGoal_timeSpanDate.editableText.toString()
             val reOccurring = view.addGoal_reoccurringCheckBox.isChecked.toString()
             val points = view.addGoal_pointsEditText.editableText.toString().toInt()
-            var invalidInput = view.addGoal_invalidInputText
+            var invalidInputTextView = view.addGoal_invalidInputText
 
-            if(title.isEmpty()){
-                invalidInput.text = getString(R.string.addGoal_invalidTitleMinLength)
-            }else if(title.length > 30){
-                invalidInput.text = getString(R.string.addGoal_invalidTitleMaxLength)
+            Log.d("checkSpan", "$timeSpan")
+
+
+            val invalidInput = validateInput(title, points)
+            if(invalidInput.isEmpty()){
+                //TODO: Sätt in alla värden i databasen här
+
+                val navController = findNavController()
+                navController.navigate(R.id.navigation_category)
+            }
+            else {
+                for (errorMessage in invalidInput) {
+                    invalidInputTextView.text = errorMessage
+                }
             }
 
-            //TODO: Sätt in alla värden i databasen här
 
-            val navController = findNavController()
-            navController.navigate(R.id.navigation_category)
+
         }
 
         return view
     }
+
+
+    override fun onStart() {
+        super.onStart()
+
+        //TODO: Måste uppdatera view'n så datePickerns värden visas på skärmen
+
+
+    }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
