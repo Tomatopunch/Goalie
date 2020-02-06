@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import androidx.appcompat.app.AlertDialog
 import com.example.golie.MainActivity
 
 import com.example.golie.R
@@ -33,19 +34,16 @@ class categoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val mainActivity = activity
         val view = inflater!!.inflate(R.layout.category_fragment, container, false)
 
         val listView = view.category_listView
 
-        if (mainActivity != null) {
             adapter = ArrayAdapter(
-                mainActivity.applicationContext, // Kan även skrivas "context!!"
+                context!!, // Kan även skrivas "context!!"
                 android.R.layout.simple_list_item_1, //Förutbestämd layout
                 android.R.id.text1,
                 toDoRepository.getAllToDos()
             )
-        }
 
         listView.adapter = adapter
 
@@ -53,6 +51,29 @@ class categoryFragment : Fragment() {
 
             var clickedToDo = listView.adapter.getItem(position) as ToDo
             var id = clickedToDo.id
+
+            AlertDialog.Builder(context!!)
+                .setTitle("Manage Goal")
+                .setMessage("Decide what you want to do with your goal.")
+                .setPositiveButton(
+                    "Finished"
+                ) { dialog, whichButton ->
+
+                    
+
+                }.setNegativeButton(
+                    "Failed"
+                ) { dialog, whichButton ->
+
+
+
+                }.setNeutralButton(
+                    "Do Nothing"
+                ){ dialog, whichButton ->
+
+
+
+                }.show()
 
             //TODO: Add an alert to decide to check an item off or not.
         }
@@ -65,7 +86,7 @@ class categoryFragment : Fragment() {
         val buttonAdd = category_addButton
 
         buttonAdd.setOnClickListener {
-
+            //activity.theButtonWasClicked()
         }
     }
 

@@ -8,8 +8,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.golie.ui.category.categoryFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), categoryFragment.Interface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,5 +28,15 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
+
+    override fun theButtonWasClicked() {
+
+
+
+    }
 }
 
+
+//class MainActivity : AppCompatActivity(), categoryFragment.Interface{
+
+//}
