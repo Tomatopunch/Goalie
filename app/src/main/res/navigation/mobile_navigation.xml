@@ -22,4 +22,9 @@
         android:name="com.example.golie.ui.shop.ShopFragment"
         android:label="@string/title_shop"
         tools:layout="@layout/shop_fragment" />
+    <fragment
+        android:id="@+id/navigation_addGoal"
+        android:name="com.example.golie.ui.category.goal.AddGoalFragment"
+        android:label="add_goal_fragment"
+        tools:layout="@layout/add_goal_fragment" />
 </navigation>
