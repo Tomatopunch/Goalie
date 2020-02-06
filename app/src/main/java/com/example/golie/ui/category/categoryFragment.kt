@@ -1,5 +1,6 @@
 package com.example.golie.ui.category
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.FragmentManager
 import com.example.golie.MainActivity
 
 import com.example.golie.R
@@ -29,6 +31,7 @@ class categoryFragment : Fragment() {
     private lateinit var adapter: ArrayAdapter<ToDo>
 
 
+    @SuppressLint("ResourceAsColor")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,13 +62,13 @@ class categoryFragment : Fragment() {
                     "Finished"
                 ) { dialog, whichButton ->
 
-                    
+
 
                 }.setNegativeButton(
                     "Failed"
                 ) { dialog, whichButton ->
 
-
+                    view.setBackgroundColor(R.color.red)
 
                 }.setNeutralButton(
                     "Do Nothing"
@@ -86,12 +89,24 @@ class categoryFragment : Fragment() {
         val buttonAdd = category_addButton
 
         buttonAdd.setOnClickListener {
-            //activity.theButtonWasClicked()
+
+            // Here we cast main activity to the interface (below) and this is possible because
+            // main activity extends this interface
+
+            var intf = context!! as Interface
+            intf.theButtonWasClicked()
         }
     }
 
     public interface  Interface {
         fun theButtonWasClicked()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+
+
+
     }
 
 

@@ -2,18 +2,27 @@ package com.example.golie
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.add
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.golie.ui.category.categoryFragment
+import com.example.golie.ui.category.goal.AddGoalFragment
+import com.example.golie.ui.home.HomeFragment
 
 class MainActivity : AppCompatActivity(), categoryFragment.Interface {
 
+    var newFragment = AddGoalFragment()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
@@ -30,11 +39,41 @@ class MainActivity : AppCompatActivity(), categoryFragment.Interface {
     }
 
     override fun theButtonWasClicked() {
+        Log.d("test", "händer inget")
+        val homeFragment = supportFragmentManager.findFragmentById(R.id.addGoalFragment) as AddGoalFragment?
 
+        if(homeFragment != null){
+            // We're in two-pane layout. This is for bigger screens.
+            Log.d("kaos", "Det blev feeeeeel")
+        }
 
+        else{
+            // This is a one-pane layout. This is what we always use.
+            val args = Bundle()
+            // args.putInt(categoryFragment.ARG_POSITION, position)
+            newFragment.arguments = args
+
+            val transaction = supportFragmentManager.beginTransaction()
+
+            transaction.add(R.id.nav_host_fragment, newFragment)
+            //transaction.addToBackStack(null)
+
+            transaction.commit()
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        val transaction = supportFragmentManager.beginTransaction()
+
+        transaction.remove(newFragment)
+        transaction.commit()
 
     }
+
 }
+
 
 
 //class MainActivity : AppCompatActivity(), categoryFragment.Interface{
