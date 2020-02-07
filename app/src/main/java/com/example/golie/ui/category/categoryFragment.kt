@@ -31,20 +31,19 @@ class categoryFragment : Fragment() {
     private lateinit var viewModel: CategoryViewModel
     private lateinit var adapter: ArrayAdapter<ToDo>
 
-
     @SuppressLint("ResourceAsColor")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater!!.inflate(R.layout.category_fragment, container, false)
+        val view = inflater.inflate(R.layout.category_fragment, container, false)
 
         val listView = view.category_listView
 
             adapter = ArrayAdapter(
-                context!!, // Kan även skrivas "context!!"
-                android.R.layout.simple_list_item_1, //Förutbestämd layout
+                context!!,
+                android.R.layout.simple_list_item_1,
                 android.R.id.text1,
                 toDoRepository.getAllToDos()
             )
@@ -62,7 +61,10 @@ class categoryFragment : Fragment() {
                 .setPositiveButton(
                     "Finished"
                 ) { dialog, whichButton ->
-
+                    val navController = findNavController()
+                    val args = Bundle() // Send this to the next navigation object with variables
+                    navController.navigate(R.id.navigation_addGoal)
+                    
 
 
                 }.setNegativeButton(
@@ -74,9 +76,6 @@ class categoryFragment : Fragment() {
                 }.setNeutralButton(
                     "Do Nothing"
                 ){ dialog, whichButton ->
-
-
-
                 }.show()
 
             //TODO: Add an alert to decide to check an item off or not.
@@ -93,14 +92,18 @@ class categoryFragment : Fragment() {
 
             // Here we cast main activity to the interface (below) and this is possible because
             // main activity extends this interface
-
             val navController = findNavController()
+            val args = Bundle().apply{
+                putString("key", "value")
+            } // Send this to the next navigation object
+            navController.navigate(R.id.navigation_addGoal, args) // Skicka med args - argument
 
-            val args = Bundle()
+            // Hämta alla argument som skickats med:
+
+            //val def = arguments!!.getString("key")
 
 
 
-            navController.navigate(R.id.navigation_addGoal)
 
 
             //var intf = context!! as Interface
@@ -119,6 +122,10 @@ class categoryFragment : Fragment() {
 
     }*/
 
+    override fun onResume() {
+        super.onResume()
+
+    }
 
     override fun onStart() {
         super.onStart()
