@@ -35,24 +35,36 @@ class AddGoalFragment : Fragment() {
 
         val createButton = view.addGoal_CreateGoalButton
         val timeSpan = view.addGoal_timeSpanDate
+
         timeSpan.setOnClickListener{
+
+
             val dialogFragment = DatePickerFragment()
             dialogFragment.show(activity!!.supportFragmentManager, "FragmentManager")
+            /*var args = Bundle().apply {
+                putString("title", "$title")
+                putString("reOccurring", "$reOccurring")
+                putString("points", "$points")
+                putString("invalidInput", "$invalidInputTextView")
+            }
+            //val navController = findNavController()
+
+            navController.navigate(R.id.navigation_addGoal, args)
+             */
+
         }
 
         Log.d("test", "hellooooo")
 
-        val checkTimeSpan = timeSpan.editableText.toString()
-        Log.d("checkSpan", "$checkTimeSpan")
-
         createButton.setOnClickListener{
             val title = view.addGoal_titleEditText.editableText.toString() // Måste vara editable för att se texten
-            val timeSpan = view.addGoal_timeSpanDate.editableText.toString()
+            val timeSpanText = view.addGoal_timeSpanDate.editableText.toString()
             val reOccurring = view.addGoal_reoccurringCheckBox.isChecked.toString()
-            val points = view.addGoal_pointsEditText.editableText.toString().toInt()
+            val points = view.addGoal_pointsEditText.editableText.toString()
             var invalidInputTextView = view.addGoal_invalidInputText
 
-            Log.d("checkSpan", "$timeSpan")
+            Log.d("checkSpan", "$timeSpanText")
+
 
 
             val invalidInput = validateInput(title, points)
@@ -75,6 +87,14 @@ class AddGoalFragment : Fragment() {
         return view
     }
 
+    /*override fun onResume() {
+
+        super.onResume()
+        val inflater = activity!!.layoutInflater
+        val view = inflater.inflate(R.layout.add_goal_fragment, null)
+
+
+    }*/
 
     override fun onStart() {
         super.onStart()

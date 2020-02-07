@@ -41,10 +41,9 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 
         val inflater = activity!!.layoutInflater
         val view = inflater.inflate(R.layout.add_goal_fragment, null)
-        view.addGoal_timeSpanDate.setText(date, TextView.BufferType.EDITABLE)
+        view.addGoal_timeSpanDate.setText(date)
 
         val timeSpanText = view.addGoal_timeSpanDate.editableText.toString()
-
         Log.d("checkSpan", "$timeSpanText")
 
     }

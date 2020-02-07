@@ -64,6 +64,8 @@ class categoryFragment : Fragment() {
                     val navController = findNavController()
                     val args = Bundle() // Send this to the next navigation object with variables
                     navController.navigate(R.id.navigation_addGoal)
+                    
+
 
                 }.setNegativeButton(
                     "Failed"
@@ -74,9 +76,6 @@ class categoryFragment : Fragment() {
                 }.setNeutralButton(
                     "Do Nothing"
                 ){ dialog, whichButton ->
-
-
-
                 }.show()
 
             //TODO: Add an alert to decide to check an item off or not.
@@ -94,8 +93,17 @@ class categoryFragment : Fragment() {
             // Here we cast main activity to the interface (below) and this is possible because
             // main activity extends this interface
             val navController = findNavController()
-            val args = Bundle() // Send this to the next navigation object
-            navController.navigate(R.id.navigation_addGoal)
+            val args = Bundle().apply{
+                putString("key", "value")
+            } // Send this to the next navigation object
+            navController.navigate(R.id.navigation_addGoal, args) // Skicka med args - argument
+
+            // Hämta alla argument som skickats med:
+
+            //val def = arguments!!.getString("key")
+
+
+
 
 
             //var intf = context!! as Interface
@@ -114,6 +122,10 @@ class categoryFragment : Fragment() {
 
     }*/
 
+    override fun onResume() {
+        super.onResume()
+
+    }
 
     override fun onStart() {
         super.onStart()
