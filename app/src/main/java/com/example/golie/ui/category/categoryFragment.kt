@@ -38,7 +38,7 @@ class categoryFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.category_fragment, container, false)
-
+        val thisIsAPlaceHolder = 0
         val listView = view.category_listView
 
             adapter = ArrayAdapter(
