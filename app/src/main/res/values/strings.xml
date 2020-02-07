@@ -5,10 +5,15 @@
     <string name="title_category">Specific Category</string>
     <string name="title_shop">Shop</string>
     <string name="yourpoints">Your points:</string>
+    <string name="create_reward">Create Reward</string>
+    <string name="create_title">Title:</string>
+    <string name="create_points">points:</string>
+    <string name="create_confirm">Confirm</string>
     <string name="addGoal_titleText">Title:</string>
     <string name="addGoal_invalidTitleMinLength">You must enter a title!</string>
     <string name="addGoal_invalidTitleMaxLength">Title is too long! Max 30 characters</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="shop_rewards">Rewards:</string>
 </resources>
