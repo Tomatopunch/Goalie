@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
 
             val navController = findNavController()
 
-            
+
 
         }
 
