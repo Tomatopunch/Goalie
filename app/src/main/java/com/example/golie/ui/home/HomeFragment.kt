@@ -6,8 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
+import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
+import com.example.golie.ToDo
+import com.example.golie.toDoRepository
+import kotlinx.android.synthetic.main.category_fragment.view.*
+import kotlinx.android.synthetic.main.home_fragment.view.*
 
 class HomeFragment : Fragment() {
 
@@ -16,12 +23,59 @@ class HomeFragment : Fragment() {
     }
 
     private lateinit var viewModel: HomeViewModel
+    private lateinit var adapter: ArrayAdapter<ToDo>
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.home_fragment, container, false)
+
+        val view = inflater.inflate(R.layout.home_fragment, container, false)
+
+        val listView = view.home_allCategoriesListView
+
+        val button = view.home_addCategoryButton
+
+        button.setOnClickListener{
+
+            val navController = findNavController()
+
+            
+
+        }
+
+        adapter = ArrayAdapter(
+            context!!,
+            android.R.layout.simple_list_item_1,
+            android.R.id.text1,
+            toDoRepository.getAllToDos()
+        )
+
+        listView.adapter = adapter
+
+        listView.setOnItemClickListener { parent, view, position, id ->
+
+            var clickedToDo = listView.adapter.getItem(position) as ToDo
+            var id = clickedToDo.id
+
+            AlertDialog.Builder(context!!)
+                .setTitle("Manage Goal")
+                .setMessage("Decide what you want to do with your goal.")
+                .setPositiveButton(
+                    "Finished"
+                ) { dialog, whichButton ->
+                    val navController = findNavController()
+                    val args = Bundle().apply {
+                        putString("categoryName", "today") // TODO: Hämta databas kategorin med detta värde
+                    } // Send this to the next navigation object with variables
+                    navController.navigate(R.id.navigation_category, args)
+                }.setNegativeButton(
+                    "Failed"
+                ) { dialog, whichButton ->
+                }.show()
+            }
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

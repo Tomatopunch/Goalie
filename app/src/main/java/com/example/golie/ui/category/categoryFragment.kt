@@ -54,29 +54,9 @@ class categoryFragment : Fragment() {
 
             var clickedToDo = listView.adapter.getItem(position) as ToDo
             var id = clickedToDo.id
-
-            AlertDialog.Builder(context!!)
-                .setTitle("Manage Goal")
-                .setMessage("Decide what you want to do with your goal.")
-                .setPositiveButton(
-                    "Finished"
-                ) { dialog, whichButton ->
-                    val navController = findNavController()
-                    val args = Bundle() // Send this to the next navigation object with variables
-                    navController.navigate(R.id.navigation_addGoal)
-                    
-
-
-                }.setNegativeButton(
-                    "Failed"
-                ) { dialog, whichButton ->
-
-                    view.setBackgroundColor(R.color.red)
-
-                }.setNeutralButton(
-                    "Do Nothing"
-                ){ dialog, whichButton ->
-                }.show()
+            val navController = findNavController()
+            val args = Bundle() // Send this to the next navigation object with variables
+            navController.navigate(R.id.navigation_addGoal)
 
             //TODO: Add an alert to decide to check an item off or not.
         }
