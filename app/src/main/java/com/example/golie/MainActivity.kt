@@ -1,8 +1,6 @@
 package com.example.golie
 
-import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -28,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_category, R.id.navigation_home, R.id.navigation_shop
+                R.id.nav_category, R.id.nav_home, R.id.nav_shop
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

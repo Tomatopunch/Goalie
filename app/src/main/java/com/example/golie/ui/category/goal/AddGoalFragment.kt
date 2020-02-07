@@ -7,16 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
-import com.example.golie.ui.category.categoryFragment
 import kotlinx.android.synthetic.main.add_goal_fragment.view.*
-import kotlinx.android.synthetic.main.category_fragment.view.*
-import java.util.*
-import java.util.zip.Inflater
 
 class AddGoalFragment : Fragment() {
 
@@ -72,7 +66,7 @@ class AddGoalFragment : Fragment() {
                 //TODO: Sätt in alla värden i databasen här
 
                 val navController = findNavController()
-                navController.navigate(R.id.navigation_category)
+                navController.navigate(R.id.nav_category)
             }
             else {
                 for (errorMessage in invalidInput) {

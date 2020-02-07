@@ -2,7 +2,6 @@ package com.example.golie.ui.shop.reward
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -49,7 +48,7 @@ class CreateReward : Fragment() {
             val args = Bundle().apply {}
 
             toDoRepository.addToDo(titleText.editableText.toString(), "")
-            navController.navigate(R.id.navigation_shop, args)
+            navController.navigate(R.id.nav_shop, args)
         }
 
         return view
