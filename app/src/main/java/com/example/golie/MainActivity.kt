@@ -7,10 +7,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.golie.ui.shop.ShopFragment
 import com.example.golie.ui.shop.reward.CreateReward
 
-class MainActivity : AppCompatActivity(), ShopFragment.Interface {
+class MainActivity : AppCompatActivity() {
 
     var newFragment = CreateReward()
 
@@ -29,29 +28,6 @@ class MainActivity : AppCompatActivity(), ShopFragment.Interface {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-    }
-
-
-    override fun theButtonWasClicked() {
-        val fragment = supportFragmentManager.findFragmentById(R.id.frameLayout) as CreateReward?
-
-        // We're in two-pane layout. This is for bigger screens.
-        if(fragment != null){ }
-
-        else {
-            // This is a one-pane layout. This is what we always use.
-            val args = Bundle()
-
-            // args.putInt(categoryFragment.ARG_POSITION, position)
-            newFragment.arguments = args
-
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.add(R.id.nav_host_fragment, newFragment)
-
-            //transaction.addToBackStack(null)
-
-            transaction.commit()
-        }
     }
 
     override fun onBackPressed() {
