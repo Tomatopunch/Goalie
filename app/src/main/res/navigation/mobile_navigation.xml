@@ -16,17 +16,16 @@
         android:name="com.example.golie.ui.category.categoryFragment"
         android:label="@string/title_category"
         tools:layout="@layout/category_fragment" />
-
-    <fragment
-        android:id="@+id/navigation_shop"
-        android:name="com.example.golie.ui.shop.ShopFragment"
-        android:label="@string/title_shop"
-        tools:layout="@layout/shop_fragment" />
     <fragment
         android:id="@+id/navigation_addGoal"
         android:name="com.example.golie.ui.category.goal.AddGoalFragment"
         android:label="add_goal_fragment"
         tools:layout="@layout/add_goal_fragment" />
+    <fragment
+        android:id="@+id/navigation_shop"
+        android:name="com.example.golie.ui.shop.ShopFragment"
+        android:label="@string/title_shop"
+        tools:layout="@layout/shop_fragment" />
     <fragment
         android:id="@+id/navigation_createReward"
         android:name="com.example.golie.ui.shop.reward.CreateReward"
