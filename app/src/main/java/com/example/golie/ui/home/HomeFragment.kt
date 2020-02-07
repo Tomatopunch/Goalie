@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.golie.R
 import com.example.golie.ToDo
 import com.example.golie.toDoRepository
-import kotlinx.android.synthetic.main.category_fragment.view.*
 import kotlinx.android.synthetic.main.home_fragment.view.*
 
 class HomeFragment : Fragment() {
@@ -35,14 +34,18 @@ class HomeFragment : Fragment() {
 
         val listView = view.home_allCategoriesListView
 
-        val button = view.home_addCategoryButton
+        val addCategoryButton = view.home_addCategoryButton
 
-        button.setOnClickListener{
+        addCategoryButton.setOnClickListener{
 
             val navController = findNavController()
 
+        }
 
+        val settingsButton = view.home_settingsButton
 
+        settingsButton.setOnClickListener{
+            
         }
 
         adapter = ArrayAdapter(
@@ -69,7 +72,7 @@ class HomeFragment : Fragment() {
                     val args = Bundle().apply {
                         putString("categoryName", "today") // TODO: Hämta databas kategorin med detta värde
                     } // Send this to the next navigation object with variables
-                    navController.navigate(R.id.navigation_category, args)
+                    navController.navigate(R.id.nav_category, args)
                 }.setNegativeButton(
                     "Failed"
                 ) { dialog, whichButton ->

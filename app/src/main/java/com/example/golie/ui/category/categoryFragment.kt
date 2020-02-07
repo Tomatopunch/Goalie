@@ -1,20 +1,14 @@
 package com.example.golie.ui.category
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.ListView
-import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
-import com.example.golie.MainActivity
 
 import com.example.golie.R
 import com.example.golie.ToDo
@@ -56,7 +50,7 @@ class categoryFragment : Fragment() {
             var id = clickedToDo.id
             val navController = findNavController()
             val args = Bundle() // Send this to the next navigation object with variables
-            navController.navigate(R.id.navigation_addGoal)
+            navController.navigate(R.id.nav_addGoal)
 
             //TODO: Add an alert to decide to check an item off or not.
         }
@@ -76,7 +70,7 @@ class categoryFragment : Fragment() {
             val args = Bundle().apply{
                 putString("key", "value")
             } // Send this to the next navigation object
-            navController.navigate(R.id.navigation_addGoal, args) // Skicka med args - argument
+            navController.navigate(R.id.nav_addGoal, args) // Skicka med args - argument
 
             // Hämta alla argument som skickats med:
 

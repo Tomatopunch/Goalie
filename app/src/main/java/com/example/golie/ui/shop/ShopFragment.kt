@@ -77,7 +77,7 @@ class ShopFragment : Fragment() {
             val navController = findNavController()
             val args = Bundle().apply {}
 
-            navController.navigate(R.id.navigation_createReward, args)
+            navController.navigate(R.id.nav_createReward, args)
             // You get argument by: val def = argument!!.getString("abc")
         }
     }
