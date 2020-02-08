@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
@@ -48,12 +50,35 @@ class categoryFragment : Fragment() {
             // TODO: JOSEFIN: De två nedanstående raderna kanske används för att hämta data ur databasen sen. De användes för att skicka med data innan iallafall :)
             var clickedGoal = listView.adapter.getItem(position) as Goal
             var id = clickedGoal.id
-            val navController = findNavController()
+
+            AlertDialog.Builder(context!!)
+                .setTitle("Manage Goal")
+                .setMessage("Decide what you want to do with your goal.")
+                .setPositiveButton(
+                    "Finished"
+                ) { dialog, whichButton ->
+                    view.setBackgroundColor(R.color.green)
+                    val navController = findNavController()
+                    val args = Bundle().apply {
+                        putString("categoryName", "today") // TODO: Hämta databas kategorin med detta värde
+                    } // Send this to the next navigation object with variables
+                    navController.navigate(R.id.nav_finishedGoal, args)
+                }.setNegativeButton(
+                    "Failed"
+                ) { dialog, whichButton ->
+                    view.setBackgroundColor(R.color.red)
+                }.setNeutralButton(
+                    "Do nothing"
+                ){dialog, whichButton ->
+                }.show()
+
+            /*val navController = findNavController()
             val args = Bundle() // Send this to the next navigation object with variables
-            navController.navigate(R.id.nav_addGoal)
+            navController.navigate(R.id.nav_addGoal)*/
+        }
+
 
             //TODO: Add an alert to decide to check an item off or not.
-        }
         return view
     }
 

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
@@ -26,6 +27,7 @@ class AddGoalFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true) // This is used with the back button. Can now handle it with onOptionsItemSelected
 
         val view = inflater!!.inflate(R.layout.add_goal_fragment, container, false)
 
@@ -96,6 +98,14 @@ class AddGoalFragment : Fragment() {
 
 
     }*/
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+        val navController = findNavController()
+        navController.navigate(R.id.nav_category)
+
+        return true
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
