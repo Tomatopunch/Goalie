@@ -71,14 +71,7 @@ class categoryFragment : Fragment() {
                     "Do nothing"
                 ){dialog, whichButton ->
                 }.show()
-
-            /*val navController = findNavController()
-            val args = Bundle() // Send this to the next navigation object with variables
-            navController.navigate(R.id.nav_addGoal)*/
         }
-
-
-            //TODO: Add an alert to decide to check an item off or not.
         return view
     }
 
@@ -100,31 +93,9 @@ class categoryFragment : Fragment() {
             // Hämta alla argument som skickats med:
 
             //val def = arguments!!.getString("key")
-
-
-
-
-
-            //var intf = context!! as Interface
-            //intf.theButtonWasClicked()
         }
     }
 
-    /*public interface  Interface {
-        fun theButtonWasClicked()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-
-
-
-    }*/
-
-    override fun onResume() {
-        super.onResume()
-
-    }
 
     override fun onStart() {
         super.onStart()
@@ -132,8 +103,6 @@ class categoryFragment : Fragment() {
         adapter.notifyDataSetChanged()
 
     }
-
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

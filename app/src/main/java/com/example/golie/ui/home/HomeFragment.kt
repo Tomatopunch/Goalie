@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
@@ -38,14 +39,37 @@ class HomeFragment : Fragment() {
 
         addCategoryButton.setOnClickListener{
 
-            val navController = findNavController()
-
         }
 
         val settingsButton = view.home_settingsButton
 
         settingsButton.setOnClickListener{
-            
+            lateinit var navController: NavController
+            AlertDialog.Builder(context!!)
+            .setTitle("Manage Goal")
+            .setMessage("Decide what you want to do with your goal.")
+            .setPositiveButton(
+                "select favorite (?)"
+            ) { dialog, whichButton ->
+
+                navController = findNavController()
+                navController.navigate(R.id.nav_chooseFavCategory)
+
+            }.setNegativeButton(
+                "Info"
+            ) { dialog, whichButton ->
+
+                    navController = findNavController()
+                    navController.navigate(R.id.nav_info)
+
+            }.setNeutralButton(
+                "Logout"
+            ){dialog, whichButton ->
+
+                    //TODO: Direct this to the login page
+
+            }.show()
+
         }
 
         adapter = ArrayAdapter(
