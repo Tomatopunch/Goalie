@@ -11,8 +11,8 @@ import android.widget.ArrayAdapter
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
-import com.example.golie.ToDo
-import com.example.golie.toDoRepository
+import com.example.golie.ui.category.goal.Goal
+import com.example.golie.ui.category.goal.goalRepository
 import kotlinx.android.synthetic.main.category_fragment.*
 import kotlinx.android.synthetic.main.category_fragment.view.*
 
@@ -23,7 +23,7 @@ class categoryFragment : Fragment() {
     }
 
     private lateinit var viewModel: CategoryViewModel
-    private lateinit var adapter: ArrayAdapter<ToDo>
+    private lateinit var adapter: ArrayAdapter<Goal>
 
     @SuppressLint("ResourceAsColor")
     override fun onCreateView(
@@ -32,22 +32,22 @@ class categoryFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.category_fragment, container, false)
-        val thisIsAPlaceHolder = 0
         val listView = view.category_listView
 
             adapter = ArrayAdapter(
                 context!!,
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
-                toDoRepository.getAllToDos()
+                goalRepository.getGoals()
             )
 
         listView.adapter = adapter
 
         listView.setOnItemClickListener{ parent, view, position, id ->
 
-            var clickedToDo = listView.adapter.getItem(position) as ToDo
-            var id = clickedToDo.id
+            // TODO: JOSEFIN: De två nedanstående raderna kanske används för att hämta data ur databasen sen. De användes för att skicka med data innan iallafall :)
+            var clickedGoal = listView.adapter.getItem(position) as Goal
+            var id = clickedGoal.id
             val navController = findNavController()
             val args = Bundle() // Send this to the next navigation object with variables
             navController.navigate(R.id.nav_addGoal)

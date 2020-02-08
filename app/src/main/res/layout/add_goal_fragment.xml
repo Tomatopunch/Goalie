@@ -5,7 +5,7 @@
     android:id="@+id/addGoalFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.category.goal.AddGoalFragment">
+    tools:context=".ui.category.goal.addGoal.AddGoalFragment">
 
     <TextView
         android:id="@+id/addGoal_titleText"
@@ -27,10 +27,9 @@
         android:layout_marginEnd="20dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="insert title here..."
+        android:hint="@string/addGoal_insertTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/addGoal_createGoalText"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@id/addGoal_createGoalText"/>
 
     <TextView
         android:id="@+id/addGoal_timeSpanText"
@@ -38,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="Time span:"
+        android:text="@string/addGoal_timeSpan"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/addGoal_timeSpanDate"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="Reoccuring: "
+        android:text="@string/addGoal_reoccurring"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/addGoal_reoccurringCheckBox"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="Points: "
+        android:text="@string/addGoal_points"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/addGoal_pointsEditText"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +83,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:text="Create Goal"
+        android:text="@string/addGoal_createGoal"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,7 +96,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:text="Create Goal!"
+        android:text="@string/addGoal_createGoal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addGoal_invalidInputText" />
@@ -109,6 +108,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:textSize="20sp"
+        android:textColor="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addGoal_pointsEditText" />
@@ -122,7 +122,7 @@
         android:ems="10"
         android:inputType="date"
         android:focusable="false"
-        android:hint = "yyyy-mm-dd"
+        android:hint = "@string/addGoal_dateFormat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addGoal_titleEditText" />
 
@@ -133,7 +133,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:ems="10"
-        android:hint="10 points"
+        android:hint="@string/addGoal_pointsExample"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addGoal_ReoccuringText" />

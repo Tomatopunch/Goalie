@@ -1,4 +1,4 @@
-package com.example.golie.ui.category.goal
+package com.example.golie.ui.category.goal.addGoal
 
 import android.app.DatePickerDialog
 import android.app.Dialog

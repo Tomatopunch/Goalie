@@ -1,4 +1,4 @@
-package com.example.golie.ui.category.goal
+package com.example.golie.ui.category.goal.addGoal
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
+import com.example.golie.ui.category.goal.goalRepository
+import com.example.golie.ui.category.goal.validateInput
 import kotlinx.android.synthetic.main.add_goal_fragment.view.*
 
 class AddGoalFragment : Fragment() {
@@ -53,25 +55,29 @@ class AddGoalFragment : Fragment() {
         createButton.setOnClickListener{
             val title = view.addGoal_titleEditText.editableText.toString() // Måste vara editable för att se texten
             val timeSpanText = view.addGoal_timeSpanDate.editableText.toString()
-            val reOccurring = view.addGoal_reoccurringCheckBox.isChecked.toString()
-            val points = view.addGoal_pointsEditText.editableText.toString()
+
+            //////////// @@@@@@@@@@ !!! --- IMPORTANT --- !!! @@@@@@@@@@ //////////////////
+            //TODO: Ingen todo, endast för att uppmärksamma. DETTA ÄR EN BOOL. GÖR OM TILL TEXT SEN FÖR DATABASEN VID BEHOV. Ta bort denna kommentar när den inte behövs längre
+            val reOccurring = view.addGoal_reoccurringCheckBox.isChecked.toString().toBoolean()
+
+            val pointsText = view.addGoal_pointsEditText.editableText.toString()
             var invalidInputTextView = view.addGoal_invalidInputText
 
             Log.d("checkSpan", "$timeSpanText")
 
 
 
-            val invalidInput = validateInput(title, points)
+            val invalidInput = validateInput(title, pointsText)
             if(invalidInput.isEmpty()){
                 //TODO: Sätt in alla värden i databasen här
+                val points = pointsText.toInt()
+                goalRepository.addGoal(title, timeSpanText, reOccurring, points)
 
                 val navController = findNavController()
                 navController.navigate(R.id.nav_category)
             }
             else {
-                for (errorMessage in invalidInput) {
-                    invalidInputTextView.text = errorMessage
-                }
+                    invalidInputTextView.text = invalidInput[0]
             }
 
 
@@ -82,6 +88,7 @@ class AddGoalFragment : Fragment() {
     }
 
     /*override fun onResume() {
+        //TODO: Måste uppdatera view'n så datePickerns värden visas på skärmen
 
         super.onResume()
         val inflater = activity!!.layoutInflater
@@ -89,15 +96,6 @@ class AddGoalFragment : Fragment() {
 
 
     }*/
-
-    override fun onStart() {
-        super.onStart()
-
-        //TODO: Måste uppdatera view'n så datePickerns värden visas på skärmen
-
-
-    }
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

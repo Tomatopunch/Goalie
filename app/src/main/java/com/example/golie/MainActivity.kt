@@ -7,7 +7,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.golie.ui.category.goal.AddGoalFragment
+import com.example.golie.ui.category.goal.addGoal.AddGoalFragment
 
 class MainActivity : AppCompatActivity() {
 
