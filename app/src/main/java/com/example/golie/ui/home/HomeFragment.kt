@@ -1,7 +1,9 @@
 package com.example.golie.ui.home
 
+import android.content.ContentValues.TAG
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.golie.R
 import com.example.golie.ToDo
 import com.example.golie.toDoRepository
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.home_fragment.view.*
 
 class HomeFragment : Fragment() {
@@ -22,6 +25,7 @@ class HomeFragment : Fragment() {
         fun newInstance() = HomeFragment()
     }
 
+    private val db = FirebaseFirestore.getInstance()
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: ArrayAdapter<ToDo>
 
@@ -32,52 +36,93 @@ class HomeFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.home_fragment, container, false)
+        // "view" is now our modifiable fragment
 
-        val listView = view.home_allCategoriesListView
+
+        // Setting up the list view with all its data and enabling cicking on one list item
+        val listView =
+            view.home_allCategoriesListView //fetching the list view with id "home_allCategoriesListView"
+
 
         val addCategoryButton = view.home_addCategoryButton
 
-        addCategoryButton.setOnClickListener{
+        addCategoryButton.setOnClickListener {
+
+            Log.d("status", "you clicked button")
+
+            // Test 1
+
+            val user1 = hashMapOf(
+                "name" to "Dennis"
+            )
+
+            Log.d("user1", "$user1")
+
+            db.collection("users1").add(user1)
+
+
+            // Test 2
+
+            val user2 = HashMap<String, Any>()
+            user2.put("first", "Ada")
+            user2.put("last", "Lovelace")
+            user2.put("born", 1815)
+
+            // Add a new document with a generated ID
+            db.collection("users2")
+                .add(user2)
+                .addOnSuccessListener { documentReference ->
+                    Log.d(
+                        TAG,
+                        "DocumentSnapshot added with ID: " + documentReference.id
+                    )
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error adding document", e)
+                    e.printStackTrace()
+                }
+
+
             val navController = findNavController()
             navController.navigate(R.id.nav_addCategory)
         }
 
         val settingsButton = view.home_settingsButton
 
-        settingsButton.setOnClickListener{
+        settingsButton.setOnClickListener {
             lateinit var navController: NavController
             AlertDialog.Builder(context!!)
-            .setTitle("Manage Goal")
-            .setMessage("Decide what you want to do with your goal.")
-            .setPositiveButton(
-                "select favorite (?)"
-            ) { dialog, whichButton ->
+                .setTitle("Manage Goal")
+                .setMessage("Decide what you want to do with your goal.")
+                .setPositiveButton(
+                    "select favorite (?)"
+                ) { dialog, whichButton ->
 
-                navController = findNavController()
-                navController.navigate(R.id.nav_chooseFavCategory)
+                    navController = findNavController()
+                    navController.navigate(R.id.nav_chooseFavCategory)
 
-            }.setNegativeButton(
-                "Info"
-            ) { dialog, whichButton ->
+                }.setNegativeButton(
+                    "Info"
+                ) { dialog, whichButton ->
 
                     navController = findNavController()
                     navController.navigate(R.id.nav_info)
 
-            }.setNeutralButton(
-                "Logout"
-            ){dialog, whichButton ->
+                }.setNeutralButton(
+                    "Logout"
+                ) { dialog, whichButton ->
 
                     //TODO: Direct this to the login page
 
-            }.show()
+                }.show()
 
         }
 
         adapter = ArrayAdapter(
-            context!!,
-            android.R.layout.simple_list_item_1,
+            context!!, // Casting our fragment into a context?
+            android.R.layout.simple_list_item_1, // Has to do with presentation (we want to display it as a simple_list_item_1)
             android.R.id.text1,
-            toDoRepository.getAllToDos()
+            toDoRepository.getAllToDos() //Here we fetch data!!
         )
 
         listView.adapter = adapter
