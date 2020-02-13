@@ -1,4 +1,4 @@
-package com.example.golie.ui.category.goal
+package com.example.golie.ui.category.goal.addGoal
 
 import androidx.lifecycle.ViewModel
 

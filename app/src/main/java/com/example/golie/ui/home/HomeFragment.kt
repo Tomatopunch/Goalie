@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
@@ -37,15 +38,39 @@ class HomeFragment : Fragment() {
         val addCategoryButton = view.home_addCategoryButton
 
         addCategoryButton.setOnClickListener{
-
             val navController = findNavController()
-
+            navController.navigate(R.id.nav_addCategory)
         }
 
         val settingsButton = view.home_settingsButton
 
         settingsButton.setOnClickListener{
-            
+            lateinit var navController: NavController
+            AlertDialog.Builder(context!!)
+            .setTitle("Manage Goal")
+            .setMessage("Decide what you want to do with your goal.")
+            .setPositiveButton(
+                "select favorite (?)"
+            ) { dialog, whichButton ->
+
+                navController = findNavController()
+                navController.navigate(R.id.nav_chooseFavCategory)
+
+            }.setNegativeButton(
+                "Info"
+            ) { dialog, whichButton ->
+
+                    navController = findNavController()
+                    navController.navigate(R.id.nav_info)
+
+            }.setNeutralButton(
+                "Logout"
+            ){dialog, whichButton ->
+
+                    //TODO: Direct this to the login page
+
+            }.show()
+
         }
 
         adapter = ArrayAdapter(
@@ -62,22 +87,13 @@ class HomeFragment : Fragment() {
             var clickedToDo = listView.adapter.getItem(position) as ToDo
             var id = clickedToDo.id
 
-            AlertDialog.Builder(context!!)
-                .setTitle("Manage Goal")
-                .setMessage("Decide what you want to do with your goal.")
-                .setPositiveButton(
-                    "Finished"
-                ) { dialog, whichButton ->
-                    val navController = findNavController()
-                    val args = Bundle().apply {
-                        putString("categoryName", "today") // TODO: Hämta databas kategorin med detta värde
-                    } // Send this to the next navigation object with variables
-                    navController.navigate(R.id.nav_category, args)
-                }.setNegativeButton(
-                    "Failed"
-                ) { dialog, whichButton ->
-                }.show()
+
+            val navController = findNavController()
+            val args = Bundle().apply {
+                putInt("id", id) // TODO: Hämta databas kategorin med detta värde
             }
+            navController.navigate(R.id.nav_category, args)
+        }
         return view
     }
 

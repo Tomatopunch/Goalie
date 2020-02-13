@@ -18,7 +18,7 @@
         tools:layout="@layout/category_fragment" />
     <fragment
         android:id="@+id/nav_addGoal"
-        android:name="com.example.golie.ui.category.goal.AddGoalFragment"
+        android:name="com.example.golie.ui.category.goal.addGoal.AddGoalFragment"
         android:label="add_goal_fragment"
         tools:layout="@layout/add_goal_fragment" />
     <fragment

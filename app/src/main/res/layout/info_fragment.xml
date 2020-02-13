@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.settings.info.InfoFragment">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sagittis augue turpis, eget rutrum libero venenatis dictum. Nullam vitae mauris sed dui lacinia aliquam. Aenean placerat risus ex, vel laoreet nisl luctus aliquam. Cras sodales elit a mauris tempus, nec efficitur quam dapibus. Nunc eleifend maximus ipsum, sagittis imperdiet urna sollicitudin id. Aliquam varius libero non dui ultrices aliquam. Curabitur rutrum est condimentum neque aliquet, et ullamcorper dui consequat. Etiam eget porttitor nunc.  Vestibulum fringilla scelerisque urna ac vulputate. In vel ex ipsum. Proin eget sem viverra, tempus metus non, semper sapien. Donec sagittis ultricies elit, a varius quam consectetur at. Sed sapien arcu, scelerisque at sapien vel, suscipit posuere nunc. Nam posuere tincidunt lorem, lobortis bibendum sapien. Curabitur nec porttitor nisi, et tincidunt massa. Duis posuere consequat magna.  Nulla sed convallis orci. Fusce convallis urna in tellus dapibus molestie. Suspendisse potenti. Etiam vitae nibh id quam accumsan cursus. Sed varius turpis ut elit vulputate, a venenatis tellus posuere. Praesent at turpis nunc. Aenean metus nibh, consequat id ligula sed, elementum porta risus. Quisque quis mi in mi tempor efficitur."
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/info_headerText" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/info_headerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Got questions? Look here!"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

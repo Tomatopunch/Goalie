@@ -5,14 +5,16 @@ import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
-import com.example.golie.ToDo
-import com.example.golie.toDoRepository
+import com.example.golie.ui.category.goal.Goal
+import com.example.golie.ui.category.goal.goalRepository
 import kotlinx.android.synthetic.main.category_fragment.*
 import kotlinx.android.synthetic.main.category_fragment.view.*
 
@@ -23,7 +25,7 @@ class categoryFragment : Fragment() {
     }
 
     private lateinit var viewModel: CategoryViewModel
-    private lateinit var adapter: ArrayAdapter<ToDo>
+    private lateinit var adapter: ArrayAdapter<Goal>
 
     @SuppressLint("ResourceAsColor")
     override fun onCreateView(
@@ -32,27 +34,43 @@ class categoryFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.category_fragment, container, false)
-        val thisIsAPlaceHolder = 0
         val listView = view.category_listView
 
             adapter = ArrayAdapter(
                 context!!,
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
-                toDoRepository.getAllToDos()
+                goalRepository.getGoals()
             )
 
         listView.adapter = adapter
 
         listView.setOnItemClickListener{ parent, view, position, id ->
 
-            var clickedToDo = listView.adapter.getItem(position) as ToDo
-            var id = clickedToDo.id
-            val navController = findNavController()
-            val args = Bundle() // Send this to the next navigation object with variables
-            navController.navigate(R.id.nav_addGoal)
+            // TODO: JOSEFIN: De två nedanstående raderna kanske används för att hämta data ur databasen sen. De användes för att skicka med data innan iallafall :)
+            var clickedGoal = listView.adapter.getItem(position) as Goal
+            var id = clickedGoal.id
 
-            //TODO: Add an alert to decide to check an item off or not.
+            AlertDialog.Builder(context!!)
+                .setTitle("Manage Goal")
+                .setMessage("Decide what you want to do with your goal.")
+                .setPositiveButton(
+                    "Finished"
+                ) { dialog, whichButton ->
+                    view.setBackgroundColor(R.color.green)
+                    val navController = findNavController()
+                    val args = Bundle().apply {
+                        putString("categoryName", "today") // TODO: Hämta databas kategorin med detta värde
+                    } // Send this to the next navigation object with variables
+                    navController.navigate(R.id.nav_finishedGoal, args)
+                }.setNegativeButton(
+                    "Failed"
+                ) { dialog, whichButton ->
+                    view.setBackgroundColor(R.color.red)
+                }.setNeutralButton(
+                    "Do nothing"
+                ){dialog, whichButton ->
+                }.show()
         }
         return view
     }
@@ -75,31 +93,9 @@ class categoryFragment : Fragment() {
             // Hämta alla argument som skickats med:
 
             //val def = arguments!!.getString("key")
-
-
-
-
-
-            //var intf = context!! as Interface
-            //intf.theButtonWasClicked()
         }
     }
 
-    /*public interface  Interface {
-        fun theButtonWasClicked()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-
-
-
-    }*/
-
-    override fun onResume() {
-        super.onResume()
-
-    }
 
     override fun onStart() {
         super.onStart()
@@ -107,8 +103,6 @@ class categoryFragment : Fragment() {
         adapter.notifyDataSetChanged()
 
     }
-
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
