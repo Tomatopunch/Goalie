@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
@@ -15,6 +16,8 @@ import kotlinx.android.synthetic.main.create_reward_fragment.view.*
 
 //Fix validation on these fields, and make the button clickable if the fields are valid
 // maybe points should be converted to int?
+//display points on the view when created
+//figure out how to separate content in a view show more than one thing?? wait for database for this
 
 class CreateReward : Fragment() {
 
@@ -31,12 +34,11 @@ class CreateReward : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater!!.inflate(R.layout.create_reward_fragment, container, false)
+        val view = inflater.inflate(R.layout.create_reward_fragment, container, false)
         val confirmButton = view.create_button
 
         titleText = view.create_editTitle
         pointContent = view.create_editPoints
-
 
         //have some sort of validation here
         /////////////////////////////////
@@ -44,14 +46,21 @@ class CreateReward : Fragment() {
         confirmButton.setOnClickListener {
             val navController = findNavController()
 
-            // probably unnecessary in this case since we don't send anything back to shop
-            val args = Bundle().apply {}
-
             toDoRepository.addToDo(titleText.editableText.toString(), "")
-            navController.navigate(R.id.nav_shop, args)
+
+            navController.navigate(R.id.nav_shop)
         }
 
+        setHasOptionsMenu(true)
         return view
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+        val navController = findNavController()
+        navController.navigate(R.id.nav_shop)
+
+        return true
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

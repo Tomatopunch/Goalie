@@ -1,7 +1,7 @@
 package com.example.golie
 
 data class ToDo(
-    val id: Int, // Val is same as const. Cannot be changed.
+    val id: Int,
     var title: String,
     var content: String
 ){
