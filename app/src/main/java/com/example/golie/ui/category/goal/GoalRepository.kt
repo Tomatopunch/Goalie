@@ -1,4 +1,4 @@
-package com.example.golie.ui.category.goal
+/*package com.example.golie.ui.category.goal
 
 
 // Global variable to store all ToDos
@@ -39,7 +39,7 @@ class GoalRepository {
         }
         goals.add(
             Goal(
-                id,
+
                 title,
                 timeSpan,
                 reOccurring,
@@ -72,4 +72,4 @@ class GoalRepository {
         }
     }
 
-}
+}*/

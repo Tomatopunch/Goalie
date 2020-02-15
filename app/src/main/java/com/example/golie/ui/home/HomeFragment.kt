@@ -14,78 +14,45 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
+import com.example.golie.R.id.nav_addCategory
 import com.example.golie.ToDo
 import com.example.golie.toDoRepository
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.home_fragment.view.*
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class HomeFragment : Fragment() {
 
     companion object {
         fun newInstance() = HomeFragment()
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private val db = FirebaseFirestore.getInstance()
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: ArrayAdapter<ToDo>
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val view = inflater.inflate(R.layout.home_fragment, container, false)
         // "view" is now our modifiable fragment
+        val view = inflater.inflate(R.layout.home_fragment, container, false)
 
 
-        // Setting up the list view with all its data and enabling cicking on one list item
-        val listView =
-            view.home_allCategoriesListView //fetching the list view with id "home_allCategoriesListView"
-
+        //Enabling clicking on plus button to add category
 
         val addCategoryButton = view.home_addCategoryButton
 
         addCategoryButton.setOnClickListener {
 
-            Log.d("status", "you clicked button")
-
-            // Test 1
-
-            val user1 = hashMapOf(
-                "name" to "Dennis"
-            )
-
-            Log.d("user1", "$user1")
-
-            db.collection("users1").add(user1)
-
-
-            // Test 2
-
-            val user2 = HashMap<String, Any>()
-            user2.put("first", "Ada")
-            user2.put("last", "Lovelace")
-            user2.put("born", 1815)
-
-            // Add a new document with a generated ID
-            db.collection("users2")
-                .add(user2)
-                .addOnSuccessListener { documentReference ->
-                    Log.d(
-                        TAG,
-                        "DocumentSnapshot added with ID: " + documentReference.id
-                    )
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Error adding document", e)
-                    e.printStackTrace()
-                }
-
-
             val navController = findNavController()
-            navController.navigate(R.id.nav_addCategory)
+            navController.navigate(nav_addCategory)
         }
+
+
+        //Enabling clicking on settings button
 
         val settingsButton = view.home_settingsButton
 
@@ -118,6 +85,10 @@ class HomeFragment : Fragment() {
 
         }
 
+        // Setting up the list view with all its data and enabling cicking on one list item
+
+        val listView = view.home_allCategoriesListView
+
         adapter = ArrayAdapter(
             context!!, // Casting our fragment into a context?
             android.R.layout.simple_list_item_1, // Has to do with presentation (we want to display it as a simple_list_item_1)
@@ -139,8 +110,13 @@ class HomeFragment : Fragment() {
             }
             navController.navigate(R.id.nav_category, args)
         }
+
+
         return view
     }
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

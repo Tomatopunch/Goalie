@@ -19,7 +19,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.golie.R
 import com.example.golie.ToDo
 import com.example.golie.toDoRepository
-import com.example.golie.ui.category.goal.goalRepository
 import kotlinx.android.synthetic.main.category_fragment.view.*
 
 class FinishedGoalFragment : Fragment() {

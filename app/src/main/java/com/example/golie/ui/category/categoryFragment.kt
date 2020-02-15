@@ -1,8 +1,10 @@
 package com.example.golie.ui.category
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -14,9 +16,13 @@ import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
 import com.example.golie.ui.category.goal.Goal
-import com.example.golie.ui.category.goal.goalRepository
+//import com.example.golie.ui.category.goal.goalRepository
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.category_fragment.*
+//import kotlinx.android.synthetic.main.category_fragment.view
 import kotlinx.android.synthetic.main.category_fragment.view.*
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class categoryFragment : Fragment() {
 
@@ -26,21 +32,44 @@ class categoryFragment : Fragment() {
 
     private lateinit var viewModel: CategoryViewModel
     private lateinit var adapter: ArrayAdapter<Goal>
+    @SuppressLint("ResourceAsColor")
+    private val db = FirebaseFirestore.getInstance()
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @SuppressLint("ResourceAsColor")
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(R.layout.category_fragment, container, false)
         val listView = view.category_listView
+        val currentUserId = "josefin"
+        val currentCategoryId = 1
+
+        var allGoals = mutableListOf<Goal>()
+
+        //Fetching all goals from database
+
+        db.collection("users/" + currentUserId + "/categories/" + currentCategoryId + "/allGoals")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val goal = document.toObject(Goal::class.java)
+                    allGoals.add(goal)
+
+                    Log.d(TAG, "Success getting all goals! ${document.id} => ${document.data}")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "Error getting goals: ", exception)
+            }
+
+
 
             adapter = ArrayAdapter(
                 context!!,
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
-                goalRepository.getGoals()
+                allGoals
             )
 
         listView.adapter = adapter
@@ -49,7 +78,7 @@ class categoryFragment : Fragment() {
 
             // TODO: JOSEFIN: De två nedanstående raderna kanske används för att hämta data ur databasen sen. De användes för att skicka med data innan iallafall :)
             var clickedGoal = listView.adapter.getItem(position) as Goal
-            var id = clickedGoal.id
+            //var id = clickedGoal.id
 
             AlertDialog.Builder(context!!)
                 .setTitle("Manage Goal")
@@ -75,12 +104,15 @@ class categoryFragment : Fragment() {
         return view
     }
 
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val buttonAdd = category_addButton
+        val addGoalButton = category_addButton
 
-        buttonAdd.setOnClickListener {
+        addGoalButton.setOnClickListener {
 
             // Here we cast main activity to the interface (below) and this is possible because
             // main activity extends this interface
@@ -97,12 +129,16 @@ class categoryFragment : Fragment() {
     }
 
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     override fun onStart() {
         super.onStart()
 
         adapter.notifyDataSetChanged()
 
     }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
