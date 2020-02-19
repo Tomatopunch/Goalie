@@ -12,10 +12,9 @@ import com.example.golie.R
 import kotlinx.android.synthetic.main.shop_fragment.*
 import kotlinx.android.synthetic.main.shop_fragment.view.*
 
-
-//FIX so you can click on each item in the recyclerview
-//points right now is a string? wait and see how things turn out with the database
-
+//TODO: Fix so that when you create a reward it gets into the recycler view
+//TODO: Your points should be added from the database
+//TODO: When you get back here
 class ShopFragment : Fragment() {
 
     companion object {
@@ -34,10 +33,11 @@ class ShopFragment : Fragment() {
 
 
         view.shop_view.layoutManager = LinearLayoutManager(activity)
-        view.shop_view.adapter = ShopAdapter()
+        view.shop_view.adapter = ShopAdapter(context!!)
+        view.shop_view.setHasFixedSize(true)
 
+        view?.shop_view?.adapter?.notifyDataSetChanged()
         points.setText("9999")
-
         return view
     }
 
@@ -57,25 +57,10 @@ class ShopFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(ShopViewModel::class.java)
         // TODO: Use the ViewModel
     }
-}
 
-//Save alert code for later
-/*
-AlertDialog.Builder(context!!)
-.setTitle("Buy")
-.setMessage("Are you sure you want to buy this item?")
-.setPositiveButton(
-"Yes"
-) { _, _->
-    AlertDialog.Builder(context!!)
-        .setTitle("That's great!")
-        .setMessage("Your new balance: XXX")
-        .setPositiveButton(
-            "Enjoy your new reward!"
-        ) { _, _->
-        }.show()
-}.setNegativeButton(
-"No"
-) { _, _->
-}.show()
-*/
+    override fun onStart() {
+        super.onStart()
+        view?.shop_view?.adapter?.notifyDataSetChanged()
+        //TODO: you probably come back here when updating a reward?
+    }
+}

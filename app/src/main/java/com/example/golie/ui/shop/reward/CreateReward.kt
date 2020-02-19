@@ -1,5 +1,6 @@
 package com.example.golie.ui.shop.reward
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,12 +13,14 @@ import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
 import com.example.golie.toDoRepository
+import com.example.golie.ui.shop.ShopAdapter
+import com.example.golie.ui.shop.ShopFragment
+import com.example.golie.ui.shop.ShopItem
 import kotlinx.android.synthetic.main.create_reward_fragment.view.*
 
-//Fix validation on these fields, and make the button clickable if the fields are valid
-// maybe points should be converted to int?
-//display points on the view when created
-//figure out how to separate content in a view show more than one thing?? wait for database for this
+//TODO: validation on all these fields
+//TODO: make the button only clickable if fields are true
+//TODO: display points from the view when created
 
 class CreateReward : Fragment() {
 
@@ -43,12 +46,16 @@ class CreateReward : Fragment() {
         //have some sort of validation here
         /////////////////////////////////
 
+
         confirmButton.setOnClickListener {
+
+            //TODO: Call the additem class from the adapter? but you can't access it?
+            val preferences = ShopAdapter(context!!)
+            preferences.addItem(titleText.toString(), pointContent.toString())
+
             val navController = findNavController()
-
-            toDoRepository.addToDo(titleText.editableText.toString(), "")
-
             navController.navigate(R.id.nav_shop)
+
         }
 
         setHasOptionsMenu(true)
@@ -57,6 +64,7 @@ class CreateReward : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         super.onOptionsItemSelected(item)
+
         val navController = findNavController()
         navController.navigate(R.id.nav_shop)
 
