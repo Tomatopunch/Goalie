@@ -1,9 +1,7 @@
 package com.example.golie.ui.home.addCategory
 
-import android.content.ContentValues.TAG
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +10,8 @@ import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
 import com.example.golie.R.id.nav_category
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.golie.data.dataClasses.Category
+import com.example.golie.data.repositoryClasses.createCategory
 import kotlinx.android.synthetic.main.add_category_fragment.view.*
 
 
@@ -27,15 +26,17 @@ class AddCategoryFragment : Fragment() {
     }
 
     private lateinit var viewModel: AddCategoryViewModel
-    private val db = FirebaseFirestore.getInstance()
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        // "view" is now our modifiable fragment
-        val view = inflater.inflate(R.layout.add_category_fragment, container, false)
 
+        val view = inflater.inflate(R.layout.add_category_fragment, container, false)
+        val currentUserId = "josefin" //TODO
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Enabling clicking on save button
 
@@ -44,21 +45,7 @@ class AddCategoryFragment : Fragment() {
 
             val categoryName = (view.addCategory_nameEditText).editableText.toString() //Fetching text in edit text field
             val category = Category(categoryName)
-            val refToCategoriesSubcollection = db.collection("users/idOfCurrentlyLoggedInUser/categories")
-
-            refToCategoriesSubcollection.add(category)
-                .addOnSuccessListener { documentReference ->
-
-                    Log.d(TAG, "Successfully added category with ID: " + documentReference.id + "within subcollection 'categories' ")
-
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Error adding category", e)
-                    e.printStackTrace()
-
-                }
-
-
+            createCategory(currentUserId, category)
             val navController = findNavController()
             navController.navigate(nav_category)
         }

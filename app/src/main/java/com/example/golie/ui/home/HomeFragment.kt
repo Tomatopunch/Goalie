@@ -1,9 +1,7 @@
 package com.example.golie.ui.home
 
-import android.content.ContentValues.TAG
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +13,8 @@ import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
 import com.example.golie.R.id.nav_addCategory
-import com.example.golie.ToDo
-import com.example.golie.toDoRepository
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.golie.data.dataClasses.Category
+import com.example.golie.data.repositoryClasses.getAllCategories
 import kotlinx.android.synthetic.main.home_fragment.view.*
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,17 +26,18 @@ class HomeFragment : Fragment() {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private val db = FirebaseFirestore.getInstance()
     private lateinit var viewModel: HomeViewModel
-    private lateinit var adapter: ArrayAdapter<ToDo>
+    private lateinit var adapter: ArrayAdapter<Category>
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        // "view" is now our modifiable fragment
-        val view = inflater.inflate(R.layout.home_fragment, container, false)
 
+        val view = inflater.inflate(R.layout.home_fragment, container, false)
+        val currentUserId = "josefin" //TODO
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Enabling clicking on plus button to add category
 
@@ -51,6 +49,7 @@ class HomeFragment : Fragment() {
             navController.navigate(nav_addCategory)
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Enabling clicking on settings button
 
@@ -59,17 +58,17 @@ class HomeFragment : Fragment() {
         settingsButton.setOnClickListener {
             lateinit var navController: NavController
             AlertDialog.Builder(context!!)
-                .setTitle("Manage Goal")
-                .setMessage("Decide what you want to do with your goal.")
+                .setTitle("Settings")
+                .setMessage("What do you want to do?")
                 .setPositiveButton(
-                    "select favorite (?)"
+                    "Select favorite category"
                 ) { dialog, whichButton ->
 
                     navController = findNavController()
                     navController.navigate(R.id.nav_chooseFavCategory)
 
                 }.setNegativeButton(
-                    "Info"
+                    "View info page"
                 ) { dialog, whichButton ->
 
                     navController = findNavController()
@@ -85,28 +84,32 @@ class HomeFragment : Fragment() {
 
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         // Setting up the list view with all its data and enabling cicking on one list item
 
         val listView = view.home_allCategoriesListView
+        //val allCategories = getAllCategories(currentUserId)
+
 
         adapter = ArrayAdapter(
             context!!, // Casting our fragment into a context?
             android.R.layout.simple_list_item_1, // Has to do with presentation (we want to display it as a simple_list_item_1)
             android.R.id.text1,
-            toDoRepository.getAllToDos() //Here we fetch data!!
+            getAllCategories(currentUserId)//getAllCategories(currentUserId)
         )
 
         listView.adapter = adapter
 
         listView.setOnItemClickListener { parent, view, position, id ->
 
-            var clickedToDo = listView.adapter.getItem(position) as ToDo
-            var id = clickedToDo.id
+            var clickedCategory = listView.adapter.getItem(position) as Category
+            var categoryId = clickedCategory.id
 
 
             val navController = findNavController()
             val args = Bundle().apply {
-                putInt("id", id) // TODO: Hämta databas kategorin med detta värde
+                putString("id", categoryId)
             }
             navController.navigate(R.id.nav_category, args)
         }

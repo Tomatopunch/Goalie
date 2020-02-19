@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
-import com.example.golie.ui.category.goal.Goal
+import com.example.golie.data.dataClasses.Goal
 //import com.example.golie.ui.category.goal.goalRepository
 import com.example.golie.ui.category.goal.validateInput
 import com.google.firebase.firestore.FirebaseFirestore
@@ -66,7 +66,7 @@ class AddGoalFragment : Fragment() {
             //Getting input values
             val title = view.addGoal_titleEditText.editableText.toString() // Måste vara editable för att se texten
             val timeSpanText = view.addGoal_timeSpanDate.editableText.toString()
-            val reOccurring = view.addGoal_reoccurringCheckBox.isChecked.toString().toBoolean() //TODO: Ingen todo, endast för att uppmärksamma. DETTA ÄR EN BOOL. GÖR OM TILL TEXT SEN FÖR DATABASEN VID BEHOV. Ta bort denna kommentar när den inte behövs längre
+            val reoccurring = view.addGoal_reoccurringCheckBox.isChecked.toString().toBoolean() //TODO: Ingen todo, endast för att uppmärksamma. DETTA ÄR EN BOOL. GÖR OM TILL TEXT SEN FÖR DATABASEN VID BEHOV. Ta bort denna kommentar när den inte behövs längre
             val pointsText = view.addGoal_pointsEditText.editableText.toString()
             val points = pointsText.toInt()
 
@@ -79,7 +79,7 @@ class AddGoalFragment : Fragment() {
 
                 //Input is valid, putting it in database
 
-                val goal = Goal(title,timeSpanText,reOccurring, points)
+                val goal = Goal(title,timeSpanText,reoccurring, points)
                 val refToSpecificCategorySubcollection = db.collection("users/idOfCurrentlyLoggedInUser/categories/idOfCurrentActivity/allCategories")
 
                 refToSpecificCategorySubcollection.add(goal)

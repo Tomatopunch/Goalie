@@ -1,13 +1,10 @@
 package com.example.golie.ui.category
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -15,9 +12,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
-import com.example.golie.ui.category.goal.Goal
+import com.example.golie.data.dataClasses.Goal
+import com.example.golie.data.repositoryClasses.GoalRepository
 //import com.example.golie.ui.category.goal.goalRepository
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.category_fragment.*
 //import kotlinx.android.synthetic.main.category_fragment.view
 import kotlinx.android.synthetic.main.category_fragment.view.*
@@ -33,52 +30,36 @@ class categoryFragment : Fragment() {
     private lateinit var viewModel: CategoryViewModel
     private lateinit var adapter: ArrayAdapter<Goal>
     @SuppressLint("ResourceAsColor")
-    private val db = FirebaseFirestore.getInstance()
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @SuppressLint("ResourceAsColor")
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(R.layout.category_fragment, container, false)
         val listView = view.category_listView
+
         val currentUserId = "josefin"
-        val currentCategoryId = 1
+        val currentCategoryId = (arguments!!.getString("id")).toString()
 
-        var allGoals = mutableListOf<Goal>()
-
-        //Fetching all goals from database
-
-        db.collection("users/" + currentUserId + "/categories/" + currentCategoryId + "/allGoals")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    val goal = document.toObject(Goal::class.java)
-                    allGoals.add(goal)
-
-                    Log.d(TAG, "Success getting all goals! ${document.id} => ${document.data}")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "Error getting goals: ", exception)
-            }
-
+        val goalRepository = GoalRepository()
 
 
             adapter = ArrayAdapter(
                 context!!,
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
-                allGoals
+                goalRepository.getAllGoalsWithinCategory(currentUserId, currentCategoryId)
             )
 
         listView.adapter = adapter
 
-        listView.setOnItemClickListener{ parent, view, position, id ->
+        listView.setOnItemClickListener{ parent, view, position, _ ->
 
-            // TODO: JOSEFIN: De två nedanstående raderna kanske används för att hämta data ur databasen sen. De användes för att skicka med data innan iallafall :)
+
             var clickedGoal = listView.adapter.getItem(position) as Goal
-            //var id = clickedGoal.id
+            var goalId = clickedGoal.id
 
             AlertDialog.Builder(context!!)
                 .setTitle("Manage Goal")
@@ -89,8 +70,8 @@ class categoryFragment : Fragment() {
                     view.setBackgroundColor(R.color.green)
                     val navController = findNavController()
                     val args = Bundle().apply {
-                        putString("categoryName", "today") // TODO: Hämta databas kategorin med detta värde
-                    } // Send this to the next navigation object with variables
+                        putString("goalId", goalId) //goal id is sent to finished goal fragment
+                    }
                     navController.navigate(R.id.nav_finishedGoal, args)
                 }.setNegativeButton(
                     "Failed"
