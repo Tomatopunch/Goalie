@@ -3,7 +3,9 @@ package com.example.golie.data.repositoryClasses
 import android.content.ContentValues
 import android.util.Log
 import com.example.golie.data.dataClasses.Goal
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 
 class GoalRepository : dbCursorRepository() {
 
@@ -32,29 +34,9 @@ class GoalRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun getAllGoalsWithinCategory(currentUserId : String, currentCategoryId: String) : MutableList<Goal>{
+    fun getAllGoalsWithinCategory(currentUserId : String, currentCategoryId: String) : Task<QuerySnapshot> {
 
-        var allGoals = mutableListOf<Goal>()
-
-        //Fetching all goals from database
-
-        db.collection("users/" + currentUserId + "/categories/" + currentCategoryId + "/allGoals")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    val goal = document.toObject(Goal::class.java)
-                    goal.id = document.id
-                    allGoals.add(goal)
-
-                    Log.d(ContentValues.TAG, "Success getting goal with id ${document.id} and data ${document.data}")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(ContentValues.TAG, "Error getting goals: ", exception)
-            }
-
-        return allGoals
-
+        return db.collection("users/" + currentUserId + "/categories/" + currentCategoryId + "/allGoals").get()
 
     }
 

@@ -11,7 +11,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.golie.R
 import com.example.golie.R.id.nav_category
 import com.example.golie.data.dataClasses.Category
-import com.example.golie.data.repositoryClasses.createCategory
+import com.example.golie.data.repositoryClasses.CategoryRepository
+//import com.example.golie.data.repositoryClasses.createCategory
 import kotlinx.android.synthetic.main.add_category_fragment.view.*
 
 
@@ -26,6 +27,7 @@ class AddCategoryFragment : Fragment() {
     }
 
     private lateinit var viewModel: AddCategoryViewModel
+    private val categoryRepository = CategoryRepository()
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,7 +47,7 @@ class AddCategoryFragment : Fragment() {
 
             val categoryName = (view.addCategory_nameEditText).editableText.toString() //Fetching text in edit text field
             val category = Category(categoryName)
-            createCategory(currentUserId, category)
+            categoryRepository.createCategory(currentUserId, category)
             val navController = findNavController()
             navController.navigate(nav_category)
         }

@@ -1,7 +1,9 @@
 package com.example.golie.ui.home
 
+import android.content.ContentValues
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +16,16 @@ import androidx.navigation.fragment.findNavController
 import com.example.golie.R
 import com.example.golie.R.id.nav_addCategory
 import com.example.golie.data.dataClasses.Category
-import com.example.golie.data.repositoryClasses.getAllCategories
+import com.example.golie.data.dataClasses.Goal
+import com.example.golie.data.dataClasses.Reward
+import com.example.golie.data.documentsToCategories
+import com.example.golie.data.doucumentToPoints
+import com.example.golie.data.repositoryClasses.CategoryRepository
+import com.example.golie.data.repositoryClasses.GoalRepository
+import com.example.golie.data.repositoryClasses.PointsRepository
+import com.example.golie.data.repositoryClasses.RewardRepository
+//import com.example.golie.data.repositoryClasses.getAllCategories
+import com.example.golie.ui.category.categoryFragment
 import kotlinx.android.synthetic.main.home_fragment.view.*
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,7 +46,16 @@ class HomeFragment : Fragment() {
 
 
         val view = inflater.inflate(R.layout.home_fragment, container, false)
+        val categoryRepository = CategoryRepository()
         val currentUserId = "josefin" //TODO
+
+
+        //for testing only
+        val goalRepository = GoalRepository()
+        val rewardRepository = RewardRepository()
+        val pointsRepository = PointsRepository()
+
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,8 +65,52 @@ class HomeFragment : Fragment() {
 
         addCategoryButton.setOnClickListener {
 
-            val navController = findNavController()
-            navController.navigate(nav_addCategory)
+            //adding a category
+            val category = Category("this week")
+            categoryRepository.createCategory(currentUserId, category)
+
+            //adding a goal to the a new category "this year"
+            val goal = Goal("clean room", "2020-02-20", true, 20)
+            goalRepository.createGoal(currentUserId, "this year", goal)
+
+            //updating category "this year"
+            val newCategory = Category("this is a NEW category!")
+            categoryRepository.updateCategory(currentUserId, "this year", newCategory)
+
+            //adding a reward
+            val reward = Reward("eat ice chocolate ice creammmmmm", 50)
+            rewardRepository.createReward(currentUserId, reward)
+
+            //setting points to 20
+            pointsRepository.setPoints(currentUserId,100)
+
+            //getting points
+
+            var points = 0
+            pointsRepository.getPoints(currentUserId)
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        points = doucumentToPoints(document)
+                        Log.d(ContentValues.TAG, "Successfully fetched points, the nr of points was: ${document.data}")
+
+                        Log.d("points??????", points.toString())
+                    }
+
+                    else {
+                        Log.d(ContentValues.TAG, "Could not find points!")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d(ContentValues.TAG, "An exception was thrown when fetching points! ", exception)
+                }
+
+
+
+
+
+
+            /*val navController = findNavController()
+            navController.navigate(nav_addCategory)*/
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,14 +153,23 @@ class HomeFragment : Fragment() {
         // Setting up the list view with all its data and enabling cicking on one list item
 
         val listView = view.home_allCategoriesListView
-        //val allCategories = getAllCategories(currentUserId)
+        lateinit var allCategories : MutableList<Category>
+
+        categoryRepository.getAllCategories(currentUserId)
+            .addOnSuccessListener { documents ->
+                allCategories = documentsToCategories(documents)
+            }
+            .addOnFailureListener { exception ->
+                Log.d("Error getting categories: ", exception.toString())
+            }
+
 
 
         adapter = ArrayAdapter(
             context!!, // Casting our fragment into a context?
             android.R.layout.simple_list_item_1, // Has to do with presentation (we want to display it as a simple_list_item_1)
             android.R.id.text1,
-            getAllCategories(currentUserId)//getAllCategories(currentUserId)
+            allCategories
         )
 
         listView.adapter = adapter

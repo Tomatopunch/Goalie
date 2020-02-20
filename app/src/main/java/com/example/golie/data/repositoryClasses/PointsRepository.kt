@@ -1,33 +1,21 @@
 package com.example.golie.data.repositoryClasses
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.util.Log
 import com.example.golie.data.dataClasses.Goal
 import com.example.golie.data.dataClasses.Reward
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentSnapshot
 
 class PointsRepository : dbCursorRepository(){
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   fun getPoints(currentUserId: String) : Int {
+   fun getPoints(currentUserId: String) : Task<DocumentSnapshot> {
 
-       var points : Int
-       points = -1
+       return db.collection("users/" + currentUserId + "/points").document("currentPoints").get()
 
-
-       db.collection("users/" + currentUserId + "/points")
-           .get()
-           .addOnSuccessListener { result ->
-               for (document in result) {
-                   points = (document.data.getValue("points")).toString().toInt()
-                   Log.d(ContentValues.TAG, "Success getting points that were stored in document with id ${document.id} and data ${document.data}")
-               }
-           }
-           .addOnFailureListener { exception ->
-               Log.d(ContentValues.TAG, "Error getting points: ", exception)
-           }
-
-       return points
    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,18 +26,11 @@ class PointsRepository : dbCursorRepository(){
             "points" to points
         )
 
-        db.collection("users/" + currentUserId + "/points")
-        .add(pointsDocumentData)
-            .addOnSuccessListener { documentReference ->
 
-                Log.d(ContentValues.TAG, "Successfully set points to " + points + " in a document with the ID: " + documentReference.id )
-
-            }
-            .addOnFailureListener { e ->
-                Log.w(ContentValues.TAG, "Error setting points.", e)
-                e.printStackTrace()
-
-            }
+        db.collection("users/" + currentUserId + "/points").document("currentPoints")
+            .set(pointsDocumentData)
+            .addOnSuccessListener { Log.d(TAG, "Successfully set points!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error setting points!", e) }
 
 
     }

@@ -3,6 +3,7 @@ package com.example.golie.ui.category
 import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
+import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
+import com.example.golie.data.documentsToCategories
+import com.example.golie.data.documentsToGoals
 import com.example.golie.data.repositoryClasses.GoalRepository
 //import com.example.golie.ui.category.goal.goalRepository
 import kotlinx.android.synthetic.main.category_fragment.*
@@ -38,22 +42,37 @@ class categoryFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(R.layout.category_fragment, container, false)
-        val listView = view.category_listView
-
         val currentUserId = "josefin"
-        val currentCategoryId = (arguments!!.getString("id")).toString()
+        val currentCategoryId : String  = (arguments!!.getString("id"))!!
+
+        //Fetching all goals from database
 
         val goalRepository = GoalRepository()
+        lateinit var allGoals : MutableList<Goal>
+
+        goalRepository.getAllGoalsWithinCategory(currentUserId, currentCategoryId)
+            .addOnSuccessListener { documents ->
+                allGoals = documentsToGoals(documents)
+            }
+            .addOnFailureListener { exception ->
+                Log.d("Error getting goals: ", exception.toString())
+            }
 
 
-            adapter = ArrayAdapter(
+
+        //Putting all goals in list view
+
+        adapter = ArrayAdapter(
                 context!!,
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
-                goalRepository.getAllGoalsWithinCategory(currentUserId, currentCategoryId)
+                allGoals
             )
 
+        val listView = view.category_listView
         listView.adapter = adapter
+
+        //Enabling clicking one one list item
 
         listView.setOnItemClickListener{ parent, view, position, _ ->
 

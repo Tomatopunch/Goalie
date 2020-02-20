@@ -5,7 +5,9 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 
 
 class CategoryRepository : dbCursorRepository()
@@ -37,31 +39,9 @@ class CategoryRepository : dbCursorRepository()
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun getAllCategories(currentUserId : String) : MutableList<Category>{
+    fun getAllCategories(currentUserId : String) : Task<QuerySnapshot> {
 
-        var allCategories = mutableListOf<Category>()
-
-
-        db.collection("users/" + currentUserId + "/categories")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-
-                    val category = document.toObject(Category::class.java)
-                    category.id = document.id
-                    allCategories.add(category)
-
-                    Log.d(ContentValues.TAG, "Success getting category with id ${document.id} and data ${document.data}")
-                    Log.d("the id of the category object", " " + category.id + "")
-                    Log.d("category object", " " + category + "")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(ContentValues.TAG, "Error getting categories: ", exception)
-            }
-
-        return allCategories
-
+        return db.collection("users/" + currentUserId + "/categories").get()
 
     }
 
