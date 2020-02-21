@@ -32,7 +32,7 @@ class categoryFragment : Fragment() {
     }
 
     private lateinit var viewModel: CategoryViewModel
-    private lateinit var adapter: ArrayAdapter<Goal>
+    private lateinit var adapter : ArrayAdapter<Goal>
     @SuppressLint("ResourceAsColor")
 
 
@@ -52,55 +52,59 @@ class categoryFragment : Fragment() {
 
         goalRepository.getAllGoalsWithinCategory(currentUserId, currentCategoryId)
             .addOnSuccessListener { documents ->
+
+                //casting documents into goal objects
+
                 allGoals = documentsToGoals(documents)
+
+
+                //Putting all goals in list view
+
+                adapter = ArrayAdapter(
+                    context!!,
+                    android.R.layout.simple_list_item_1,
+                    android.R.id.text1,
+                    allGoals
+                )
+
+                val listView = view.category_listView
+                listView.adapter = adapter
+
+                //Enabling clicking one one list item
+
+                listView.setOnItemClickListener{ parent, view, position, _ ->
+
+
+                    var clickedGoal = listView.adapter.getItem(position) as Goal
+                    var goalId = clickedGoal.id
+
+                    AlertDialog.Builder(context!!)
+                        .setTitle("Manage Goal")
+                        .setMessage("Decide what you want to do with your goal.")
+                        .setPositiveButton(
+                            "Finished"
+                        ) { dialog, whichButton ->
+                            view.setBackgroundColor(R.color.green)
+                            val navController = findNavController()
+                            val args = Bundle().apply {
+                                putString("goalId", goalId) //goal id is sent to finished goal fragment
+                            }
+                            navController.navigate(R.id.nav_finishedGoal, args)
+                        }.setNegativeButton(
+                            "Failed"
+                        ) { dialog, whichButton ->
+                            view.setBackgroundColor(R.color.red)
+                        }.setNeutralButton(
+                            "Do nothing"
+                        ){dialog, whichButton ->
+                        }.show()
+                }
+
             }
             .addOnFailureListener { exception ->
                 Log.d("Error getting goals: ", exception.toString())
             }
 
-
-
-        //Putting all goals in list view
-
-        adapter = ArrayAdapter(
-                context!!,
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1,
-                allGoals
-            )
-
-        val listView = view.category_listView
-        listView.adapter = adapter
-
-        //Enabling clicking one one list item
-
-        listView.setOnItemClickListener{ parent, view, position, _ ->
-
-
-            var clickedGoal = listView.adapter.getItem(position) as Goal
-            var goalId = clickedGoal.id
-
-            AlertDialog.Builder(context!!)
-                .setTitle("Manage Goal")
-                .setMessage("Decide what you want to do with your goal.")
-                .setPositiveButton(
-                    "Finished"
-                ) { dialog, whichButton ->
-                    view.setBackgroundColor(R.color.green)
-                    val navController = findNavController()
-                    val args = Bundle().apply {
-                        putString("goalId", goalId) //goal id is sent to finished goal fragment
-                    }
-                    navController.navigate(R.id.nav_finishedGoal, args)
-                }.setNegativeButton(
-                    "Failed"
-                ) { dialog, whichButton ->
-                    view.setBackgroundColor(R.color.red)
-                }.setNeutralButton(
-                    "Do nothing"
-                ){dialog, whichButton ->
-                }.show()
-        }
         return view
     }
 
@@ -134,7 +138,13 @@ class categoryFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        adapter.notifyDataSetChanged()
+        if (::adapter.isInitialized) {
+            adapter!!.notifyDataSetChanged()
+        }
+        else{
+            Log.d("State of adapter", "The adapter")
+
+        }
 
     }
 

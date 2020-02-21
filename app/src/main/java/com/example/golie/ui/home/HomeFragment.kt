@@ -65,55 +65,8 @@ class HomeFragment : Fragment() {
 
         addCategoryButton.setOnClickListener {
 
-            /*/adding a category
-            val category = Category("neeew category1")
-            categoryRepository.createCategory(currentUserId, category)
-
-            //adding a new category and adding a goal to that new category
-            val goal = Goal("new goal ", "2020-02-20", true, 20)
-            goalRepository.createGoal(currentUserId, "this year", goal)
-
-            //updating category "this year"
-            val newCategory = Category("this is a NEW category that has been updated!")
-            categoryRepository.updateCategory(currentUserId, "this year", newCategory)*/
-
-            //adding a reward
-            //val reward = Reward("hellooooooo im a reward", 50)
-            //rewardRepository.createReward(currentUserId, reward)
-
-            //val updatedReward = Reward("hellooooooo im an UPDATED reward", 50)
-            //rewardRepository.updateReward(currentUserId, "qHoHRsMIWoGYi5i9krde", updatedReward)
-
-            //setting points to 20
-            pointsRepository.setPoints(currentUserId,10000000)
-
-            //getting points
-
-            var points = 0
-            pointsRepository.getPoints(currentUserId)
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        points = doucumentToPoints(document)
-                        Log.d(ContentValues.TAG, "Successfully fetched points, the nr of points was: ${document.data}")
-
-                        Log.d("points??????", points.toString())
-                    }
-
-                    else {
-                        Log.d(ContentValues.TAG, "Could not find points!")
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Log.d(ContentValues.TAG, "An exception was thrown when fetching points! ", exception)
-                }
-
-
-
-
-
-
-            /*val navController = findNavController()
-            navController.navigate(nav_addCategory)*/
+            val navController = findNavController()
+            navController.navigate(nav_addCategory)
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,6 +113,7 @@ class HomeFragment : Fragment() {
 
         categoryRepository.getAllCategories(currentUserId)
             .addOnSuccessListener { documents ->
+
                 allCategories = documentsToCategories(documents)
 
                 adapter = ArrayAdapter(
@@ -174,7 +128,9 @@ class HomeFragment : Fragment() {
                 listView.setOnItemClickListener { parent, view, position, id ->
 
                     var clickedCategory = listView.adapter.getItem(position) as Category
+
                     var categoryId = clickedCategory.id
+                    Log.d("id of clicked category", categoryId)
 
 
                     val navController = findNavController()

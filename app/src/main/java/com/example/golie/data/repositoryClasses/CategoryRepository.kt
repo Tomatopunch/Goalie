@@ -6,6 +6,7 @@ import android.util.Log
 import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 
@@ -19,21 +20,9 @@ class CategoryRepository : dbCursorRepository()
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun createCategory(currentUserId: String , newCategory : Category)  {
+    fun createCategory(currentUserId: String , newCategory : Category) : Task<DocumentReference> {
 
-        val refToCategoriesSubcollection = db.collection("users/" + currentUserId + "/categories")
-
-        refToCategoriesSubcollection.add(newCategory)
-            .addOnSuccessListener { documentReference ->
-
-                Log.d(ContentValues.TAG, "Successfully added category with ID: " + documentReference.id + "within subcollection 'categories' for user " + currentUserId)
-
-            }
-            .addOnFailureListener { e ->
-                Log.w(ContentValues.TAG, "Error adding category", e)
-                e.printStackTrace()
-
-            }
+        return  db.collection("users/" + currentUserId + "/categories").add(newCategory)
 
     }
 
@@ -47,16 +36,12 @@ class CategoryRepository : dbCursorRepository()
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun updateCategory(currentUserId: String, categoryId: String, updatedCategory: Category) {
-
-        val categoryRef = db.collection("users/" + currentUserId + "/categories").document(categoryId)
+    fun updateCategory(currentUserId: String, categoryId: String, updatedCategory: Category) : Task<Void> {
 
         val updatedCategoryMap = mapOf("name" to updatedCategory.name) //This might seem uneccessary but is included to make all update functions alike and to make this update function more extendable if another attribute was to be added in the Category class
 
-        categoryRef
-            .update(updatedCategoryMap) //Why is this an unresolved reference?
-            .addOnSuccessListener { Log.d("Updating category name", "Catgory name successfully updated for category with id " + categoryId + " for user with id " + currentUserId) }
-            .addOnFailureListener { e -> Log.w(TAG, "Error updating category name", e) } //why?
+        return db.collection("users/" + currentUserId + "/categories").document(categoryId).update(updatedCategoryMap)
+
     }
 
 
