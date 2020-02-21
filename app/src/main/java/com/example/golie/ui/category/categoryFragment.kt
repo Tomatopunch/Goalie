@@ -43,7 +43,6 @@ class categoryFragment : Fragment() {
             activeAlertDialog = checkActiveDialog
         }
 
-        Log.d("testing", activeAlertDialog.toString())
         if(activeAlertDialog){
             AlertDialog.Builder(context!!)
                 .setTitle("Manage Goal")
@@ -51,7 +50,7 @@ class categoryFragment : Fragment() {
                 .setPositiveButton(
                     "Finished"
                 ) { dialog, whichButton ->
-                    view.setBackgroundColor(R.color.green)
+                    listView.setBackgroundColor(R.color.green)
                     val navController = findNavController()
                     val args = Bundle().apply {
                         putString("categoryName", "today") // TODO: Hämta databas kategorin med detta värde
@@ -61,7 +60,7 @@ class categoryFragment : Fragment() {
                 }.setNegativeButton(
                     "Failed"
                 ) { dialog, whichButton ->
-                    view.setBackgroundColor(R.color.red)
+                    listView.setBackgroundColor(R.color.green)
                     activeAlertDialog = false
                 }.setNeutralButton(
                     "Do nothing"
@@ -155,10 +154,6 @@ class categoryFragment : Fragment() {
         super.onSaveInstanceState(outState)
 
         outState.putBoolean("activeAlertDialog", activeAlertDialog)
-
-        // bool to identify if alertBox is active.
-        // if active, add alert again
-
 
     }
 }
