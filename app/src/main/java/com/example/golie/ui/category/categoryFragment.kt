@@ -3,6 +3,7 @@ package com.example.golie.ui.category
 import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -26,6 +27,7 @@ class categoryFragment : Fragment() {
 
     private lateinit var viewModel: CategoryViewModel
     private lateinit var adapter: ArrayAdapter<Goal>
+    private var activeAlertDialog = false
 
     @SuppressLint("ResourceAsColor")
     override fun onCreateView(
@@ -36,7 +38,41 @@ class categoryFragment : Fragment() {
         val view = inflater.inflate(R.layout.category_fragment, container, false)
         val listView = view.category_listView
 
-            adapter = ArrayAdapter(
+        var checkActiveDialog = savedInstanceState?.getBoolean("activeAlertDialog")
+        if(checkActiveDialog != null){
+            activeAlertDialog = checkActiveDialog
+        }
+
+        Log.d("testing", activeAlertDialog.toString())
+        if(activeAlertDialog){
+            AlertDialog.Builder(context!!)
+                .setTitle("Manage Goal")
+                .setMessage("Decide what you want to do with your goal.")
+                .setPositiveButton(
+                    "Finished"
+                ) { dialog, whichButton ->
+                    view.setBackgroundColor(R.color.green)
+                    val navController = findNavController()
+                    val args = Bundle().apply {
+                        putString("categoryName", "today") // TODO: Hämta databas kategorin med detta värde
+                    } // Send this to the next navigation object with variables
+                    activeAlertDialog = false
+                    navController.navigate(R.id.nav_finishedGoal, args)
+                }.setNegativeButton(
+                    "Failed"
+                ) { dialog, whichButton ->
+                    view.setBackgroundColor(R.color.red)
+                    activeAlertDialog = false
+                }.setNeutralButton(
+                    "Do nothing"
+                ){dialog, whichButton ->
+                    activeAlertDialog = false
+                }.setOnCancelListener{
+                    activeAlertDialog = false
+                }.show()
+        }
+
+        adapter = ArrayAdapter(
                 context!!,
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
@@ -50,7 +86,7 @@ class categoryFragment : Fragment() {
             // TODO: JOSEFIN: De två nedanstående raderna kanske används för att hämta data ur databasen sen. De användes för att skicka med data innan iallafall :)
             var clickedGoal = listView.adapter.getItem(position) as Goal
             var id = clickedGoal.id
-
+            activeAlertDialog = true
             AlertDialog.Builder(context!!)
                 .setTitle("Manage Goal")
                 .setMessage("Decide what you want to do with your goal.")
@@ -62,14 +98,19 @@ class categoryFragment : Fragment() {
                     val args = Bundle().apply {
                         putString("categoryName", "today") // TODO: Hämta databas kategorin med detta värde
                     } // Send this to the next navigation object with variables
+                    activeAlertDialog = false
                     navController.navigate(R.id.nav_finishedGoal, args)
                 }.setNegativeButton(
                     "Failed"
                 ) { dialog, whichButton ->
                     view.setBackgroundColor(R.color.red)
+                    activeAlertDialog = false
                 }.setNeutralButton(
                     "Do nothing"
                 ){dialog, whichButton ->
+                    activeAlertDialog = false
+                }.setOnCancelListener{
+                    activeAlertDialog = false
                 }.show()
         }
         return view
@@ -110,4 +151,14 @@ class categoryFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putBoolean("activeAlertDialog", activeAlertDialog)
+
+        // bool to identify if alertBox is active.
+        // if active, add alert again
+
+
+    }
 }

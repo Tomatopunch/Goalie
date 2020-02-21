@@ -19,7 +19,13 @@ import kotlinx.android.synthetic.main.add_goal_fragment.*
 import kotlinx.android.synthetic.main.add_goal_fragment.view.*
 import java.util.*
 
-class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
+class DatePickerFragment : DialogFragment, DatePickerDialog.OnDateSetListener {
+
+    lateinit var theView: View
+
+    constructor(view: View) : super(){
+        this.theView = view
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
@@ -39,12 +45,13 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         val theMonth = month + 1
         val date = ("$year-$theMonth-$day")
 
-        val inflater = activity!!.layoutInflater
-        val view = inflater.inflate(R.layout.add_goal_fragment, null)
-        view.addGoal_timeSpanDate.setText(date)
 
-        val timeSpanText = view.addGoal_timeSpanDate.editableText.toString()
+        theView.addGoal_timeSpanDate.setText(date)
+
+        val timeSpanText = theView.addGoal_timeSpanDate.editableText.toString()
         Log.d("checkSpan", "$timeSpanText")
+
+
 
     }
 }
