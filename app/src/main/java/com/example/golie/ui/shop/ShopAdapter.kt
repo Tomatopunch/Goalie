@@ -2,6 +2,7 @@ package com.example.golie.ui.shop
 
 import android.app.AlertDialog
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,43 +18,18 @@ open class ShopAdapter(context: Context) : RecyclerView.Adapter<ShopAdapter.Cust
     val context = context
 
     private val videoTitles = mutableListOf(
-        "bla",
-        "bla",
-        "bla",
         "Ice cream",
         "Dance",
         "Movie Night",
         "Moore Title",
-        "Ice cream",
-        "Dance",
-        "Movie Night",
-        "Moore Title",
-        "Ice cream",
-        "Dance",
-        "Movie Night",
-        "Moore Title",
-        "Ice cream",
-        "Dance",
-        "Movie Night",
-        "Moore Title"
+        "Wanna hang"
     )
     private val shopPoints = mutableListOf(
         "50",
         "40",
         "50",
-        "XXXX",
         "50",
-        "40",
-        "50",
-        "XXXX",
-        "50",
-        "40",
-        "50",
-        "XXXX",
-        "50",
-        "40",
-        "50",
-        "XXXX"
+        "40"
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
@@ -76,7 +52,7 @@ open class ShopAdapter(context: Context) : RecyclerView.Adapter<ShopAdapter.Cust
     }
 
     //number of item
-    override fun getItemCount() = shopPoints.size
+    override fun getItemCount() = videoTitles.size
 
     class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val videoTitle: TextView = itemView.shop_title
@@ -105,6 +81,10 @@ open class ShopAdapter(context: Context) : RecyclerView.Adapter<ShopAdapter.Cust
     fun addItem(title: String, point: String) {
         videoTitles.add(title)
         shopPoints.add(point)
+    }
+
+    fun refreshDataset() {
+        notifyDataSetChanged()
     }
 }
 

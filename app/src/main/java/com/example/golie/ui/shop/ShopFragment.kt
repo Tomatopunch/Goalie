@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +24,7 @@ class ShopFragment : Fragment() {
 
     private lateinit var viewModel: ShopViewModel
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,17 +36,19 @@ class ShopFragment : Fragment() {
 
         view.shop_view.layoutManager = LinearLayoutManager(activity)
         view.shop_view.adapter = ShopAdapter(context!!)
+
+        view.shop_view?.adapter?.notifyDataSetChanged()
+
         view.shop_view.setHasFixedSize(true)
 
-        view?.shop_view?.adapter?.notifyDataSetChanged()
         points.setText("9999")
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val buttonCreateReward = shop_floatingActionButton
-
 
         buttonCreateReward.setOnClickListener {
             val navController = findNavController()
@@ -58,9 +62,7 @@ class ShopFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
-    override fun onStart() {
-        super.onStart()
-        view?.shop_view?.adapter?.notifyDataSetChanged()
-        //TODO: you probably come back here when updating a reward?
+    override fun onResume() {
+        super.onResume()
     }
 }

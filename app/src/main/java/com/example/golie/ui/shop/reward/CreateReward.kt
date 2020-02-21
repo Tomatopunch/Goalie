@@ -3,6 +3,7 @@ package com.example.golie.ui.shop.reward
 import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -46,12 +47,11 @@ class CreateReward : Fragment() {
         //have some sort of validation here
         /////////////////////////////////
 
-
         confirmButton.setOnClickListener {
 
             //TODO: Call the additem class from the adapter? but you can't access it?
-            val preferences = ShopAdapter(context!!)
-            preferences.addItem(titleText.toString(), pointContent.toString())
+            val shopItem = ShopAdapter(context!!)
+            shopItem.addItem(titleText.editableText.toString(), pointContent.editableText.toString())
 
             val navController = findNavController()
             navController.navigate(R.id.nav_shop)
