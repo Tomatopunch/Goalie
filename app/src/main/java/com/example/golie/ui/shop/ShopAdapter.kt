@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.golie.R
 import kotlinx.android.synthetic.main.shop_item.view.*
 
-
 private val videoTitles = mutableListOf(
     "Ice cream",
     "Dance",
@@ -61,22 +60,31 @@ open class ShopAdapter(context: Context) : RecyclerView.Adapter<ShopAdapter.Cust
     }
 
     private fun alertDialog(context: Context) {
+        alertItemClicked = true
         AlertDialog.Builder(context)
             .setTitle("Buy")
             .setMessage("Are you sure you want to buy this item?")
             .setPositiveButton(
                 "Yes"
-            ) { _, _->
-                AlertDialog.Builder(context!!)
+            ) { dialog, whichButton ->
+                alertItemClicked = false
+                alertItemBought = true
+                AlertDialog.Builder(context)
                     .setTitle("That's great!")
                     .setMessage("Your new balance: XXX")
                     .setPositiveButton(
                         "Enjoy your new reward!"
-                    ) { _, _->
+                    ) { dialog, whichButton ->
+                        alertItemBought = false
+                    }.setOnCancelListener{
+                        alertItemBought = false
                     }.show()
             }.setNegativeButton(
                 "No"
-            ) { _, _->
+            ) { dialog, whichButton ->
+                alertItemClicked = false
+            }.setOnCancelListener{
+                alertItemClicked = false
             }.show()
     }
     fun addItem(title: String, point: String) {
