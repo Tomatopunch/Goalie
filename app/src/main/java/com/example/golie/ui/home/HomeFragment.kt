@@ -65,24 +65,27 @@ class HomeFragment : Fragment() {
 
         addCategoryButton.setOnClickListener {
 
-            //adding a category
-            val category = Category("this week")
+            /*/adding a category
+            val category = Category("neeew category1")
             categoryRepository.createCategory(currentUserId, category)
 
-            //adding a goal to the a new category "this year"
-            val goal = Goal("clean room", "2020-02-20", true, 20)
+            //adding a new category and adding a goal to that new category
+            val goal = Goal("new goal ", "2020-02-20", true, 20)
             goalRepository.createGoal(currentUserId, "this year", goal)
 
             //updating category "this year"
-            val newCategory = Category("this is a NEW category!")
-            categoryRepository.updateCategory(currentUserId, "this year", newCategory)
+            val newCategory = Category("this is a NEW category that has been updated!")
+            categoryRepository.updateCategory(currentUserId, "this year", newCategory)*/
 
             //adding a reward
-            val reward = Reward("eat ice chocolate ice creammmmmm", 50)
-            rewardRepository.createReward(currentUserId, reward)
+            //val reward = Reward("hellooooooo im a reward", 50)
+            //rewardRepository.createReward(currentUserId, reward)
+
+            //val updatedReward = Reward("hellooooooo im an UPDATED reward", 50)
+            //rewardRepository.updateReward(currentUserId, "qHoHRsMIWoGYi5i9krde", updatedReward)
 
             //setting points to 20
-            pointsRepository.setPoints(currentUserId,100)
+            pointsRepository.setPoints(currentUserId,10000000)
 
             //getting points
 
@@ -153,39 +156,42 @@ class HomeFragment : Fragment() {
         // Setting up the list view with all its data and enabling cicking on one list item
 
         val listView = view.home_allCategoriesListView
-        lateinit var allCategories : MutableList<Category>
+        var allCategories : MutableList<Category> = ArrayList()
 
         categoryRepository.getAllCategories(currentUserId)
             .addOnSuccessListener { documents ->
                 allCategories = documentsToCategories(documents)
+
+                adapter = ArrayAdapter(
+                    context!!, // Casting our fragment into a context?
+                    android.R.layout.simple_list_item_1, // Has to do with presentation (we want to display it as a simple_list_item_1)
+                    android.R.id.text1,
+                    allCategories
+                )
+
+                listView.adapter = adapter
+
+                listView.setOnItemClickListener { parent, view, position, id ->
+
+                    var clickedCategory = listView.adapter.getItem(position) as Category
+                    var categoryId = clickedCategory.id
+
+
+                    val navController = findNavController()
+                    val args = Bundle().apply {
+                        putString("id", categoryId)
+                    }
+                    navController.navigate(R.id.nav_category, args)
+                }
+
+
             }
             .addOnFailureListener { exception ->
                 Log.d("Error getting categories: ", exception.toString())
+
             }
 
 
-
-        adapter = ArrayAdapter(
-            context!!, // Casting our fragment into a context?
-            android.R.layout.simple_list_item_1, // Has to do with presentation (we want to display it as a simple_list_item_1)
-            android.R.id.text1,
-            allCategories
-        )
-
-        listView.adapter = adapter
-
-        listView.setOnItemClickListener { parent, view, position, id ->
-
-            var clickedCategory = listView.adapter.getItem(position) as Category
-            var categoryId = clickedCategory.id
-
-
-            val navController = findNavController()
-            val args = Bundle().apply {
-                putString("id", categoryId)
-            }
-            navController.navigate(R.id.nav_category, args)
-        }
 
 
         return view
