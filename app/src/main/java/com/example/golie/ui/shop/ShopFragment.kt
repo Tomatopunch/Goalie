@@ -33,12 +33,9 @@ class ShopFragment : Fragment() {
         val view = inflater.inflate(R.layout.shop_fragment, container, false)
         val points = view.shop_balance
 
-
         view.shop_view.layoutManager = LinearLayoutManager(activity)
         view.shop_view.adapter = ShopAdapter(context!!)
-
-        view.shop_view?.adapter?.notifyDataSetChanged()
-
+        view.shop_view.adapter?.notifyDataSetChanged()
         view.shop_view.setHasFixedSize(true)
 
         points.setText("9999")
@@ -54,6 +51,7 @@ class ShopFragment : Fragment() {
             val navController = findNavController()
             navController.navigate(R.id.nav_createReward)
         }
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

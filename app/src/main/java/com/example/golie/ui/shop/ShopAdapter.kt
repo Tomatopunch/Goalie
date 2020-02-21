@@ -2,7 +2,6 @@ package com.example.golie.ui.shop
 
 import android.app.AlertDialog
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,26 +10,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.golie.R
 import kotlinx.android.synthetic.main.shop_item.view.*
 
+
+private val videoTitles = mutableListOf(
+    "Ice cream",
+    "Dance",
+    "Movie Night",
+    "Moore Title",
+    "Wanna hang"
+)
+private val shopPoints = mutableListOf(
+    "50",
+    "40",
+    "50",
+    "50",
+    "40"
+)
+
 // might want to have a dataclass and pass that as an argument into ShopAdapter
 // instead of having all the data here later on
 open class ShopAdapter(context: Context) : RecyclerView.Adapter<ShopAdapter.CustomViewHolder>() {
 
     val context = context
 
-    private val videoTitles = mutableListOf(
-        "Ice cream",
-        "Dance",
-        "Movie Night",
-        "Moore Title",
-        "Wanna hang"
-    )
-    private val shopPoints = mutableListOf(
-        "50",
-        "40",
-        "50",
-        "50",
-        "40"
-    )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         //create view
@@ -81,10 +82,6 @@ open class ShopAdapter(context: Context) : RecyclerView.Adapter<ShopAdapter.Cust
     fun addItem(title: String, point: String) {
         videoTitles.add(title)
         shopPoints.add(point)
-    }
-
-    fun refreshDataset() {
-        notifyDataSetChanged()
     }
 }
 
