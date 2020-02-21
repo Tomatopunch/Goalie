@@ -28,7 +28,7 @@ class HomeFragment : Fragment() {
     private val db = FirebaseFirestore.getInstance()
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: ArrayAdapter<ToDo>
-
+    private var activeAlertDialog = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +43,39 @@ class HomeFragment : Fragment() {
         val listView =
             view.home_allCategoriesListView //fetching the list view with id "home_allCategoriesListView"
 
+        var checkActiveDialog = savedInstanceState?.getBoolean("activeAlertDialog")
+        if(checkActiveDialog != null){
+            activeAlertDialog = checkActiveDialog
+        }
+
+        if(activeAlertDialog){
+            lateinit var navController: NavController
+            AlertDialog.Builder(context!!)
+                .setTitle("Manage Goal")
+                .setMessage("Decide what you want to do with your goal.")
+                .setPositiveButton(
+                    "select favorite (?)"
+                ) { dialog, whichButton ->
+                    activeAlertDialog = false
+                    navController = findNavController()
+                    navController.navigate(R.id.nav_chooseFavCategory)
+
+                }.setNegativeButton(
+                    "Info"
+                ) { dialog, whichButton ->
+                    activeAlertDialog = false
+                    navController = findNavController()
+                    navController.navigate(R.id.nav_info)
+
+                }.setNeutralButton(
+                    "Logout"
+                ) { dialog, whichButton ->
+                    activeAlertDialog = false
+                    //TODO: Direct this to the login page
+                }.setOnCancelListener{
+                    activeAlertDialog = false
+                }.show()
+        }
 
         val addCategoryButton = view.home_addCategoryButton
 
@@ -88,8 +121,8 @@ class HomeFragment : Fragment() {
         }
 
         val settingsButton = view.home_settingsButton
-
         settingsButton.setOnClickListener {
+            activeAlertDialog = true
             lateinit var navController: NavController
             AlertDialog.Builder(context!!)
                 .setTitle("Manage Goal")
@@ -97,27 +130,27 @@ class HomeFragment : Fragment() {
                 .setPositiveButton(
                     "select favorite (?)"
                 ) { dialog, whichButton ->
-
+                    activeAlertDialog = false
                     navController = findNavController()
                     navController.navigate(R.id.nav_chooseFavCategory)
 
                 }.setNegativeButton(
                     "Info"
                 ) { dialog, whichButton ->
-
+                    activeAlertDialog = false
                     navController = findNavController()
                     navController.navigate(R.id.nav_info)
 
                 }.setNeutralButton(
                     "Logout"
                 ) { dialog, whichButton ->
-
+                    activeAlertDialog = false
                     //TODO: Direct this to the login page
-
+                }.setOnCancelListener{
+                    activeAlertDialog = false
                 }.show()
 
         }
-
         adapter = ArrayAdapter(
             context!!, // Casting our fragment into a context?
             android.R.layout.simple_list_item_1, // Has to do with presentation (we want to display it as a simple_list_item_1)
@@ -148,4 +181,9 @@ class HomeFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putBoolean("activeAlertDialog", activeAlertDialog)
+    }
 }

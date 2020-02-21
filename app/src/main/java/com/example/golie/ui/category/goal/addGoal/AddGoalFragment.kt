@@ -37,7 +37,7 @@ class AddGoalFragment : Fragment() {
         timeSpan.setOnClickListener{
 
 
-            val dialogFragment = DatePickerFragment()
+            val dialogFragment = DatePickerFragment(view)
             dialogFragment.show(activity!!.supportFragmentManager, "FragmentManager")
             /*var args = Bundle().apply {
                 putString("title", "$title")

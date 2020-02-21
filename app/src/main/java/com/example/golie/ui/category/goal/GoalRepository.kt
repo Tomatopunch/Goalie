@@ -13,6 +13,7 @@ val goalRepository = GoalRepository().apply{
         100
     )
 
+
     addGoal(
         "Exercise",
         null,
