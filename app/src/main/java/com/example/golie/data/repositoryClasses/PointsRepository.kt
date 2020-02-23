@@ -20,18 +20,14 @@ class PointsRepository : dbCursorRepository(){
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun setPoints(currentUserId: String, points: Int){
+    fun setPoints(currentUserId: String, points: Int) : Task<Void>{
 
         val pointsDocumentData = hashMapOf(
             "points" to points
         )
 
 
-        db.collection("users/" + currentUserId + "/points").document("currentPoints")
-            .set(pointsDocumentData)
-            .addOnSuccessListener { Log.d(TAG, "Successfully set points!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error setting points!", e) }
-
+        return db.collection("users/" + currentUserId + "/points").document("currentPoints").set(pointsDocumentData)
 
     }
 

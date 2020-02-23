@@ -4,6 +4,8 @@ import android.util.Log
 import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
 import com.example.golie.data.dataClasses.Reward
+import com.example.golie.data.repositoryClasses.GoalRepository
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
@@ -75,5 +77,8 @@ fun doucumentToPoints (document: DocumentSnapshot) : Int {
 
     return document.data!!.getValue("points").toString().toInt()
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
