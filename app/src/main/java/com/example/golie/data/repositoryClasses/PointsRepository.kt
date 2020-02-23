@@ -12,6 +12,7 @@ class PointsRepository : dbCursorRepository(){
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // Funkar
    fun getPoints(currentUserId: String) : Task<DocumentSnapshot> {
 
        return db.collection("users/" + currentUserId + "/points").document("currentPoints").get()
@@ -20,6 +21,7 @@ class PointsRepository : dbCursorRepository(){
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // Funkar
     fun setPoints(currentUserId: String, points: Int) : Task<Void>{
 
         val pointsDocumentData = hashMapOf(

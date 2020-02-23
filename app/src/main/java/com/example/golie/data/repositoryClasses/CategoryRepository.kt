@@ -20,6 +20,7 @@ class CategoryRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //Funkar
     fun createCategory(currentUserId: String, newCategory: Category): Task<DocumentReference> {
 
         return db.collection("users/" + currentUserId + "/categories").add(newCategory)
@@ -28,6 +29,7 @@ class CategoryRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //Funkar
     fun getAllCategories(currentUserId: String): Task<QuerySnapshot> {
 
         return db.collection("users/" + currentUserId + "/categories").get()
@@ -36,19 +38,19 @@ class CategoryRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //Funkar EJ!
     fun updateCategory(currentUserId: String, categoryId: String, updatedCategory: Category): Task<Void> {
 
-        val updatedCategoryMap =
-            mapOf("name" to updatedCategory.name) //This might seem uneccessary but is included to make all update functions alike and to make this update function more extendable if another attribute was to be added in the Category class
+        val updatedCategoryMap = mapOf("name" to updatedCategory.name) //This might seem uneccessary but is included to make all update functions alike and to make this update function more extendable if another attribute was to be added in the Category class
 
-        return db.collection("users/" + currentUserId + "/categories").document(categoryId)
-            .update(updatedCategoryMap)
+        return db.collection("users/" + currentUserId + "/categories").document(categoryId).update(updatedCategoryMap)
 
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+    // Funkar!!
     fun deleteCategory(currentUserId: String, currentCategoryId: String) {
 
         // First; fetching and deleting (one at the time) all goals that belong to the category

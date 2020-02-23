@@ -14,6 +14,7 @@ class GoalRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // Funkar
     fun createGoal(currentUserId : String, currentCategoryId: String, newGoal: Goal) : Task<DocumentReference>{
 
         return db.collection("users/" + currentUserId + "/categories/" + currentCategoryId + "/allGoals").add(newGoal)
@@ -40,6 +41,7 @@ class GoalRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //Funkar
     fun deleteGoal (currentUserId : String, currentCategoryId: String, goalId: String) : Task<Void> {
 
        return db.collection("users/" + currentUserId + "/categories/" + currentCategoryId + "/allGoals").document(goalId).delete()

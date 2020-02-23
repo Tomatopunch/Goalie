@@ -48,11 +48,14 @@ class AddCategoryFragment : Fragment() {
             val categoryName = (view.addCategory_nameEditText).editableText.toString() //Fetching text in edit text field
             val category = Category(categoryName)
             categoryRepository.createCategory(currentUserId, category)
-            val navController = findNavController()
-            navController.navigate(nav_category)
+                .addOnSuccessListener {
+
+                    val navController = findNavController()
+                    navController.navigate(R.id.nav_home)
+                }
+
+
         }
-
-
 
 
         return view
