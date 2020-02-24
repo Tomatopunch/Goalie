@@ -14,7 +14,6 @@ import com.example.golie.R
 import kotlinx.android.synthetic.main.shop_fragment.*
 import kotlinx.android.synthetic.main.shop_fragment.view.*
 
-//TODO: Fix so that when you create a reward it gets into the recycler view
 //TODO: Your points should be added from the database
 //TODO: When you get back here
 
@@ -50,7 +49,7 @@ class ShopFragment : Fragment() {
                 .setMessage("Are you sure you want to buy this item?")
                 .setPositiveButton(
                     "Yes"
-                ) { dialog, whichButton ->
+                ) { _, _ ->
                     alertItemClicked = false
                     alertItemBought = true
                     android.app.AlertDialog.Builder(context!!)
@@ -58,14 +57,14 @@ class ShopFragment : Fragment() {
                         .setMessage("Your new balance: XXX")
                         .setPositiveButton(
                             "Enjoy your new reward!"
-                        ) { dialog, whichButton ->
+                        ) { _, _ ->
                             alertItemBought = false
                         }.setOnCancelListener{
                             alertItemBought = false
                         }.show()
                 }.setNegativeButton(
                     "No"
-                ) {dialog, whichButton ->
+                ) {_, _ ->
                     alertItemClicked = false
                 }.setOnCancelListener{
                     alertItemClicked = false
@@ -79,12 +78,12 @@ class ShopFragment : Fragment() {
         }
 
         if(alertItemBought){
-            android.app.AlertDialog.Builder(context!!)
+            android.app.AlertDialog.Builder(context)
                 .setTitle("That's great!")
                 .setMessage("Your new balance: XXX")
                 .setPositiveButton(
                     "Enjoy your new reward!"
-                ) { dialog, whichButton ->
+                ) { _, _ ->
                     alertItemBought = false
                 }.setOnCancelListener{
                     alertItemBought = false
@@ -110,17 +109,12 @@ class ShopFragment : Fragment() {
             val navController = findNavController()
             navController.navigate(R.id.nav_createReward)
         }
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(ShopViewModel::class.java)
         // TODO: Use the ViewModel
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

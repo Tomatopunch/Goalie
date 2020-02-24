@@ -60,7 +60,7 @@ class categoryFragment : Fragment() {
                 }.setNegativeButton(
                     "Failed"
                 ) { dialog, whichButton ->
-                    listView.setBackgroundColor(R.color.green)
+                    listView.setBackgroundColor(R.color.red)
                     activeAlertDialog = false
                 }.setNeutralButton(
                     "Do nothing"

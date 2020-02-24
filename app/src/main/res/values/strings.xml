@@ -23,4 +23,6 @@
     <string name="addGoal_insertTitle">insert title here...</string>
     <string name="addGoal_dateFormat">yyyy-mm-dd</string>
     <string name="addGoal_pointsExample">10 points</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

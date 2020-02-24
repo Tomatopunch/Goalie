@@ -66,7 +66,7 @@ open class ShopAdapter(context: Context) : RecyclerView.Adapter<ShopAdapter.Cust
             .setMessage("Are you sure you want to buy this item?")
             .setPositiveButton(
                 "Yes"
-            ) { dialog, whichButton ->
+            ) { _, _ ->
                 alertItemClicked = false
                 alertItemBought = true
                 AlertDialog.Builder(context)
@@ -74,14 +74,14 @@ open class ShopAdapter(context: Context) : RecyclerView.Adapter<ShopAdapter.Cust
                     .setMessage("Your new balance: XXX")
                     .setPositiveButton(
                         "Enjoy your new reward!"
-                    ) { dialog, whichButton ->
+                    ) { _, _ ->
                         alertItemBought = false
                     }.setOnCancelListener{
                         alertItemBought = false
                     }.show()
             }.setNegativeButton(
                 "No"
-            ) { dialog, whichButton ->
+            ) { _, _ ->
                 alertItemClicked = false
             }.setOnCancelListener{
                 alertItemClicked = false

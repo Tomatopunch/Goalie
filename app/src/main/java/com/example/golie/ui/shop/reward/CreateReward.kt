@@ -49,7 +49,6 @@ class CreateReward : Fragment() {
 
         confirmButton.setOnClickListener {
 
-            //TODO: Call the additem class from the adapter? but you can't access it?
             val shopItem = ShopAdapter(context!!)
             shopItem.addItem(titleText.editableText.toString(), pointContent.editableText.toString())
 
