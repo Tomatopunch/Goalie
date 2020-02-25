@@ -39,7 +39,7 @@
     <fragment
         android:id="@+id/nav_addCategory"
         android:name="com.example.golie.ui.home.addCategory.AddCategoryFragment"
-        android:label="add_category_fragment"
+        android:label="New Category"
         tools:layout="@layout/add_category_fragment" />
     <fragment
         android:id="@+id/nav_settings"
@@ -54,7 +54,7 @@
     <fragment
         android:id="@+id/nav_chooseFavCategory"
         android:name="com.example.golie.ui.home.settings.chooseFavCategory.ChooseFavCategoryFragment"
-        android:label="choose_fav_category_fragment"
+        android:label="Pick your favorite"
         tools:layout="@layout/choose_fav_category_fragment" />
     <fragment
         android:id="@+id/nav_favorite"

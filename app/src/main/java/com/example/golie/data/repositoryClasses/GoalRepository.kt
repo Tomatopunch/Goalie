@@ -31,6 +31,7 @@ class GoalRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //Funkar ej
     fun updateGoal(currentUserId : String, currentCategoryId: String, goalId: String, updatedGoal: Goal) : Task<Void> {
 
         val updatedGoalMap = mapOf("title" to updatedGoal.title, "timeSpan" to updatedGoal.timeSpan, "reoccurring" to updatedGoal.reoccurring, "points" to updatedGoal.points)

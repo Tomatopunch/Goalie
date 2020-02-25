@@ -77,6 +77,24 @@ db.collection("users/" + currentUserId + "/categories/").document(currentCategor
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+val goal = Goal("newgoalhelloitsnightandimtired", "coffe yesss", true, 10)
+            goalRepository.createGoal(currentUserId, "categoryofcoffeeeee", goal)
+                .addOnSuccessListener {
+                    Log.d("heloo", "yey added new goal AND category")
+
+
+
+                    /*val updatedCat = Category("imupdatedbitch")
+                    categoryRepository.updateCategory(currentUserId, "bajsnewcategory", updatedCat)
+                        .addOnSuccessListener { Log.d("update", "yey updated cat") }
+                        .addOnFailureListener { Log.d("updatefail", "noo fail updated cat") }*/
+
+                    val updatedGoal = Goal("im updated!!!", "coffe yesss", true, 10)
+                    goalRepository.updateGoal(currentUserId, "categoryofcoffeeeee", "27mjvmTzFID2B93bvP4t", updatedGoal)
+                        .addOnSuccessListener {  Log.d("update", "updated goal!") }
+                        .addOnFailureListener{  Log.d("update", "FAIL WITH UPDATE") }
+
+                }
 
 
 */

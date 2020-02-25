@@ -43,15 +43,20 @@ class AddCategoryFragment : Fragment() {
         //Enabling clicking on save button
 
         val addCategoryButton = view.addCategory_createCategoryButton
-        addCategoryButton.setOnClickListener{
+
+        addCategoryButton.setOnClickListener {
 
             val categoryName = (view.addCategory_nameEditText).editableText.toString() //Fetching text in edit text field
             val category = Category(categoryName)
             categoryRepository.createCategory(currentUserId, category)
                 .addOnSuccessListener {
 
+                    val categoryId = it.id
+
                     val navController = findNavController()
-                    navController.navigate(R.id.nav_home)
+                    //val args = Bundle().apply { putString("categoryId", categoryId) } // Add
+                    //navController.navigate(R.id.nav_category) // Add
+                    navController.navigate(R.id.nav_home) // Remove
                 }
 
 

@@ -50,11 +50,13 @@ class HomeFragment : Fragment() {
         val currentUserId = "josefin" //TODO
 
 
-        //for testing only
-        val goalRepository = GoalRepository()
-        val rewardRepository = RewardRepository()
-        val pointsRepository = PointsRepository()
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //Setting the title
+
+        val userNameTextView = view.home_userNameTextView
+        userNameTextView.text = currentUserId //TODO
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -64,35 +66,9 @@ class HomeFragment : Fragment() {
 
         addCategoryButton.setOnClickListener {
 
-
-            /*val goal = Goal("skdsk", "hsdgkd", true, 10)
-            goalRepository.createGoal(currentUserId, "bajsnewcategory", goal)
-                .addOnSuccessListener {
-                    Log.d("heloo", "yey added new goal AND category")*/
-
-            goalRepository.deleteGoal(currentUserId, "bajsnewcategory", "V92UAIm2dgSx82KQAGal")
-                .addOnSuccessListener { Log.d("deleted", "deleted yessss") }
-
-
-                    /*val updatedCat = Category("imupdatedbitch")
-                    categoryRepository.updateCategory(currentUserId, "bajsnewcategory", updatedCat)
-                        .addOnSuccessListener { Log.d("update", "yey updated cat") }
-                        .addOnFailureListener { Log.d("updatefail", "noo fail updated cat") }*/
-
-                }
-
-
-            pointsRepository.setPoints(currentUserId, 10)
-            var points = -1
-            pointsRepository.getPoints(currentUserId)
-                .addOnSuccessListener { document ->
-                    points = doucumentToPoints(document)
-                    Log.d("points should be ", points.toString())
-
-
-                    //val navController = findNavController()
-                    //navController.navigate(nav_addCategory)
-                }
+            val navController = findNavController()
+            navController.navigate(nav_addCategory)
+        }
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
