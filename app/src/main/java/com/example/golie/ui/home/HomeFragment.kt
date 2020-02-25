@@ -19,6 +19,7 @@ import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
 import com.example.golie.data.dataClasses.Reward
 import com.example.golie.data.documentsToCategories
+import com.example.golie.data.documentsToGoals
 import com.example.golie.data.doucumentToPoints
 import com.example.golie.data.repositoryClasses.CategoryRepository
 import com.example.golie.data.repositoryClasses.GoalRepository
@@ -49,6 +50,7 @@ class HomeFragment : Fragment() {
         val categoryRepository = CategoryRepository()
         val currentUserId = "josefin" //TODO
 
+        val goalRepository = GoalRepository()
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,15 +62,74 @@ class HomeFragment : Fragment() {
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        // Setting up the list view with all its data and enabling cicking on one list item
+
+        val listView = view.home_allCategoriesListView
+        var allCategories: MutableList<Category> = ArrayList()
+
+        categoryRepository.getAllCategories(currentUserId)
+            .addOnSuccessListener { documents ->
+
+
+                allCategories = documentsToCategories(documents)
+
+                adapter = ArrayAdapter(
+                    context!!, // Casting our fragment into a context?
+                    android.R.layout.simple_list_item_1, // Has to do with presentation (we want to display it as a simple_list_item_1)
+                    android.R.id.text1,
+                    allCategories
+                )
+
+                listView.adapter = adapter
+
+                listView.setOnItemClickListener { parent, view, position, id ->
+
+                    var clickedCategory = listView.adapter.getItem(position) as Category
+
+                    var categoryId = clickedCategory.id
+                    Log.d("id of clicked category", categoryId)
+
+
+                    val navController = findNavController()
+                    val args = Bundle().apply { putString("id", categoryId) }
+                    navController.navigate(R.id.nav_category, args)
+                }
+
+
+            }
+            .addOnFailureListener { exception ->
+                Log.d("Error getting categories: ", exception.toString())
+
+            }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
         //Enabling clicking on plus button to add category
 
         val addCategoryButton = view.home_addCategoryButton
 
         addCategoryButton.setOnClickListener {
 
-            val navController = findNavController()
-            navController.navigate(nav_addCategory)
-        }
+            Log.d("clicked button", "")
+            val goal = Goal("NEEEEEW GOAL", "coffe yesss", true, 10)
+            goalRepository.createGoal(currentUserId, "categoryofcoffeeeee", goal)
+                .addOnSuccessListener {
+                    Log.d("heloo", "yey added new goal AND category")
+
+
+                    val updatedCat = Category("semlor ")
+                    categoryRepository.updateCategory(currentUserId, "categoryofcoffeeeee", updatedCat)
+                        .addOnSuccessListener { Log.d("update", "yey updated cat") }
+                        .addOnFailureListener { Log.d("updatefail", it.toString()) }
+
+
+                    //val navController = findNavController()
+                    //navController.navigate(nav_addCategory)
+                }
+
+                .addOnFailureListener{  Log.d("heloo", "nooo")}
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -107,49 +168,7 @@ class HomeFragment : Fragment() {
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            // Setting up the list view with all its data and enabling cicking on one list item
-
-            val listView = view.home_allCategoriesListView
-            var allCategories: MutableList<Category> = ArrayList()
-
-            categoryRepository.getAllCategories(currentUserId)
-                .addOnSuccessListener { documents ->
-
-                    allCategories = documentsToCategories(documents)
-
-                    adapter = ArrayAdapter(
-                        context!!, // Casting our fragment into a context?
-                        android.R.layout.simple_list_item_1, // Has to do with presentation (we want to display it as a simple_list_item_1)
-                        android.R.id.text1,
-                        allCategories
-                    )
-
-                    listView.adapter = adapter
-
-                    listView.setOnItemClickListener { parent, view, position, id ->
-
-                        var clickedCategory = listView.adapter.getItem(position) as Category
-
-                        var categoryId = clickedCategory.id
-                        Log.d("id of clicked category", categoryId)
-
-
-                        val navController = findNavController()
-                        val args = Bundle().apply { putString("id", categoryId) }
-                        navController.navigate(R.id.nav_category, args)
-                    }
-
-
-                }
-                .addOnFailureListener { exception ->
-                    Log.d("Error getting categories: ", exception.toString())
-
-                }
-
-
-
-
-
+        }
 
         return view
     }

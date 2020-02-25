@@ -13,53 +13,51 @@ import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
-import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
-import com.example.golie.data.documentToCategory
-import com.example.golie.data.documentToGoal
-import com.example.golie.data.documentsToCategories
 import com.example.golie.data.documentsToGoals
-import com.example.golie.data.repositoryClasses.CategoryRepository
 import com.example.golie.data.repositoryClasses.GoalRepository
-//import com.example.golie.ui.category.goal.goalRepository
-import kotlinx.android.synthetic.main.category_fragment.*
-//import kotlinx.android.synthetic.main.category_fragment.view
 import kotlinx.android.synthetic.main.category_fragment.view.*
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class categoryFragment : Fragment() {
+class displayCategoryFragment : Fragment() {
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     companion object {
-        fun newInstance() = categoryFragment()
+        fun newInstance() = displayCategoryFragment()
     }
 
-    private lateinit var viewModel: CategoryViewModel
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private lateinit var viewModel: DisplayCategoryViewModel
     private lateinit var adapter : ArrayAdapter<Goal>
+    //private lateinit var view: View
     @SuppressLint("ResourceAsColor")
 
 
+    val currentUserId = "josefin"
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.display_category_fragment, container, false)
+        return view
+    }
 
-        val view = inflater.inflate(R.layout.category_fragment, container, false)
-        val currentUserId = "josefin"
-        val categoryRepository = CategoryRepository()
-        val currentCategoryId : String  = (arguments!!.getString("id"))!!
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(DisplayCategoryViewModel::class.java)
+        // TODO: Use the ViewModel
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        //Setting title
-
-        val userNameTextView = view.category_titleTextView
-        categoryRepository.getCategoryById(currentUserId, currentCategoryId)
-            .addOnSuccessListener {document ->
-                val category = documentToCategory(document)
-                userNameTextView.text = category.name
-            }
-
+    @SuppressLint("ResourceAsColor")
+    fun displayCategory (currentCategoryId: String){
 
         //Fetching all goals from database
 
@@ -83,7 +81,7 @@ class categoryFragment : Fragment() {
                     allGoals
                 )
 
-                val listView = view.category_listView
+                val listView = view!!.category_listView
                 listView.adapter = adapter
 
                 //Enabling clicking one one list item
@@ -121,55 +119,7 @@ class categoryFragment : Fragment() {
                 Log.d("Error getting goals: ", exception.toString())
             }
 
-        return view
     }
 
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val addGoalButton = category_addButton
-
-        addGoalButton.setOnClickListener {
-
-            // Here we cast main activity to the interface (below) and this is possible because
-            // main activity extends this interface
-            val navController = findNavController()
-            val args = Bundle().apply{
-                putString("key", "value")
-            } // Send this to the next navigation object
-            navController.navigate(R.id.nav_addGoal, args) // Skicka med args - argument
-
-            // Hämta alla argument som skickats med:
-
-            //val def = arguments!!.getString("key")
-        }
-    }
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    override fun onStart() {
-        super.onStart()
-
-        if (::adapter.isInitialized) {
-            adapter!!.notifyDataSetChanged()
-        }
-        else{
-            Log.d("State of adapter", "The adapter")
-
-        }
-
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(CategoryViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

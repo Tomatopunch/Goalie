@@ -6,10 +6,7 @@ import android.util.Log
 import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
 import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 
 
 class CategoryRepository : dbCursorRepository() {
@@ -29,6 +26,12 @@ class CategoryRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    fun getCategoryById(currentUserId: String, categoryId: String) : Task<DocumentSnapshot> {
+        return db.collection("users/" + currentUserId + "/categories").document(categoryId).get()
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     //Funkar
     fun getAllCategories(currentUserId: String): Task<QuerySnapshot> {
 
@@ -38,7 +41,7 @@ class CategoryRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //Funkar EJ!
+    //Funkar
     fun updateCategory(currentUserId: String, categoryId: String, updatedCategory: Category): Task<Void> {
 
         val updatedCategoryMap = mapOf("name" to updatedCategory.name) //This might seem uneccessary but is included to make all update functions alike and to make this update function more extendable if another attribute was to be added in the Category class
@@ -46,7 +49,6 @@ class CategoryRepository : dbCursorRepository() {
         return db.collection("users/" + currentUserId + "/categories").document(categoryId).update(updatedCategoryMap)
 
     }
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -82,7 +84,27 @@ class CategoryRepository : dbCursorRepository() {
     }
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    fun setFavoriteCategoryId(currentUserId: String, idOfNewFavorite: String): Task<Void> {
+
+        val idOfFavMap = hashMapOf("idOfFavoriteCategory" to idOfNewFavorite)
+
+        return db.collection("users/" + currentUserId + "/favorites").document("favoriteCategory").set(idOfFavMap)
+
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    fun getFavoriteCategoryId(currentUserId: String): Task<DocumentSnapshot> {
+
+        return db.collection("users/" + currentUserId + "/favorites").document("favoriteCategory").get()
+
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 }
 

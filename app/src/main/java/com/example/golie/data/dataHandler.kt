@@ -14,14 +14,39 @@ import java.util.*
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+fun documentToCategory (document : DocumentSnapshot) : Category {
+
+    val category = document.toObject(Category::class.java)
+    category!!.id = document.id
+    return category
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+fun documentToGoal (document : DocumentSnapshot) : Goal {
+
+    val goal = document.toObject(Goal::class.java)
+    goal!!.id = document.id
+    return goal
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+fun documentToReward(document : DocumentSnapshot) : Reward {
+
+    val reward = document.toObject(Reward::class.java)
+    reward!!.id = document.id
+    return reward
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 fun documentsToCategories (documents : QuerySnapshot) : MutableList<Category> {
 
     var allCategories = mutableListOf<Category>()
 
     for (document in documents) {
 
-        val category = document.toObject(Category::class.java)
-        category.id = document.id
+        val category = documentToCategory(document)
         allCategories.add(category)
 
         Log.d(ContentValues.TAG, "Success getting category with id ${document.id} and data ${document.data}")
@@ -42,8 +67,7 @@ fun documentsToGoals (documents : QuerySnapshot) : MutableList<Goal> {
 
     for (document in documents) {
 
-        val goal = document.toObject(Goal::class.java)
-        goal.id = document.id
+        val goal = documentToGoal(document)
         allGoals.add(goal)
 
     }
@@ -61,8 +85,7 @@ fun documentsToRewards(documents : QuerySnapshot) : MutableList<Reward> {
 
     for (document in documents) {
 
-        val reward = document.toObject(Reward::class.java)
-        reward.id = document.id
+        val reward = documentToReward(document)
         allRewards.add(reward)
 
     }

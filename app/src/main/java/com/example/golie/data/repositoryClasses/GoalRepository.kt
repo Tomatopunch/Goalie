@@ -23,6 +23,7 @@ class GoalRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //Funkar
     fun getAllGoalsWithinCategory(currentUserId : String, currentCategoryId: String) : Task<QuerySnapshot> {
 
         return db.collection("users/" + currentUserId + "/categories/" + currentCategoryId + "/allGoals").get()
@@ -31,11 +32,11 @@ class GoalRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //Funkar ej
+    //Funkar
     fun updateGoal(currentUserId : String, currentCategoryId: String, goalId: String, updatedGoal: Goal) : Task<Void> {
 
         val updatedGoalMap = mapOf("title" to updatedGoal.title, "timeSpan" to updatedGoal.timeSpan, "reoccurring" to updatedGoal.reoccurring, "points" to updatedGoal.points)
-        return db.collection("users/" + currentUserId + "/categories/" + currentCategoryId + "/goalId").document(goalId).update(updatedGoalMap)
+        return db.collection("users/" + currentUserId + "/categories/" + currentCategoryId + "/allGoals").document(goalId).update(updatedGoalMap)
 
     }
 
