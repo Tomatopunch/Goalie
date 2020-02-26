@@ -14,8 +14,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
-import com.example.golie.ui.category.goal.Goal
-import com.example.golie.ui.category.goal.goalRepository
+import com.example.golie.data.dataClasses.Goal
+import com.example.golie.data.documentToCategory
+import com.example.golie.data.documentsToGoals
+import com.example.golie.data.repositoryClasses.CategoryRepository
+import com.example.golie.data.repositoryClasses.GoalRepository
 import kotlinx.android.synthetic.main.category_fragment.*
 import kotlinx.android.synthetic.main.category_fragment.view.*
 
@@ -36,82 +39,125 @@ class categoryFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.category_fragment, container, false)
-        val listView = view.category_listView
+        val currentUserId = "josefin"
+        val categoryRepository = CategoryRepository()
+        /*var currentCategoryId = "-1"
+        if(arguments != null){
+            currentCategoryId = (arguments!!.getString("id"))!!
+        }*/
+        val currentCategoryId : String  = (arguments!!.getString("id"))!!
 
-        var checkActiveDialog = savedInstanceState?.getBoolean("activeAlertDialog")
-        if(checkActiveDialog != null){
-            activeAlertDialog = checkActiveDialog
-        }
+        //Setting title
 
-        if(activeAlertDialog){
-            AlertDialog.Builder(context!!)
-                .setTitle("Manage Goal")
-                .setMessage("Decide what you want to do with your goal.")
-                .setPositiveButton(
-                    "Finished"
-                ) { dialog, whichButton ->
-                    listView.setBackgroundColor(R.color.green)
-                    val navController = findNavController()
-                    val args = Bundle().apply {
-                        putString("categoryName", "today") // TODO: Hämta databas kategorin med detta värde
-                    } // Send this to the next navigation object with variables
-                    activeAlertDialog = false
-                    navController.navigate(R.id.nav_finishedGoal, args)
-                }.setNegativeButton(
-                    "Failed"
-                ) { dialog, whichButton ->
-                    listView.setBackgroundColor(R.color.green)
-                    activeAlertDialog = false
-                }.setNeutralButton(
-                    "Do nothing"
-                ){dialog, whichButton ->
-                    activeAlertDialog = false
-                }.setOnCancelListener{
-                    activeAlertDialog = false
-                }.show()
-        }
+        val userNameTextView = view.category_titleTextView
+        categoryRepository.getCategoryById(currentUserId, currentCategoryId)
+            .addOnSuccessListener {document ->
+                val category = documentToCategory(document)
+                Log.d("categoryCheck", "$category")
+                userNameTextView.text = category.name
+            }
 
-        adapter = ArrayAdapter(
-                context!!,
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1,
-                goalRepository.getGoals()
-            )
 
-        listView.adapter = adapter
+        //Fetching all goals from database
 
-        listView.setOnItemClickListener{ parent, view, position, id ->
+        val goalRepository = GoalRepository()
+        lateinit var allGoals : MutableList<Goal>
 
-            // TODO: JOSEFIN: De två nedanstående raderna kanske används för att hämta data ur databasen sen. De användes för att skicka med data innan iallafall :)
-            var clickedGoal = listView.adapter.getItem(position) as Goal
-            var id = clickedGoal.id
-            activeAlertDialog = true
-            AlertDialog.Builder(context!!)
-                .setTitle("Manage Goal")
-                .setMessage("Decide what you want to do with your goal.")
-                .setPositiveButton(
-                    "Finished"
-                ) { dialog, whichButton ->
-                    view.setBackgroundColor(R.color.green)
-                    val navController = findNavController()
-                    val args = Bundle().apply {
-                        putString("categoryName", "today") // TODO: Hämta databas kategorin med detta värde
-                    } // Send this to the next navigation object with variables
-                    activeAlertDialog = false
-                    navController.navigate(R.id.nav_finishedGoal, args)
-                }.setNegativeButton(
-                    "Failed"
-                ) { dialog, whichButton ->
-                    view.setBackgroundColor(R.color.red)
-                    activeAlertDialog = false
-                }.setNeutralButton(
-                    "Do nothing"
-                ){dialog, whichButton ->
-                    activeAlertDialog = false
-                }.setOnCancelListener{
-                    activeAlertDialog = false
-                }.show()
-        }
+        goalRepository.getAllGoalsWithinCategory(currentUserId, currentCategoryId)
+            .addOnSuccessListener { documents ->
+
+                //casting documents into goal objects
+
+                allGoals = documentsToGoals(documents)
+
+                val listView = view.category_listView
+
+                ///////////////////////// RUNTIME CONFIG HANDLER ////////////////////////
+
+                var checkActiveDialog = savedInstanceState?.getBoolean("activeAlertDialog")
+                if(checkActiveDialog != null){
+                    activeAlertDialog = checkActiveDialog
+                }
+
+                if(activeAlertDialog){
+                    AlertDialog.Builder(context!!)
+                        .setTitle("Manage Goal")
+                        .setMessage("Decide what you want to do with your goal.")
+                        .setPositiveButton(
+                            "Finished"
+                        ) { dialog, whichButton ->
+                            listView.setBackgroundColor(R.color.green)
+                            val navController = findNavController()
+                            val args = Bundle().apply {
+                                putString("categoryName", "today") // TODO: Hämta databas kategorin med detta värde
+                            } // Send this to the next navigation object with variables
+                            activeAlertDialog = false
+                            navController.navigate(R.id.nav_finishedGoal, args)
+                        }.setNegativeButton(
+                            "Failed"
+                        ) { dialog, whichButton ->
+                            listView.setBackgroundColor(R.color.green)
+                            activeAlertDialog = false
+                        }.setNeutralButton(
+                            "Do nothing"
+                        ){dialog, whichButton ->
+                            activeAlertDialog = false
+                        }.setOnCancelListener{
+                            activeAlertDialog = false
+                        }.show()
+                }
+
+
+                //Putting all goals in list view
+
+                adapter = ArrayAdapter(
+                    context!!,
+                    android.R.layout.simple_list_item_1,
+                    android.R.id.text1,
+                    allGoals
+                )
+
+                listView.adapter = adapter
+
+                //Enabling clicking one one list item
+
+                listView.setOnItemClickListener{ parent, view, position, _ ->
+
+                    var clickedGoal = listView.adapter.getItem(position) as Goal
+                    var goalId = clickedGoal.id
+                    activeAlertDialog = true
+                    AlertDialog.Builder(context!!)
+                        .setTitle("Manage Goal")
+                        .setMessage("Decide what you want to do with your goal.")
+                        .setPositiveButton(
+                            "Finished"
+                        ) { dialog, whichButton ->
+                            view.setBackgroundColor(R.color.green)
+                            val navController = findNavController()
+                            val args = Bundle().apply {
+                                putString("goalId", goalId) // TODO: Hämta databas kategorin med detta värde
+                            } // Send this to the next navigation object with variables
+                            activeAlertDialog = false
+                            navController.navigate(R.id.nav_finishedGoal, args)
+                        }.setNegativeButton(
+                            "Failed"
+                        ) { dialog, whichButton ->
+                            view.setBackgroundColor(R.color.red)
+                            activeAlertDialog = false
+                        }.setNeutralButton(
+                            "Do nothing"
+                        ){dialog, whichButton ->
+                            activeAlertDialog = false
+                        }.setOnCancelListener{
+                            activeAlertDialog = false
+                        }.show()
+                }
+
+            }
+            .addOnFailureListener { exception ->
+                Log.d("Error getting goals: ", exception.toString())
+            }
+
         return view
     }
 
@@ -140,7 +186,12 @@ class categoryFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        adapter.notifyDataSetChanged()
+        if(::adapter.isInitialized) {
+            adapter.notifyDataSetChanged()
+        }
+        else{
+            Log.d("State of adapter", "Adapter is not initialized")
+        }
 
     }
 

@@ -13,7 +13,6 @@ import android.widget.EditText
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
-import com.example.golie.toDoRepository
 import com.example.golie.ui.shop.ShopAdapter
 import com.example.golie.ui.shop.ShopFragment
 import com.example.golie.ui.shop.ShopItem

@@ -1,4 +1,4 @@
-package com.example.golie.ui.category.goal.addGoal
+package com.example.golie.ui.category.addGoal
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -11,8 +11,9 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
-import com.example.golie.ui.category.goal.goalRepository
-import com.example.golie.ui.category.goal.validateInput
+import com.example.golie.data.dataClasses.Goal
+import com.example.golie.ui.category.addGoal.validateInput
+import com.example.golie.data.repositoryClasses.GoalRepository
 import kotlinx.android.synthetic.main.add_goal_fragment.view.*
 
 class AddGoalFragment : Fragment() {
@@ -73,7 +74,7 @@ class AddGoalFragment : Fragment() {
             if(invalidInput.isEmpty()){
                 //TODO: Sätt in alla värden i databasen här
                 val points = pointsText.toInt()
-                goalRepository.addGoal(title, timeSpanText, reOccurring, points)
+                //GoalRepository.createGoal(title, timeSpanText, reOccurring, points)
 
                 val navController = findNavController()
                 navController.navigate(R.id.nav_category)

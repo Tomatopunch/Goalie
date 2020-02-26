@@ -28,8 +28,6 @@ class InfoFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.info_fragment, container, false)
 
-
-
         return view
     }
 

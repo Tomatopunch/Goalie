@@ -1,6 +1,6 @@
 package com.example.golie.ui.home
 
-import android.content.ContentValues.TAG
+import android.content.ContentValues
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -14,166 +14,152 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
-import com.example.golie.ToDo
-import com.example.golie.toDoRepository
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.golie.R.id.nav_addCategory
+import com.example.golie.data.dataClasses.Category
+import com.example.golie.data.dataClasses.Goal
+import com.example.golie.data.dataClasses.Reward
+import com.example.golie.data.documentsToCategories
+import com.example.golie.data.documentsToGoals
+import com.example.golie.data.doucumentToPoints
+import com.example.golie.data.repositoryClasses.CategoryRepository
+import com.example.golie.data.repositoryClasses.GoalRepository
+import com.example.golie.data.repositoryClasses.PointsRepository
+import com.example.golie.data.repositoryClasses.RewardRepository
+//import com.example.golie.data.repositoryClasses.getAllCategories
+import com.example.golie.ui.category.categoryFragment
 import kotlinx.android.synthetic.main.home_fragment.view.*
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class HomeFragment : Fragment() {
 
     companion object {
         fun newInstance() = HomeFragment()
     }
 
-    private val db = FirebaseFirestore.getInstance()
-    private lateinit var viewModel: HomeViewModel
-    private lateinit var adapter: ArrayAdapter<ToDo>
-    private var activeAlertDialog = false
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    private lateinit var viewModel: HomeViewModel
+    private lateinit var adapter: ArrayAdapter<Category>
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
 
         val view = inflater.inflate(R.layout.home_fragment, container, false)
-        // "view" is now our modifiable fragment
+        val categoryRepository = CategoryRepository()
+        val currentUserId = "josefin" //TODO
 
+        val goalRepository = GoalRepository()
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //Setting the title
+
+        val userNameTextView = view.home_userNameTextView
+        userNameTextView.text = currentUserId //TODO
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // Setting up the list view with all its data and enabling cicking on one list item
-        val listView =
-            view.home_allCategoriesListView //fetching the list view with id "home_allCategoriesListView"
 
-        var checkActiveDialog = savedInstanceState?.getBoolean("activeAlertDialog")
-        if(checkActiveDialog != null){
-            activeAlertDialog = checkActiveDialog
-        }
+        val listView = view.home_allCategoriesListView
+        var allCategories: MutableList<Category> = ArrayList()
 
-        if(activeAlertDialog){
-            lateinit var navController: NavController
-            AlertDialog.Builder(context!!)
-                .setTitle("Manage Goal")
-                .setMessage("Decide what you want to do with your goal.")
-                .setPositiveButton(
-                    "select favorite (?)"
-                ) { dialog, whichButton ->
-                    activeAlertDialog = false
-                    navController = findNavController()
-                    navController.navigate(R.id.nav_chooseFavCategory)
+        categoryRepository.getAllCategories(currentUserId)
+            .addOnSuccessListener { documents ->
 
-                }.setNegativeButton(
-                    "Info"
-                ) { dialog, whichButton ->
-                    activeAlertDialog = false
-                    navController = findNavController()
-                    navController.navigate(R.id.nav_info)
 
-                }.setNeutralButton(
-                    "Logout"
-                ) { dialog, whichButton ->
-                    activeAlertDialog = false
-                    //TODO: Direct this to the login page
-                }.setOnCancelListener{
-                    activeAlertDialog = false
-                }.show()
-        }
+                allCategories = documentsToCategories(documents)
+
+                adapter = ArrayAdapter(
+                    context!!, // Casting our fragment into a context?
+                    android.R.layout.simple_list_item_1, // Has to do with presentation (we want to display it as a simple_list_item_1)
+                    android.R.id.text1,
+                    allCategories
+                )
+
+                listView.adapter = adapter
+
+                listView.setOnItemClickListener { parent, view, position, id ->
+
+                    var clickedCategory = listView.adapter.getItem(position) as Category
+
+                    var categoryId = clickedCategory.id
+                    Log.d("id of clicked category", categoryId)
+
+
+                    val navController = findNavController()
+                    val args = Bundle().apply { putString("id", categoryId) }
+                    navController.navigate(R.id.nav_category, args)
+                }
+
+
+            }
+            .addOnFailureListener { exception ->
+                Log.d("Error getting categories: ", exception.toString())
+
+            }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        //Enabling clicking on plus button to add category
 
         val addCategoryButton = view.home_addCategoryButton
 
         addCategoryButton.setOnClickListener {
 
-            Log.d("status", "you clicked button")
-
-            // Test 1
-
-            val user1 = hashMapOf(
-                "name" to "Dennis"
-            )
-
-            Log.d("user1", "$user1")
-
-            db.collection("users1").add(user1)
-
-
-            // Test 2
-
-            val user2 = HashMap<String, Any>()
-            user2.put("first", "Ada")
-            user2.put("last", "Lovelace")
-            user2.put("born", 1815)
-
-            // Add a new document with a generated ID
-            db.collection("users2")
-                .add(user2)
-                .addOnSuccessListener { documentReference ->
-                    Log.d(
-                        TAG,
-                        "DocumentSnapshot added with ID: " + documentReference.id
-                    )
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Error adding document", e)
-                    e.printStackTrace()
-                }
-
-
             val navController = findNavController()
-            navController.navigate(R.id.nav_addCategory)
+            navController.navigate(nav_addCategory)
         }
 
-        val settingsButton = view.home_settingsButton
-        settingsButton.setOnClickListener {
-            activeAlertDialog = true
-            lateinit var navController: NavController
-            AlertDialog.Builder(context!!)
-                .setTitle("Manage Goal")
-                .setMessage("Decide what you want to do with your goal.")
-                .setPositiveButton(
-                    "select favorite (?)"
-                ) { dialog, whichButton ->
-                    activeAlertDialog = false
-                    navController = findNavController()
-                    navController.navigate(R.id.nav_chooseFavCategory)
 
-                }.setNegativeButton(
-                    "Info"
-                ) { dialog, whichButton ->
-                    activeAlertDialog = false
-                    navController = findNavController()
-                    navController.navigate(R.id.nav_info)
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                }.setNeutralButton(
-                    "Logout"
-                ) { dialog, whichButton ->
-                    activeAlertDialog = false
-                    //TODO: Direct this to the login page
-                }.setOnCancelListener{
-                    activeAlertDialog = false
-                }.show()
+            //Enabling clicking on settings button
 
-        }
-        adapter = ArrayAdapter(
-            context!!, // Casting our fragment into a context?
-            android.R.layout.simple_list_item_1, // Has to do with presentation (we want to display it as a simple_list_item_1)
-            android.R.id.text1,
-            toDoRepository.getAllToDos() //Here we fetch data!!
-        )
+            val settingsButton = view.home_settingsButton
 
-        listView.adapter = adapter
+            Log.d("TESTING", "$settingsButton")
 
-        listView.setOnItemClickListener { parent, view, position, id ->
+            settingsButton.setOnClickListener {
+                Log.d("TESTING", "kommer in i settings")
+                lateinit var navController: NavController
+                AlertDialog.Builder(context!!)
+                    .setTitle("Settings")
+                    .setMessage("What do you want to do?")
+                    .setPositiveButton(
+                        "Select favorite category"
+                    ) { dialog, whichButton ->
 
-            var clickedToDo = listView.adapter.getItem(position) as ToDo
-            var id = clickedToDo.id
+                        navController = findNavController()
+                        navController.navigate(R.id.nav_chooseFavCategory)
 
+                    }.setNegativeButton(
+                        "View info page"
+                    ) { dialog, whichButton ->
 
-            val navController = findNavController()
-            val args = Bundle().apply {
-                putInt("id", id) // TODO: Hämta databas kategorin med detta värde
+                        navController = findNavController()
+                        navController.navigate(R.id.nav_info)
+
+                    }.setNeutralButton(
+                        "Logout"
+                    ) { dialog, whichButton ->
+
+                        //TODO: Direct this to the login page
+
+                    }.show()
+
             }
-            navController.navigate(R.id.nav_category, args)
-        }
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         return view
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -181,9 +167,4 @@ class HomeFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putBoolean("activeAlertDialog", activeAlertDialog)
-    }
 }

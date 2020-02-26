@@ -1,4 +1,4 @@
-package com.example.golie.ui.category.goal
+package com.example.golie.ui.category.addGoal
 
 fun validateInput(title: String, points: String): MutableList<String> {
     val invalidInput: MutableList<String> = ArrayList()
@@ -8,7 +8,7 @@ fun validateInput(title: String, points: String): MutableList<String> {
         invalidInput.add("Title: It's too long. Max 30 characters")
     }
 
-    val numberRegex = "[0-9]".toRegex()
+    //val numberRegex = "[0-9]".toRegex()
     if(points.isEmpty()){
         invalidInput.add("Points: You need to add some points")
     }

@@ -8,18 +8,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 
 import com.example.golie.R
-import com.example.golie.ToDo
-import com.example.golie.toDoRepository
-import com.example.golie.ui.category.goal.goalRepository
 import kotlinx.android.synthetic.main.category_fragment.view.*
 
 class FinishedGoalFragment : Fragment() {
@@ -29,7 +20,6 @@ class FinishedGoalFragment : Fragment() {
     }
 
     private lateinit var viewModel: FinishedGoalViewModel
-    private lateinit var adapter: ArrayAdapter<ToDo>
 
 
     override fun onCreateView(
@@ -42,14 +32,14 @@ class FinishedGoalFragment : Fragment() {
 
         val listView = view.category_listView
 
-        adapter = ArrayAdapter(
+        /*adapter = ArrayAdapter(
             context!!,
             android.R.layout.simple_list_item_1,
             android.R.id.text1,
             toDoRepository.getAllToDos()
-        )
+        )*/
 
-        listView.adapter = adapter
+        //listView.adapter = adapter
 
         listView.setOnItemClickListener { parent, view, position, id ->
 
@@ -81,7 +71,7 @@ class FinishedGoalFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        adapter.notifyDataSetChanged()
+        //adapter.notifyDataSetChanged()
 
     }
 }

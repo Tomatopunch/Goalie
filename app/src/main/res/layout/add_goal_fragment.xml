@@ -5,7 +5,7 @@
     android:id="@+id/addGoalFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.category.goal.addGoal.AddGoalFragment">
+    tools:context=".ui.category.addGoal.AddGoalFragment">
 
     <TextView
         android:id="@+id/addGoal_titleText"
