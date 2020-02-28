@@ -20,7 +20,6 @@ import com.example.golie.data.dataClasses.Goal
 import com.example.golie.data.dataClasses.Reward
 import com.example.golie.data.documentsToCategories
 import com.example.golie.data.documentsToGoals
-import com.example.golie.data.doucumentToPoints
 import com.example.golie.data.repositoryClasses.CategoryRepository
 import com.example.golie.data.repositoryClasses.GoalRepository
 import com.example.golie.data.repositoryClasses.PointsRepository

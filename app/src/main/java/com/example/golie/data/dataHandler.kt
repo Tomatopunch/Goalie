@@ -96,7 +96,7 @@ fun documentsToRewards(documents : QuerySnapshot) : MutableList<Reward> {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-fun doucumentToPoints (document: DocumentSnapshot) : Int {
+fun documentToPoints (document: DocumentSnapshot) : Int {
 
     return document.data!!.getValue("points").toString().toInt()
 }

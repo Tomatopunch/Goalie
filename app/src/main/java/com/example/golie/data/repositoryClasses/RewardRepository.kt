@@ -16,7 +16,7 @@ class RewardRepository : dbCursorRepository(){
     //Funkar
     fun createReward(currentUserId: String, newReward: Reward) : Task<DocumentReference> {
 
-        return  db.collection("users/" + currentUserId + "/rewards" ).add(newReward)
+        return  db.collection("users/$currentUserId/rewards").add(newReward)
 
     }
 
@@ -24,7 +24,7 @@ class RewardRepository : dbCursorRepository(){
 
     fun getAlLRewards (currentUserId: String) : Task<QuerySnapshot> {
 
-        return db.collection("users/" + currentUserId + "/rewards").get()
+        return db.collection("users/$currentUserId/rewards").get()
 
     }
 
@@ -35,7 +35,7 @@ class RewardRepository : dbCursorRepository(){
 
         val updatedRewardMap = mapOf("title" to updatedReward.title, "price" to updatedReward.price)
 
-        return db.collection("users/" + currentUserId + "/rewards").document(rewardId).update(updatedRewardMap)
+        return db.collection("users/$currentUserId/rewards").document(rewardId).update(updatedRewardMap)
 
     }
 
@@ -44,7 +44,7 @@ class RewardRepository : dbCursorRepository(){
     //Funkar
     fun deleteReward(currentUserId: String, rewardId: String) : Task<Void>{
 
-        return db.collection("users/" + currentUserId + "/rewards").document(rewardId).delete()
+        return db.collection("users/$currentUserId/rewards").document(rewardId).delete()
 
     }
 
