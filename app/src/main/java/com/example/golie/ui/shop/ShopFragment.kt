@@ -1,34 +1,38 @@
 package com.example.golie.ui.shop
 
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
-import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.ViewModelProviders
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.golie.R
 import kotlinx.android.synthetic.main.shop_fragment.*
 import kotlinx.android.synthetic.main.shop_fragment.view.*
+import java.text.FieldPosition
 
-//TODO: Fix so that when you create a reward it gets into the recycler view
+
 //TODO: Your points should be added from the database
-//TODO: When you get back here
 
 var alertItemClicked = false
 var alertItemBought = false
 
 class ShopFragment : Fragment() {
 
+    private var swipeBackground: ColorDrawable = ColorDrawable(Color.parseColor("#FF0000"))
+    private lateinit var deleteIcon: Drawable
+
     companion object {
         fun newInstance() = ShopFragment()
     }
-
-    private lateinit var viewModel: ShopViewModel
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,22 +54,22 @@ class ShopFragment : Fragment() {
                 .setMessage("Are you sure you want to buy this item?")
                 .setPositiveButton(
                     "Yes"
-                ) { dialog, whichButton ->
+                ) { _, _ ->
                     alertItemClicked = false
                     alertItemBought = true
-                    android.app.AlertDialog.Builder(context!!)
+                    android.app.AlertDialog.Builder(requireContext())
                         .setTitle("That's great!")
                         .setMessage("Your new balance: XXX")
                         .setPositiveButton(
                             "Enjoy your new reward!"
-                        ) { dialog, whichButton ->
+                        ) { _, _ ->
                             alertItemBought = false
                         }.setOnCancelListener{
                             alertItemBought = false
                         }.show()
                 }.setNegativeButton(
                     "No"
-                ) {dialog, whichButton ->
+                ) { _, _ ->
                     alertItemClicked = false
                 }.setOnCancelListener{
                     alertItemClicked = false
@@ -79,48 +83,86 @@ class ShopFragment : Fragment() {
         }
 
         if(alertItemBought){
-            android.app.AlertDialog.Builder(context!!)
+            android.app.AlertDialog.Builder(requireContext())
                 .setTitle("That's great!")
                 .setMessage("Your new balance: XXX")
                 .setPositiveButton(
                     "Enjoy your new reward!"
-                ) { dialog, whichButton ->
+                ) { _, _ ->
                     alertItemBought = false
                 }.setOnCancelListener{
                     alertItemBought = false
                 }.show()
         }
 
+        deleteIcon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_delete)!!
 
         view.shop_view.layoutManager = LinearLayoutManager(activity)
-        view.shop_view.adapter = ShopAdapter(context!!)
-        view.shop_view.adapter?.notifyDataSetChanged()
+        view.shop_view.adapter = ShopAdapter(requireContext())
         view.shop_view.setHasFixedSize(true)
 
-        points.setText("9999")
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+
+            // This is only used for moving, but we don't use that.
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean { return false }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, position: Int) {
+                (view.shop_view.adapter as ShopAdapter).removeItem(viewHolder as ShopAdapter.CustomViewHolder)
+            }
+
+            override fun onChildDraw(
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+            ) {
+                val itemView = viewHolder.itemView
+
+                // calculate the distance between the top of the icon and the bottom of the recyclerview.
+                // so that we can get the icon to appear in the center of each item vertically.
+                val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / 2
+
+                if (dX > 0) {
+                    swipeBackground.setBounds(itemView.left, itemView.top, dX.toInt(), itemView.bottom)
+
+                    deleteIcon.setBounds(itemView.left + iconMargin, itemView.top + iconMargin, itemView.left + iconMargin + deleteIcon.intrinsicWidth,
+                        itemView.bottom - iconMargin)
+                }
+                else {
+                    swipeBackground.setBounds(itemView.right + dX.toInt(), itemView.top, itemView.right, itemView.bottom)
+
+                    deleteIcon.setBounds(itemView.right - iconMargin - deleteIcon.intrinsicWidth, itemView.top + iconMargin, itemView.right - iconMargin,
+                        itemView.bottom - iconMargin)
+                }
+
+                //c is our canvas that we want to draw.
+                swipeBackground.draw(c)
+                deleteIcon.draw(c)
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(view.shop_view)
+
+        points.text = "9999"
 
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val buttonCreateReward = shop_floatingActionButton
 
         buttonCreateReward.setOnClickListener {
             val navController = findNavController()
             navController.navigate(R.id.nav_createReward)
         }
-
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(ShopViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -128,6 +170,5 @@ class ShopFragment : Fragment() {
 
         outState.putBoolean("alertItemClicked", alertItemClicked)
         outState.putBoolean("alertItemBought", alertItemBought)
-
     }
 }

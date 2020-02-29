@@ -28,7 +28,6 @@ class CreateReward : Fragment() {
         fun newInstance() = CreateReward()
     }
 
-    private lateinit var viewModel: CreateRewardViewModel
     private lateinit var titleText: EditText
     private lateinit var pointContent: EditText
 
@@ -48,13 +47,11 @@ class CreateReward : Fragment() {
 
         confirmButton.setOnClickListener {
 
-            //TODO: Call the additem class from the adapter? but you can't access it?
-            val shopItem = ShopAdapter(context!!)
+            val shopItem = ShopAdapter(requireContext())
             shopItem.addItem(titleText.editableText.toString(), pointContent.editableText.toString())
 
             val navController = findNavController()
             navController.navigate(R.id.nav_shop)
-
         }
 
         setHasOptionsMenu(true)
@@ -68,11 +65,5 @@ class CreateReward : Fragment() {
         navController.navigate(R.id.nav_shop)
 
         return true
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(CreateRewardViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 }

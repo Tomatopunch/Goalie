@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.golie.R
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.shop_item.view.*
 
 private val videoTitles = mutableListOf(
@@ -31,11 +32,16 @@ open class ShopAdapter(context: Context) : RecyclerView.Adapter<ShopAdapter.Cust
 
     val context = context
 
+    private var removedPosition: Int = 0
+    private var removedItem: String = ""
+    private var removedItem2: String = ""
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         //create view
         val layoutInflater = LayoutInflater.from(parent.context)
         val cellForRow = layoutInflater.inflate(R.layout.shop_item, parent, false)
+
         return CustomViewHolder(cellForRow)
     }
 
@@ -66,7 +72,7 @@ open class ShopAdapter(context: Context) : RecyclerView.Adapter<ShopAdapter.Cust
             .setMessage("Are you sure you want to buy this item?")
             .setPositiveButton(
                 "Yes"
-            ) { dialog, whichButton ->
+            ) { _, _ ->
                 alertItemClicked = false
                 alertItemBought = true
                 AlertDialog.Builder(context)
@@ -74,22 +80,44 @@ open class ShopAdapter(context: Context) : RecyclerView.Adapter<ShopAdapter.Cust
                     .setMessage("Your new balance: XXX")
                     .setPositiveButton(
                         "Enjoy your new reward!"
-                    ) { dialog, whichButton ->
+                    ) { _, _ ->
                         alertItemBought = false
                     }.setOnCancelListener{
                         alertItemBought = false
                     }.show()
             }.setNegativeButton(
                 "No"
-            ) { dialog, whichButton ->
+            ) { _, _ ->
                 alertItemClicked = false
             }.setOnCancelListener{
                 alertItemClicked = false
             }.show()
     }
+
     fun addItem(title: String, point: String) {
         videoTitles.add(title)
         shopPoints.add(point)
+    }
+
+    fun removeItem(viewHolder: CustomViewHolder) {
+
+        //before you remove, cache the position it was previously on.
+        removedPosition = viewHolder.adapterPosition
+        removedItem = shopPoints[viewHolder.adapterPosition]
+        removedItem2 = videoTitles[viewHolder.adapterPosition]
+
+        videoTitles.removeAt(viewHolder.adapterPosition)
+        shopPoints.removeAt(viewHolder.adapterPosition)
+        notifyItemRemoved(viewHolder.adapterPosition)
+
+
+        Snackbar.make(viewHolder.itemView, "$removedItem2 deleted.", Snackbar.LENGTH_LONG).setAction("UNDO") {
+            //here we wanna add back our item
+            shopPoints.add(removedPosition, removedItem)
+            videoTitles.add(removedPosition, removedItem2)
+
+            notifyItemInserted(removedPosition)
+        }.show()
     }
 }
 
