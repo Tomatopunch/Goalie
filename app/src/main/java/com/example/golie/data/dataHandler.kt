@@ -1,6 +1,7 @@
 package com.example.golie.data
 import android.content.ContentValues
 import android.util.Log
+import android.widget.TextView
 import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
 import com.example.golie.data.dataClasses.Reward

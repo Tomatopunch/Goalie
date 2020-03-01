@@ -1,9 +1,7 @@
 package com.example.golie.ui.shop.reward
 
-import android.content.Intent
-import androidx.lifecycle.ViewModelProviders
+
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -11,11 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.navigation.fragment.findNavController
-
 import com.example.golie.R
 import com.example.golie.ui.shop.ShopAdapter
-import com.example.golie.ui.shop.ShopFragment
-import com.example.golie.ui.shop.ShopItem
 import kotlinx.android.synthetic.main.create_reward_fragment.view.*
 
 //TODO: validation on all these fields
@@ -45,10 +40,11 @@ class CreateReward : Fragment() {
         //have some sort of validation here
         /////////////////////////////////
 
+        // TODO here you wanna add the reward back to the recyclerview, works differntly now with the database
         confirmButton.setOnClickListener {
 
             val shopItem = ShopAdapter(requireContext())
-            shopItem.addItem(titleText.editableText.toString(), pointContent.editableText.toString())
+       //     shopItem.addItem(titleText.editableText.toString(), pointContent.editableText.toString())
 
             val navController = findNavController()
             navController.navigate(R.id.nav_shop)

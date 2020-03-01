@@ -1,10 +1,12 @@
 package com.example.golie.ui.shop
 
+import android.content.ContentValues
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +17,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.golie.R
+import com.example.golie.data.documentToPoints
+import com.example.golie.data.repositoryClasses.PointsRepository
 import kotlinx.android.synthetic.main.shop_fragment.*
 import kotlinx.android.synthetic.main.shop_fragment.view.*
-import java.text.FieldPosition
 
 
 //TODO: Your points should be added from the database
@@ -29,10 +32,8 @@ class ShopFragment : Fragment() {
 
     private var swipeBackground: ColorDrawable = ColorDrawable(Color.parseColor("#FF0000"))
     private lateinit var deleteIcon: Drawable
-
-    companion object {
-        fun newInstance() = ShopFragment()
-    }
+    private val pointsRepository = PointsRepository()
+    val currentUserId = "josefin"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,11 +45,11 @@ class ShopFragment : Fragment() {
 
         var checkAlertItemClicked = savedInstanceState?.getBoolean("alertItemClicked")
 
-        if(checkAlertItemClicked != null){
+        if (checkAlertItemClicked != null) {
             alertItemClicked = checkAlertItemClicked
         }
 
-        if(alertItemClicked) {
+        if (alertItemClicked) {
             android.app.AlertDialog.Builder(context)
                 .setTitle("Buy")
                 .setMessage("Are you sure you want to buy this item?")
@@ -78,11 +79,11 @@ class ShopFragment : Fragment() {
 
         var checkAlertItemBought = savedInstanceState?.getBoolean("alertItemBought")
 
-        if(checkAlertItemBought != null){
+        if (checkAlertItemBought != null) {
             alertItemBought = checkAlertItemBought
         }
 
-        if(alertItemBought){
+        if (alertItemBought) {
             android.app.AlertDialog.Builder(requireContext())
                 .setTitle("That's great!")
                 .setMessage("Your new balance: XXX")
@@ -149,7 +150,23 @@ class ShopFragment : Fragment() {
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(view.shop_view)
 
-        points.text = "9999"
+        // get points from the current user
+        // separate this into another function
+        pointsRepository.getPoints(currentUserId)
+            .addOnSuccessListener { document ->
+
+                if (document != null) {
+                    points.text = documentToPoints(document).toString()
+                    Log.d("found points", points.toString())
+                }
+                else {
+                    Log.d(ContentValues.TAG, "Could not find points!")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(ContentValues.TAG, "An exception was thrown when fetching points! ", exception)
+            }
+
 
         return view
     }
@@ -171,4 +188,5 @@ class ShopFragment : Fragment() {
         outState.putBoolean("alertItemClicked", alertItemClicked)
         outState.putBoolean("alertItemBought", alertItemBought)
     }
+
 }
