@@ -68,7 +68,6 @@ class ChooseFavoriteFragment : Fragment() {
                     var categoryId = clickedCategory.id
 
                     categoryRepository.setFavoriteCategoryId(currentUserId, categoryId)
-                    //TODO: put this category id in navbar in some way!
 
                     val navController = findNavController()
                     navController.navigate(R.id.nav_home)

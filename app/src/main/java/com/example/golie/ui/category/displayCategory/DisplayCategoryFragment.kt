@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.category_fragment.view.*
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class DisplayCategoryFragment : Fragment() {
+open class DisplayCategoryFragment : Fragment() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -58,7 +58,9 @@ class DisplayCategoryFragment : Fragment() {
 
 
     @SuppressLint("ResourceAsColor")
-    fun displayCategory (currentCategoryId: String){
+    fun displayCategory (currentCategoryId: String, inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View{
+
+        val view = inflater.inflate(R.layout.category_fragment, container, false)
 
         //Fetching all goals from database
 
@@ -120,6 +122,7 @@ class DisplayCategoryFragment : Fragment() {
                 Log.d("Error getting goals: ", exception.toString())
             }
 
+        return view
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

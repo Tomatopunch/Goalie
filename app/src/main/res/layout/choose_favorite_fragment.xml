@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.settings.chooseFavCategory.ChooseFavCategoryFragment">
+    tools:context=".ui.home.settings.chooseFavoriteFragment.ChooseFavoriteFragment">
 
     <TextView
         android:id="@+id/chooseFavCategory_titleTextView"

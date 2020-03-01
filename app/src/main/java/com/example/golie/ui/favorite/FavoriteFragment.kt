@@ -11,9 +11,13 @@ import android.widget.ArrayAdapter
 
 import com.example.golie.R
 import com.example.golie.data.dataClasses.Category
+import com.example.golie.data.documentToFavoriteCateoryId
+import com.example.golie.data.repositoryClasses.CategoryRepository
+import com.example.golie.ui.category.DisplayCategoryFragment
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class FavoriteFragment : Fragment() {
+class FavoriteFragment :  DisplayCategoryFragment(){
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -25,15 +29,30 @@ class FavoriteFragment : Fragment() {
 
     private lateinit var viewModel: FavoriteViewModel
     private lateinit var adapter: ArrayAdapter<Category>
+    private val categoryRepository = CategoryRepository()
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
+        lateinit var view: View
 
-        //This fragment will show the favorite category, fetch id of favorite from database THEN call function in superclass"Display..."
-        val view = inflater.inflate(R.layout.favorite_fragment, container, false)
+        //Getting the id of the currently chosen favorite category
+        categoryRepository.getFavoriteCategoryId(currentUserId)
 
+            .addOnSuccessListener { document->
+                val categoryId = documentToFavoriteCateoryId(document)
+                Log.d("id of fav cat:", categoryId)
+
+                //Calling method of superclass DisplayCategoryFragment to display that category
+                //displayCategory(categoryId)
+                view = displayCategory(categoryId, inflater, container, savedInstanceState)
+            }
+
+            .addOnFailureListener{//add code here for what should happen if favorite category id is not found (maybe that category was deleted by user!)
+            }
+
+        //val view = inflater.inflate(R.layout.favorite_fragment, container, false)
         return view
     }
 

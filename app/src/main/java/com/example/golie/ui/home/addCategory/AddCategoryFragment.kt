@@ -2,6 +2,7 @@ package com.example.golie.ui.home.addCategory
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -46,18 +47,33 @@ class AddCategoryFragment : Fragment() {
 
         addCategoryButton.setOnClickListener {
 
-            val categoryName = (view.addCategory_nameEditText).editableText.toString() //Fetching text in edit text field
-            val category = Category(categoryName)
-            categoryRepository.createCategory(currentUserId, category)
-                .addOnSuccessListener {
+            val categoryName = (view.addCategory_nameEditText).editableText.toString()//Fetching text in edit text field
+            Log.d("name", categoryName)
 
-                    val categoryId = it.id
+            var validationErrors = validateCategoryInput(categoryName)
 
-                    val navController = findNavController()
-                    //val args = Bundle().apply { putString("categoryId", categoryId) } // Add
-                    //navController.navigate(R.id.nav_category) // Add
-                    navController.navigate(R.id.nav_home) // Remove
-                }
+            if (validationErrors.isNotEmpty()) { // There are validation errors
+
+                var validationTextView = view.addCategory_validationTextView
+                validationTextView.text = "The following validation error occurred: " + validationErrors
+            }
+
+            else { //There are no validation errors!
+
+                Log.d("validation errors", validationErrors)
+                val category = Category(categoryName)
+                categoryRepository.createCategory(currentUserId, category)
+                    .addOnSuccessListener {
+
+                        Log.d("success", "did add category")
+                        //val categoryId = it.id
+
+                        val navController = findNavController()
+                        //val args = Bundle().apply { putString("categoryId", categoryId) } // Add
+                        //navController.navigate(R.id.nav_category) // Add
+                        navController.navigate(R.id.nav_home) // Remove
+                    }
+            }
 
 
         }
