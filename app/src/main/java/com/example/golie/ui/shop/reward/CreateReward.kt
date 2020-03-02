@@ -1,7 +1,9 @@
 package com.example.golie.ui.shop.reward
 
 
+import android.content.ContentValues
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -10,7 +12,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.navigation.fragment.findNavController
 import com.example.golie.R
-import com.example.golie.ui.shop.ShopAdapter
+import com.example.golie.data.dataClasses.Reward
+import com.example.golie.data.repositoryClasses.RewardRepository
 import kotlinx.android.synthetic.main.create_reward_fragment.view.*
 
 //TODO: validation on all these fields
@@ -25,6 +28,9 @@ class CreateReward : Fragment() {
 
     private lateinit var titleText: EditText
     private lateinit var pointContent: EditText
+    private val rewardRepository = RewardRepository()
+
+    val currentUserId = "josefin"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,19 +43,25 @@ class CreateReward : Fragment() {
         titleText = view.create_editTitle
         pointContent = view.create_editPoints
 
+        Log.d("title", titleText.toString())
+        Log.d("point", pointContent.toString())
+
         //have some sort of validation here
         /////////////////////////////////
-
-        // TODO here you wanna add the reward back to the recyclerview, works differntly now with the database
+/*
         confirmButton.setOnClickListener {
 
-            val shopItem = ShopAdapter(requireContext())
-       //     shopItem.addItem(titleText.editableText.toString(), pointContent.editableText.toString())
+            rewardRepository.createReward(currentUserId, reward)
 
-            val navController = findNavController()
-            navController.navigate(R.id.nav_shop)
+                .addOnSuccessListener {
+                    val navController = findNavController()
+                    navController.navigate(R.id.nav_shop)
+
+                }.addOnFailureListener {
+                    Log.d(ContentValues.TAG, "An exception was thrown when creating a reward! ")
+                }
         }
-
+*/
         setHasOptionsMenu(true)
         return view
     }

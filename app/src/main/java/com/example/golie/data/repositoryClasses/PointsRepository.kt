@@ -15,7 +15,7 @@ class PointsRepository : dbCursorRepository(){
     // Funkar
    fun getPoints(currentUserId: String) : Task<DocumentSnapshot> {
 
-       return db.collection("users/$currentUserId/points").document("currentPoints").get()
+       return db.collection("users").document(currentUserId).get()
 
    }
 
@@ -29,7 +29,7 @@ class PointsRepository : dbCursorRepository(){
         )
 
 
-        return db.collection("users/$currentUserId/points").document("currentPoints").set(pointsDocumentData)
+        return db.collection("users").document(currentUserId).set(pointsDocumentData)
 
     }
 

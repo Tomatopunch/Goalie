@@ -17,13 +17,14 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.golie.R
+import com.example.golie.data.dataClasses.Reward
 import com.example.golie.data.documentToPoints
+import com.example.golie.data.documentsToRewards
 import com.example.golie.data.repositoryClasses.PointsRepository
+import com.example.golie.data.repositoryClasses.RewardRepository
 import kotlinx.android.synthetic.main.shop_fragment.*
 import kotlinx.android.synthetic.main.shop_fragment.view.*
 
-
-//TODO: Your points should be added from the database
 
 var alertItemClicked = false
 var alertItemBought = false
@@ -32,7 +33,12 @@ class ShopFragment : Fragment() {
 
     private var swipeBackground: ColorDrawable = ColorDrawable(Color.parseColor("#FF0000"))
     private lateinit var deleteIcon: Drawable
+    private var rewards = mutableListOf<Reward>()
     private val pointsRepository = PointsRepository()
+    private val rewardRepository = RewardRepository()
+
+    lateinit var reward: Reward  // not in use???
+
     val currentUserId = "josefin"
 
     override fun onCreateView(
@@ -98,9 +104,23 @@ class ShopFragment : Fragment() {
 
         deleteIcon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_delete)!!
 
-        view.shop_view.layoutManager = LinearLayoutManager(activity)
-        view.shop_view.adapter = ShopAdapter(requireContext())
-        view.shop_view.setHasFixedSize(true)
+        rewardRepository.getAlLRewards(currentUserId)
+            .addOnSuccessListener { document ->
+
+                if (document != null) {
+                    rewards = documentsToRewards(document)
+                    view.shop_view.layoutManager = LinearLayoutManager(activity)
+                    view.shop_view.adapter = ShopAdapter(requireContext(), rewards)
+                    view.shop_view.setHasFixedSize(true)
+                    (view.shop_view.adapter as ShopAdapter).notifyDataSetChanged()
+                }
+                else {
+                    Log.d(ContentValues.TAG, "Could not find rewards!")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(ContentValues.TAG, "An exception was thrown when fetching rewards! ", exception)
+            }
 
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
@@ -166,7 +186,6 @@ class ShopFragment : Fragment() {
             .addOnFailureListener { exception ->
                 Log.d(ContentValues.TAG, "An exception was thrown when fetching points! ", exception)
             }
-
 
         return view
     }
