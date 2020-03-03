@@ -37,6 +37,8 @@ class FavoriteFragment :  DisplayCategoryFragment(){
 
         //lateinit var view: View
 
+        var view = inflater.inflate(R.layout.category_fragment, container, false)
+
         //Getting the id of the currently chosen favorite category
         categoryRepository.getFavoriteCategoryId(currentUserId)
 
@@ -45,17 +47,15 @@ class FavoriteFragment :  DisplayCategoryFragment(){
                 Log.d("id of fav cat:", categoryId)
 
                 //Calling method of superclass DisplayCategoryFragment to display that category
-                //displayCategory(categoryId)
-                displayCategory(categoryId, inflater, container, savedInstanceState)
+
+                view = displayCategory(categoryId, view)
 
 
             }
-
             .addOnFailureListener{//add code here for what should happen if favorite category id is not found (maybe that category was deleted by user!)
-                Log.d("oh no", "couldtn even get id of fav")
+                Log.d("oh no", "couldnt even get id of fav :( ")
             }
 
-        val view = inflater.inflate(R.layout.favorite_fragment, container, false)
         return view
     }
 

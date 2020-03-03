@@ -58,18 +58,19 @@ open class DisplayCategoryFragment : Fragment() {
 
 
     @SuppressLint("ResourceAsColor")
-    fun displayCategory (currentCategoryId: String, inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View{
+    fun displayCategory (currentCategoryId: String, view: View) : View{
 
-        val view = inflater.inflate(R.layout.category_fragment, container, false)
-
+        Log.d("im in display function", "would you plz ")
         //Fetching all goals from database
 
         val goalRepository = GoalRepository()
         lateinit var allGoals : MutableList<Goal>
 
+        var finishedGettingData = false
         goalRepository.getAllGoalsWithinCategory(currentUserId, currentCategoryId)
             .addOnSuccessListener { documents ->
 
+                Log.d("i just got all goals", "success getting goals, still working")
                 //casting documents into goal objects
 
                 allGoals = documentsToGoals(documents)
@@ -122,6 +123,9 @@ open class DisplayCategoryFragment : Fragment() {
                 Log.d("Error getting goals: ", exception.toString())
             }
 
+
+
+        Log.d("returning view now!!!!", "view yes ")
         return view
     }
 
