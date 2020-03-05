@@ -90,7 +90,7 @@ class HomeFragment : Fragment() {
 
 
                     val navController = findNavController()
-                    val args = Bundle().apply { putString("id", categoryId) }
+                    val args = Bundle().apply { putString("categoryId", categoryId) }
                     navController.navigate(R.id.nav_category, args)
                 }
 
