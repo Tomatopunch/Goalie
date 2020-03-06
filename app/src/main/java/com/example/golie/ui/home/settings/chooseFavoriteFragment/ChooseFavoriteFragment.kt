@@ -14,19 +14,17 @@ import com.example.golie.R
 import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.documentsToCategories
 import com.example.golie.data.repositoryClasses.CategoryRepository
-import com.example.golie.ui.favorite.FavoriteFragment
-import com.example.golie.ui.favorite.FavoriteViewModel
 import kotlinx.android.synthetic.main.choose_favorite_fragment.view.*
 
 class ChooseFavoriteFragment : Fragment() {
 
     companion object {
-        fun newInstance() = FavoriteFragment()
+        fun newInstance() = ChooseFavoriteFragment()
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private lateinit var viewModel: FavoriteViewModel
+    private lateinit var viewModel: ChooseFavoriteViewModel
     private lateinit var adapter: ArrayAdapter<Category>
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +83,7 @@ class ChooseFavoriteFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(FavoriteViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(ChooseFavoriteViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

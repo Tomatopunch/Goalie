@@ -63,7 +63,7 @@ class categoryFragment : Fragment() {
                     displayCategory(currentCategoryId, view, savedInstanceState)
                 }
 
-                .addOnFailureListener{
+                .addOnFailureListener{//We couldnt find the id of the fsvorite category
                 }
         }
 
