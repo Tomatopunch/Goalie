@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -24,12 +25,6 @@ import com.example.golie.data.repositoryClasses.PointsRepository
 import com.example.golie.data.repositoryClasses.RewardRepository
 import kotlinx.android.synthetic.main.shop_fragment.*
 import kotlinx.android.synthetic.main.shop_fragment.view.*
-
-
- /*
-var alertItemClicked = false
-var alertItemBought = false
-*/
 
 class ShopFragment : Fragment() {
 
@@ -48,68 +43,12 @@ class ShopFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.shop_fragment, container, false)
         val points = view.shop_balance
-/*
-        var checkAlertItemClicked = savedInstanceState?.getBoolean("alertItemClicked")
-
-        if (checkAlertItemClicked != null) {
-            alertItemClicked = checkAlertItemClicked
-        }
-
-        if (alertItemClicked) {
-            android.app.AlertDialog.Builder(context)
-                .setTitle("Buy")
-                .setMessage("Are you sure you want to buy this item?")
-                .setPositiveButton(
-                    "Yes"
-                ) { _, _ ->
-                    alertItemClicked = false
-                    alertItemBought = true
-                    android.app.AlertDialog.Builder(requireContext())
-                        .setTitle("That's great!")
-                        .setMessage("Your new balance: XXX")
-                        .setPositiveButton(
-                            "Enjoy your new reward!"
-                        ) { _, _ ->
-                            alertItemBought = false
-                        }.setOnCancelListener{
-                            alertItemBought = false
-                        }.show()
-                }.setNegativeButton(
-                    "No"
-                ) { _, _ ->
-                    alertItemClicked = false
-                }.setOnCancelListener{
-                    alertItemClicked = false
-                }.show()
-        }
-
-
-        var checkAlertItemBought = savedInstanceState?.getBoolean("alertItemBought")
-
-        if (checkAlertItemBought != null) {
-            alertItemBought = checkAlertItemBought
-        }
-
-        if (alertItemBought) {
-            android.app.AlertDialog.Builder(requireContext())
-                .setTitle("That's great!")
-                .setMessage("Your new balance: XXX")
-                .setPositiveButton(
-                    "Enjoy your new reward!"
-                ) { _, _ ->
-                    alertItemBought = false
-                }.setOnCancelListener{
-                    alertItemBought = false
-                }.show()
-        }
- */
 
         deleteIcon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_delete)!!
 
         rewardRepository.getAlLRewards(currentUserId)
             .addOnSuccessListener { document ->
 
-                // you need to send your activity when calling ShopAdapter for FragmentDialog
                 if (document != null) {
                     rewards = documentsToRewards(document)
                     view.shop_view.layoutManager = LinearLayoutManager(activity)
@@ -174,21 +113,7 @@ class ShopFragment : Fragment() {
         itemTouchHelper.attachToRecyclerView(view.shop_view)
 
         // get points from the current user
-        // separate this into another function
-        pointsRepository.getPoints(currentUserId)
-            .addOnSuccessListener { document ->
-
-                if (document != null) {
-                    points.text = documentToPoints(document).toString()
-                    Log.d("found points", points.toString())
-                }
-                else {
-                    Log.d(ContentValues.TAG, "Could not find points!")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(ContentValues.TAG, "An exception was thrown when fetching points! ", exception)
-            }
+        getPoints(points)
 
         return view
     }
@@ -204,12 +129,29 @@ class ShopFragment : Fragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-/*
-        outState.putBoolean("alertItemClicked", alertItemClicked)
-        outState.putBoolean("alertItemBought", alertItemBought)
+    // when we get back here fetch the points again to update the view
+    override fun onResume() {
+        super.onResume()
 
- */
+        val points = shop_balance
+        getPoints(points)
     }
+
+    //Function that retrieves the amount of points from the user currently logged in
+    private fun getPoints(points: TextView) {
+        pointsRepository.getPoints(currentUserId)
+            .addOnSuccessListener { document ->
+
+                if (document != null) {
+                    points.text = documentToPoints(document).toString()
+                }
+                else {
+                    Log.d(ContentValues.TAG, "Could not find points!")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(ContentValues.TAG, "An exception was thrown when fetching points! ", exception)
+            }
+    }
+
 }

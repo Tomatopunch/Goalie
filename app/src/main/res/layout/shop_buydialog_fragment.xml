@@ -22,16 +22,16 @@
         android:layout_alignRight="@+id/alert_dialog_text"
         android:layout_alignBottom="@+id/noButton"
         android:layout_marginRight="38dp"
-        android:text="No" />
+        android:text="Yes     " />
 
     <Button
         android:id="@+id/noButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/alert_dialog_text"
         android:layout_below="@+id/alert_dialog_text"
+        android:layout_alignLeft="@+id/alert_dialog_text"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="20dp"
-        android:text="Yes" />
+        android:text="No     " />
 
 </RelativeLayout>

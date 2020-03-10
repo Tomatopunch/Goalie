@@ -1,6 +1,6 @@
 package com.example.golie.ui.shop
 
-import android.app.AlertDialog
+
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
@@ -8,12 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.golie.R
 import com.example.golie.data.dataClasses.Reward
 import com.example.golie.data.repositoryClasses.RewardRepository
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.shop_item.view.*
+
+
 
 open class ShopAdapter(val context: Context, private var rewards: MutableList<Reward> ) : RecyclerView.Adapter<ShopAdapter.CustomViewHolder>() {
 
@@ -43,8 +46,11 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
         holder.shopPoints.text = shopPoints.toString()
 
         holder.itemView.setOnClickListener {
-            val shopDialogFragment = ShopBuyDialogFragment()
 
+            val fragmentManager = (context as FragmentActivity).supportFragmentManager
+            val shopDialogFragment = ShopBuyDialogFragment(shopPoints)
+
+            shopDialogFragment.show(fragmentManager, "firstFragmentManager")
         }
     }
 
@@ -84,52 +90,16 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
                     currentUserId,
                     removedItem,
                     removedItem.id
-                )
 
-                    .addOnSuccessListener {
+
+                ).addOnSuccessListener {
                         rewards.add(removedPosition, removedItem)
                         notifyItemInserted(removedPosition)
 
-                    }.addOnFailureListener {
-                        Log.d(ContentValues.TAG, "An exception was thrown when deleting a reward! ")
-                    }
+
+                }.addOnFailureListener {
+                    Log.d(ContentValues.TAG, "An exception was thrown when deleting a reward! ")
+                }
             }.show()
     }
 }
-/*
-    private fun alertDialog(context: Context) {
-
-
-        alertItemClicked = true
-        AlertDialog.Builder(context)
-            .setTitle("Buy")
-            .setMessage("Are you sure you want to buy this item?")
-            .setPositiveButton(
-                "Yes"
-            ) { _, _ ->
-                alertItemClicked = false
-                alertItemBought = true
-                AlertDialog.Builder(context)
-                    .setTitle("That's great!")
-                    .setMessage("Your new balance: XXX")
-                    .setPositiveButton(
-                        "Enjoy your new reward!"
-                    ) { _, _ ->
-                        alertItemBought = false
-                    }.setOnCancelListener{
-                        alertItemBought = false
-                    }.show()
-            }.setNegativeButton(
-                "No"
-            ) { _, _ ->
-                alertItemClicked = false
-            }.setOnCancelListener{
-                alertItemClicked = false
-            }.show()
-    }
-
-
-}
-
- */
-

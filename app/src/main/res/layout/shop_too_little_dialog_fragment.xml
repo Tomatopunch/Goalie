@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="Thank You"
+        android:text="Oh No! :("
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"/>
@@ -23,32 +23,23 @@
         android:background="#03bd70" />
 
     <Button
-        android:id="@+id/acceptButton"
+        android:id="@+id/confirm_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/view1"
         android:layout_marginTop="78dp"
-        android:text="Enjoy Your Reward" />
+
+        android:text="better luck next time" />
 
     <TextView
-        android:id="@+id/contentText"
+        android:id="@+id/content_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/view1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
-        android:text="Your new balance is: "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/new_point_balance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/contentText"
-        android:layout_marginTop="26dp"
-        android:layout_marginStart="40dp"
-        android:layout_below="@+id/view1"
+        android:text="Not enough money yet "
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>
