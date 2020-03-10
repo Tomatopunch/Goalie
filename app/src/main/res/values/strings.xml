@@ -23,4 +23,12 @@
     <string name="addGoal_insertTitle">insert title here...</string>
     <string name="addGoal_dateFormat">yyyy-mm-dd</string>
     <string name="addGoal_pointsExample">10 points</string>
+    <string name="dialog_title">Completed or failed the goal? \nDecide what to do: </string>
+    <string name="dialog_manageGoal">Manage your goal:</string>
+    <string name="editGoal">Edit Goal</string>
+    <string name="dialog_failedGoal">Failed Goal</string>
+    <string name="dialog_finishedGoal">Finished Goal</string>
+    <string name="dialog_deleteGoal">Delete Goal</string>
+    <string name="dialog_return">Return to Goals</string>
+    <string name="updateGoal">Update Goal!</string>
 </resources>

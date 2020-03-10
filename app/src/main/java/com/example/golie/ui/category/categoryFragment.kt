@@ -1,18 +1,18 @@
 package com.example.golie.ui.category
 
 import android.annotation.SuppressLint
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-
 import com.example.golie.R
 import com.example.golie.data.dataClasses.Goal
 import com.example.golie.data.documentToCategory
@@ -31,26 +31,31 @@ class categoryFragment : Fragment() {
     private lateinit var viewModel: CategoryViewModel
     private lateinit var adapter: ArrayAdapter<Goal>
     private var activeAlertDialog = false
+    lateinit var allGoals : MutableList<Goal>
+    val userId = "josefin"
+    lateinit var categoryId: String
+    lateinit var goalId: String
+    val goalRepository = GoalRepository()
+
+
+    lateinit var listView: ListView
 
     @SuppressLint("ResourceAsColor")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true) // This is used with the back button. Can now handle it with onOptionsItemSelected
 
         val view = inflater.inflate(R.layout.category_fragment, container, false)
-        val currentUserId = "josefin"
         val categoryRepository = CategoryRepository()
-        /*var currentCategoryId = "-1"
-        if(arguments != null){
-            currentCategoryId = (arguments!!.getString("id"))!!
-        }*/
-        val currentCategoryId : String  = (arguments!!.getString("id"))!!
+        categoryId = (arguments!!.getString("categoryId"))!!
+        Log.d("categoryId", categoryId)
 
         //Setting title
 
         val userNameTextView = view.category_titleTextView
-        categoryRepository.getCategoryById(currentUserId, currentCategoryId)
+        categoryRepository.getCategoryById(userId, categoryId)
             .addOnSuccessListener {document ->
                 val category = documentToCategory(document)
                 Log.d("categoryCheck", "$category")
@@ -60,17 +65,16 @@ class categoryFragment : Fragment() {
 
         //Fetching all goals from database
 
-        val goalRepository = GoalRepository()
-        lateinit var allGoals : MutableList<Goal>
 
-        goalRepository.getAllGoalsWithinCategory(currentUserId, currentCategoryId)
+        goalRepository.getAllGoalsWithinCategory(userId, categoryId)
             .addOnSuccessListener { documents ->
 
                 //casting documents into goal objects
 
                 allGoals = documentsToGoals(documents)
 
-                val listView = view.category_listView
+
+                listView = view.category_listView
 
                 ///////////////////////// RUNTIME CONFIG HANDLER ////////////////////////
 
@@ -79,14 +83,14 @@ class categoryFragment : Fragment() {
                     activeAlertDialog = checkActiveDialog
                 }
 
-                if(activeAlertDialog){
+                if(activeAlertDialog){ // Dialogfragment
                     AlertDialog.Builder(context!!)
                         .setTitle("Manage Goal")
                         .setMessage("Decide what you want to do with your goal.")
                         .setPositiveButton(
                             "Finished"
                         ) { dialog, whichButton ->
-                            listView.setBackgroundColor(R.color.green)
+                            view.setBackgroundColor(context!!.getColor( R.color.green))
                             val navController = findNavController()
                             val args = Bundle().apply {
                                 putString("categoryName", "today") // TODO: Hämta databas kategorin med detta värde
@@ -96,7 +100,7 @@ class categoryFragment : Fragment() {
                         }.setNegativeButton(
                             "Failed"
                         ) { dialog, whichButton ->
-                            listView.setBackgroundColor(R.color.green)
+                            view.setBackgroundColor(context!!.getColor( R.color.red))
                             activeAlertDialog = false
                         }.setNeutralButton(
                             "Do nothing"
@@ -110,8 +114,8 @@ class categoryFragment : Fragment() {
 
                 //Putting all goals in list view
 
-                adapter = ArrayAdapter(
-                    context!!,
+                adapter = ArrayAdapter( //TODO: Gör en egen arrayadapter som uppdaterar färgen vid init
+                    requireContext(),
                     android.R.layout.simple_list_item_1,
                     android.R.id.text1,
                     allGoals
@@ -119,20 +123,43 @@ class categoryFragment : Fragment() {
 
                 listView.adapter = adapter
 
+                goalRepository.verifyGoalStatus(allGoals, this)
+
                 //Enabling clicking one one list item
+
 
                 listView.setOnItemClickListener{ parent, view, position, _ ->
 
                     var clickedGoal = listView.adapter.getItem(position) as Goal
-                    var goalId = clickedGoal.id
-                    activeAlertDialog = true
+                    goalId = clickedGoal.id
+
+                    val goalDialogFragment = GoalDialogFragment()
+
+                    var args = Bundle().apply{
+                        putString("categoryId", categoryId)
+                        putString("userId", userId)
+                        putString("goalId", goalId)
+                        putInt("position", position)
+
+
+                        //vill skicka med view för att ändra färgen på categoryListView??
+
+                    }
+
+                    goalDialogFragment.arguments = args
+                    goalDialogFragment.show(childFragmentManager, "FragmentManager")
+
+
+
+
+                    /*activeAlertDialog = true
                     AlertDialog.Builder(context!!)
                         .setTitle("Manage Goal")
                         .setMessage("Decide what you want to do with your goal.")
                         .setPositiveButton(
                             "Finished"
                         ) { dialog, whichButton ->
-                            view.setBackgroundColor(R.color.green)
+                            view.setBackgroundColor(context!!.getColor( R.color.green))
                             val navController = findNavController()
                             val args = Bundle().apply {
                                 putString("goalId", goalId) // TODO: Hämta databas kategorin med detta värde
@@ -142,7 +169,7 @@ class categoryFragment : Fragment() {
                         }.setNegativeButton(
                             "Failed"
                         ) { dialog, whichButton ->
-                            view.setBackgroundColor(R.color.red)
+                            view.setBackgroundColor(context!!.getColor( R.color.red))
                             activeAlertDialog = false
                         }.setNeutralButton(
                             "Do nothing"
@@ -150,7 +177,7 @@ class categoryFragment : Fragment() {
                             activeAlertDialog = false
                         }.setOnCancelListener{
                             activeAlertDialog = false
-                        }.show()
+                        }.show()*/
                 }
 
             }
@@ -166,13 +193,16 @@ class categoryFragment : Fragment() {
 
         val buttonAdd = category_addButton
 
+        val categoryId : String  = (arguments!!.getString("categoryId"))!!
+
         buttonAdd.setOnClickListener {
 
             // Here we cast main activity to the interface (below) and this is possible because
             // main activity extends this interface
             val navController = findNavController()
             val args = Bundle().apply{
-                putString("key", "value")
+                putString("categoryId", categoryId)
+                putString("userId", userId)
             } // Send this to the next navigation object
             navController.navigate(R.id.nav_addGoal, args) // Skicka med args - argument
 
@@ -182,17 +212,42 @@ class categoryFragment : Fragment() {
         }
     }
 
+    fun deleteGoal(position: Int){
 
-    override fun onStart() {
-        super.onStart()
+        allGoals.removeAt(position)
+        adapter.notifyDataSetChanged()
 
+    }
+
+    fun setBackgroundColor(position: Int, colorId: Int, init: Boolean){
+        var listItem: View
+        if(init) {
+            listItem = listView.adapter.getView(position, null, listView)
+        }
+        else {
+            listItem = listView.getChildAt(position)
+        }
+        goalRepository.updateColorId(userId, categoryId, allGoals[position].id, colorId).addOnSuccessListener {
+            allGoals[position].colorId = colorId
+            adapter.notifyDataSetChanged()
+            listItem.setBackgroundColor(context!!.getColor(colorId))
+        }
+            .addOnFailureListener {
+                Log.d("updateColorId", "Error updating colorId in categoryFragment")
+            }
+
+    }
+
+
+
+    override fun onResume() {
+        super.onResume()
         if(::adapter.isInitialized) {
             adapter.notifyDataSetChanged()
         }
         else{
             Log.d("State of adapter", "Adapter is not initialized")
         }
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -206,5 +261,13 @@ class categoryFragment : Fragment() {
 
         outState.putBoolean("activeAlertDialog", activeAlertDialog)
 
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+        val navController = findNavController()
+        navController.navigate(R.id.nav_home)
+
+        return true
     }
 }

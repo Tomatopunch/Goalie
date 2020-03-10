@@ -47,7 +47,7 @@ class HomeFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.home_fragment, container, false)
         val categoryRepository = CategoryRepository()
-        val currentUserId = "josefin" //TODO
+        val userId = "josefin" //TODO
 
         val goalRepository = GoalRepository()
 
@@ -57,7 +57,7 @@ class HomeFragment : Fragment() {
         //Setting the title
 
         val userNameTextView = view.home_userNameTextView
-        userNameTextView.text = currentUserId //TODO
+        userNameTextView.text = userId //TODO
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -66,7 +66,7 @@ class HomeFragment : Fragment() {
         val listView = view.home_allCategoriesListView
         var allCategories: MutableList<Category> = ArrayList()
 
-        categoryRepository.getAllCategories(currentUserId)
+        categoryRepository.getAllCategories(userId)
             .addOnSuccessListener { documents ->
 
 
@@ -90,7 +90,7 @@ class HomeFragment : Fragment() {
 
 
                     val navController = findNavController()
-                    val args = Bundle().apply { putString("id", categoryId) }
+                    val args = Bundle().apply { putString("categoryId", categoryId) }
                     navController.navigate(R.id.nav_category, args)
                 }
 

@@ -1,22 +1,28 @@
 package com.example.golie
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import android.os.PersistableBundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.golie.ui.category.addGoal.AddGoalFragment
+import com.example.golie.ui.category.categoryFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    var newFragment = AddGoalFragment()
 
+    companion object categoryInit{
+
+        var categoryFragment: categoryFragment? = null
+        var categoryListView: View? = null
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
@@ -26,55 +32,22 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_category, R.id.nav_home, R.id.nav_shop
+                R.id.nav_favorite, R.id.nav_home, R.id.nav_shop // Disable back button
             )
         )
+
+
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
 
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
 
-    // Sparat för att Linus ska se skillnaden.
+        outState.apply {
 
-    /*override fun theButtonWasClicked() {
-        Log.d("test", "händer inget")
-        /*val homeFragment = supportFragmentManager.findFragmentById(R.id.addGoalFragment) as AddGoalFragment?
-
-        if(homeFragment != null){
-            // We're in two-pane layout. This is for bigger screens.
-            Log.d("kaos", "Det blev feeeeeel")
         }
-
-        else{*/
-            // This is a one-pane layout. This is what we always use.
-            val args = Bundle()
-            // args.putInt(categoryFragment.ARG_POSITION, position)
-            newFragment.arguments = args
-
-            val transaction = supportFragmentManager.beginTransaction()
-
-            transaction.add(R.id.nav_host_fragment, newFragment)
-                transaction.setReorderingAllowed(true)
-            transaction.addToBackStack(null)
-
-            transaction.commit()
-        //}
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-
-        val transaction = supportFragmentManager.beginTransaction()
-
-        transaction.remove(newFragment)
-        transaction.commit()
-
-    }*/
-
 }
-
-
-
-//class MainActivity : AppCompatActivity(), categoryFragment.Interface{
-
-//}

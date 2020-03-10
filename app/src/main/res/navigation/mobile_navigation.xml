@@ -59,6 +59,6 @@
     <fragment
         android:id="@+id/nav_favorite"
         android:name="com.example.golie.ui.favorite.FavoriteFragment"
-        android:label="favorite_fragment"
+        android:label="Favorite"
         tools:layout="@layout/favorite_fragment" />
 </navigation>

@@ -5,6 +5,7 @@ data class Goal (
     var timeSpan: String? = "",
     var reoccurring: Boolean = false,
     var points: Int = -1,
+    var colorId: Int = -1,
     var id: String = ""
 ){
     override fun toString() = title
