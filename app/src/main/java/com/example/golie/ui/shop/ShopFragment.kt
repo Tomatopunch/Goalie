@@ -26,8 +26,10 @@ import kotlinx.android.synthetic.main.shop_fragment.*
 import kotlinx.android.synthetic.main.shop_fragment.view.*
 
 
+ /*
 var alertItemClicked = false
 var alertItemBought = false
+*/
 
 class ShopFragment : Fragment() {
 
@@ -36,8 +38,6 @@ class ShopFragment : Fragment() {
     private var rewards = mutableListOf<Reward>()
     private val pointsRepository = PointsRepository()
     private val rewardRepository = RewardRepository()
-
-    lateinit var reward: Reward  // not in use???
 
     val currentUserId = "josefin"
 
@@ -48,7 +48,7 @@ class ShopFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.shop_fragment, container, false)
         val points = view.shop_balance
-
+/*
         var checkAlertItemClicked = savedInstanceState?.getBoolean("alertItemClicked")
 
         if (checkAlertItemClicked != null) {
@@ -83,6 +83,7 @@ class ShopFragment : Fragment() {
                 }.show()
         }
 
+
         var checkAlertItemBought = savedInstanceState?.getBoolean("alertItemBought")
 
         if (checkAlertItemBought != null) {
@@ -101,12 +102,14 @@ class ShopFragment : Fragment() {
                     alertItemBought = false
                 }.show()
         }
+ */
 
         deleteIcon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_delete)!!
 
         rewardRepository.getAlLRewards(currentUserId)
             .addOnSuccessListener { document ->
 
+                // you need to send your activity when calling ShopAdapter for FragmentDialog
                 if (document != null) {
                     rewards = documentsToRewards(document)
                     view.shop_view.layoutManager = LinearLayoutManager(activity)
@@ -203,9 +206,10 @@ class ShopFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-
+/*
         outState.putBoolean("alertItemClicked", alertItemClicked)
         outState.putBoolean("alertItemBought", alertItemBought)
-    }
 
+ */
+    }
 }

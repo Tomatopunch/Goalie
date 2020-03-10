@@ -43,25 +43,25 @@ class CreateReward : Fragment() {
         titleText = view.create_editTitle
         pointContent = view.create_editPoints
 
-        Log.d("title", titleText.toString())
-        Log.d("point", pointContent.toString())
 
         //have some sort of validation here
         /////////////////////////////////
-/*
+
         confirmButton.setOnClickListener {
+
+            val reward = Reward(titleText.editableText.toString(), pointContent.editableText.toString().toInt())
 
             rewardRepository.createReward(currentUserId, reward)
 
                 .addOnSuccessListener {
                     val navController = findNavController()
                     navController.navigate(R.id.nav_shop)
-
-                }.addOnFailureListener {
-                    Log.d(ContentValues.TAG, "An exception was thrown when creating a reward! ")
                 }
+                .addOnFailureListener {
+                Log.d(ContentValues.TAG, "An exception was thrown when creating a reward! ")
+            }
         }
-*/
+
         setHasOptionsMenu(true)
         return view
     }

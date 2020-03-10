@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/alert_dialog_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:text="Are you sure you want to buy this"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/yesButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/noButton"
+        android:layout_alignRight="@+id/alert_dialog_text"
+        android:layout_alignBottom="@+id/noButton"
+        android:layout_marginRight="38dp"
+        android:text="No" />
+
+    <Button
+        android:id="@+id/noButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/alert_dialog_text"
+        android:layout_below="@+id/alert_dialog_text"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="20dp"
+        android:text="Yes" />
+
+</RelativeLayout>

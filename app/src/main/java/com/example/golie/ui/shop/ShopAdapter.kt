@@ -42,8 +42,9 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
         holder.shopTitle.text = shopTitle
         holder.shopPoints.text = shopPoints.toString()
 
-        holder.itemView.setOnClickListener{
-            alertDialog(context)
+        holder.itemView.setOnClickListener {
+            val shopDialogFragment = ShopBuyDialogFragment()
+
         }
     }
 
@@ -76,21 +77,29 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
 
         //Give the user information that an item was deleted.
         //When pressing UNDO - > revert the changes
-        Snackbar.make(viewHolder.itemView, "$removedItem deleted.", Snackbar.LENGTH_LONG).setAction("UNDO") {
+        Snackbar.make(viewHolder.itemView, "$removedItem deleted.", Snackbar.LENGTH_LONG)
+            .setAction("UNDO") {
 
-            rewardRepository.createRewardWithSpecificId(currentUserId, removedItem, removedItem.id)
+                rewardRepository.createRewardWithSpecificId(
+                    currentUserId,
+                    removedItem,
+                    removedItem.id
+                )
 
-                .addOnSuccessListener {
-                    rewards.add(removedPosition, removedItem)
-                    notifyItemInserted(removedPosition)
+                    .addOnSuccessListener {
+                        rewards.add(removedPosition, removedItem)
+                        notifyItemInserted(removedPosition)
 
-                }.addOnFailureListener {
-                    Log.d(ContentValues.TAG, "An exception was thrown when deleting a reward! ")
-                }
-        }.show()
+                    }.addOnFailureListener {
+                        Log.d(ContentValues.TAG, "An exception was thrown when deleting a reward! ")
+                    }
+            }.show()
     }
-
+}
+/*
     private fun alertDialog(context: Context) {
+
+
         alertItemClicked = true
         AlertDialog.Builder(context)
             .setTitle("Buy")
@@ -118,5 +127,9 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
                 alertItemClicked = false
             }.show()
     }
+
+
 }
+
+ */
 

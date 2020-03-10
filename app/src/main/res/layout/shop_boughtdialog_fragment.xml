@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical"
+    android:background="#808080">
+
+    <TextView
+        android:id="@+id/title_text_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="That's great!"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/content_text_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your new balance is: "
+        android:textSize="14sp" />
+    <Button
+        android:id="@+id/enjoy_reward_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enjoy your reward"
+        android:textAllCaps="false"/>
+</LinearLayout>
