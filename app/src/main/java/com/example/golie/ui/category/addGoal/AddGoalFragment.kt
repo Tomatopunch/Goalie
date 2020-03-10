@@ -28,20 +28,21 @@ class AddGoalFragment : Fragment() {
     ): View? {
         setHasOptionsMenu(true) // This is used with the back button. Can now handle it with onOptionsItemSelected
 
+        val arguments = requireArguments()
         val view = inflater.inflate(R.layout.add_goal_fragment, container, false)
-        val userId = arguments!!.getString("userId")!!
-        val categoryId : String  = (arguments!!.getString("categoryId"))!!
+        val userId = arguments.getString("userId")!!
+        val categoryId : String  = (arguments.getString("categoryId"))!!
         Log.d("currentCategory", categoryId)
         val goalRepository = GoalRepository()
 
         val createButton = view.addGoal_CreateGoalButton
         val timeSpan = view.addGoal_timeSpanDate
 
-        if(arguments!!.getString("checkIfUpdating") != null){ // Checking if I got here to update
-            val titleText = arguments!!.getString("title")
-            val timeSpanText = arguments!!.getString("timeSpan")
-            val reoccurring = arguments!!.getBoolean("reoccurring")
-            val points = arguments!!.getInt("points")
+        if(arguments.getString("checkIfUpdating") != null){ // Checking if I got here to update
+            val titleText = arguments.getString("title")
+            val timeSpanText = arguments.getString("timeSpan")
+            val reoccurring = arguments.getBoolean("reoccurring")
+            val points = arguments.getInt("points")
             view.addGoal_titleEditText.setText(titleText)
             view.addGoal_timeSpanDate.setText(timeSpanText)
             view.addGoal_reoccurringCheckBox.isChecked = reoccurring
@@ -57,7 +58,7 @@ class AddGoalFragment : Fragment() {
 
 
             val dialogFragment = DatePickerFragment(it)
-            dialogFragment.show(activity!!.supportFragmentManager, "FragmentManager")
+            dialogFragment.show(requireActivity().supportFragmentManager, "FragmentManager")
             /*var args = Bundle().apply {
                 putString("title", "$title")
                 putString("reOccurring", "$reOccurring")
@@ -91,8 +92,8 @@ class AddGoalFragment : Fragment() {
                 //TODO: Sätt in alla värden i databasen här
                 val points = pointsText.toInt()
                 val goal = Goal(title, timeSpanText, reOccurring, points) // Behöver vi GoalId?
-                if(arguments!!.getString("checkIfUpdating") != null) { // Checking if I'm updating or deleting
-                    val goalId = arguments!!.getString("goalId")!!
+                if(arguments.getString("checkIfUpdating") != null) { // Checking if I'm updating or deleting
+                    val goalId = arguments.getString("goalId")!!
                     goalRepository.updateGoal(userId, categoryId, goalId, goal)
                 }
                 else {
@@ -119,8 +120,9 @@ class AddGoalFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         super.onOptionsItemSelected(item)
         val navController = findNavController()
-        val userId = arguments!!.getString("userId")!!
-        val categoryId : String  = (arguments!!.getString("categoryId"))!!
+        val arguments = requireArguments()
+        val userId = arguments.getString("userId")!!
+        val categoryId : String  = (arguments.getString("categoryId"))!!
         val args = Bundle().apply{
             putString("categoryId", categoryId)
             putString("userId", userId)

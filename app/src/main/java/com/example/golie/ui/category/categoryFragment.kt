@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.golie.R
+import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
 import com.example.golie.data.documentToCategory
 import com.example.golie.data.documentsToGoals
@@ -37,7 +38,6 @@ class categoryFragment : Fragment() {
     lateinit var goalId: String
     val goalRepository = GoalRepository()
 
-
     lateinit var listView: ListView
 
     @SuppressLint("ResourceAsColor")
@@ -49,7 +49,9 @@ class categoryFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.category_fragment, container, false)
         val categoryRepository = CategoryRepository()
-        categoryId = (arguments!!.getString("categoryId"))!!
+        val arguments = requireArguments()
+        val context = requireContext()
+        categoryId = (arguments.getString("categoryId"))!!
         Log.d("categoryId", categoryId)
 
         //Setting title
@@ -84,13 +86,13 @@ class categoryFragment : Fragment() {
                 }
 
                 if(activeAlertDialog){ // Dialogfragment
-                    AlertDialog.Builder(context!!)
+                    AlertDialog.Builder(context)
                         .setTitle("Manage Goal")
                         .setMessage("Decide what you want to do with your goal.")
                         .setPositiveButton(
                             "Finished"
                         ) { dialog, whichButton ->
-                            view.setBackgroundColor(context!!.getColor( R.color.green))
+                            view.setBackgroundColor(context.getColor( R.color.green))
                             val navController = findNavController()
                             val args = Bundle().apply {
                                 putString("categoryName", "today") // TODO: Hämta databas kategorin med detta värde
@@ -100,7 +102,7 @@ class categoryFragment : Fragment() {
                         }.setNegativeButton(
                             "Failed"
                         ) { dialog, whichButton ->
-                            view.setBackgroundColor(context!!.getColor( R.color.red))
+                            view.setBackgroundColor(context.getColor( R.color.red))
                             activeAlertDialog = false
                         }.setNeutralButton(
                             "Do nothing"
@@ -114,8 +116,8 @@ class categoryFragment : Fragment() {
 
                 //Putting all goals in list view
 
-                adapter = ArrayAdapter( //TODO: Gör en egen arrayadapter som uppdaterar färgen vid init
-                    requireContext(),
+                adapter = CategoryAdapter( //TODO: Gör en egen arrayadapter som uppdaterar färgen vid init
+                    context,
                     android.R.layout.simple_list_item_1,
                     android.R.id.text1,
                     allGoals
@@ -193,7 +195,7 @@ class categoryFragment : Fragment() {
 
         val buttonAdd = category_addButton
 
-        val categoryId : String  = (arguments!!.getString("categoryId"))!!
+        val categoryId : String  = (requireArguments().getString("categoryId"))!!
 
         buttonAdd.setOnClickListener {
 
@@ -230,7 +232,7 @@ class categoryFragment : Fragment() {
         goalRepository.updateColorId(userId, categoryId, allGoals[position].id, colorId).addOnSuccessListener {
             allGoals[position].colorId = colorId
             adapter.notifyDataSetChanged()
-            listItem.setBackgroundColor(context!!.getColor(colorId))
+            listItem.setBackgroundColor(requireContext().getColor(colorId))
         }
             .addOnFailureListener {
                 Log.d("updateColorId", "Error updating colorId in categoryFragment")

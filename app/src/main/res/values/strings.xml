@@ -31,4 +31,5 @@
     <string name="dialog_deleteGoal">Delete Goal</string>
     <string name="dialog_return">Return to Goals</string>
     <string name="updateGoal">Update Goal!</string>
+    <string name="goal_item_title">Title</string>
 </resources>

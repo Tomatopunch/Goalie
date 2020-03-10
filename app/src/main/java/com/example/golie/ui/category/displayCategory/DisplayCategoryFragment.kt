@@ -61,7 +61,7 @@ class DisplayCategoryFragment : Fragment() {
     fun displayCategory (currentCategoryId: String){
 
         //Fetching all goals from database
-
+        val context = requireContext()
         val goalRepository = GoalRepository()
         lateinit var allGoals : MutableList<Goal>
 
@@ -76,13 +76,13 @@ class DisplayCategoryFragment : Fragment() {
                 //Putting all goals in list view
 
                 adapter = ArrayAdapter(
-                    context!!,
+                    context,
                     android.R.layout.simple_list_item_1,
                     android.R.id.text1,
                     allGoals
                 )
 
-                val listView = view!!.category_listView
+                val listView = requireView().category_listView
                 listView.adapter = adapter
 
                 //Enabling clicking one one list item
@@ -93,7 +93,7 @@ class DisplayCategoryFragment : Fragment() {
                     var clickedGoal = listView.adapter.getItem(position) as Goal
                     var goalId = clickedGoal.id
 
-                    AlertDialog.Builder(context!!)
+                    AlertDialog.Builder(context)
                         .setTitle("Manage Goal")
                         .setMessage("Decide what you want to do with your goal.")
                         .setPositiveButton(

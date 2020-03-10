@@ -30,7 +30,7 @@ class GoalDialogFragment : DialogFragment {
 
         var view = inflater.inflate(R.layout.goaldialog_fragment, container, false)
 
-        var fragments = activity!!.supportFragmentManager.fragments
+        var fragments = requireActivity().supportFragmentManager.fragments
 
         categoryFragment = parentFragment as categoryFragment
 
@@ -41,10 +41,11 @@ class GoalDialogFragment : DialogFragment {
             position = savedInstanceState.getInt("position")
         }
         else {
-            categoryId = arguments!!.getString("categoryId")!!
-            userId = arguments!!.getString("userId")!!
-            goalId = arguments!!.getString("goalId")!!
-            position = arguments!!.getInt("position")
+            var arguments = requireArguments()
+            categoryId = arguments.getString("categoryId")!!
+            userId = arguments.getString("userId")!!
+            goalId = arguments.getString("goalId")!!
+            position = arguments.getInt("position")
 
         }
         val goalRepository = GoalRepository()
@@ -63,6 +64,9 @@ class GoalDialogFragment : DialogFragment {
 
             goalRepository.deleteGoal(userId, categoryId, goalId).addOnSuccessListener {
                 categoryFragment.deleteGoal(position)
+                val goal =
+                    categoryFragment.allGoals[position] // Next item to be displayed on pos deleted
+                categoryFragment.setBackgroundColor(position, goal.colorId, false)
                 dismiss()
 
             }.addOnFailureListener{
