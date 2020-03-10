@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.example.golie.MainActivity
 
 import com.example.golie.R
 import com.example.golie.R.id.nav_addCategory
@@ -26,6 +27,8 @@ import com.example.golie.data.repositoryClasses.PointsRepository
 import com.example.golie.data.repositoryClasses.RewardRepository
 //import com.example.golie.data.repositoryClasses.getAllCategories
 import com.example.golie.ui.category.categoryFragment
+import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.home_fragment.view.*
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,8 +51,6 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.home_fragment, container, false)
         val categoryRepository = CategoryRepository()
         val currentUserId = "josefin" //TODO
-
-        val goalRepository = GoalRepository()
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,8 +87,6 @@ class HomeFragment : Fragment() {
                     var clickedCategory = listView.adapter.getItem(position) as Category
 
                     var categoryId = clickedCategory.id
-                    Log.d("id of clicked category", categoryId)
-
 
                     val navController = findNavController()
                     val args = Bundle().apply { putString("categoryId", categoryId) }
@@ -109,6 +108,9 @@ class HomeFragment : Fragment() {
         val addCategoryButton = view.home_addCategoryButton
 
         addCategoryButton.setOnClickListener {
+
+            Log.d("==========================google id when clicking add button", FirebaseAuth.getInstance().currentUser!!.uid )
+
 
             val navController = findNavController()
             navController.navigate(nav_addCategory)
@@ -147,7 +149,7 @@ class HomeFragment : Fragment() {
                         "Logout"
                     ) { dialog, whichButton ->
 
-                        //TODO: Direct this to the login page
+                       signOut()
 
                     }.show()
 
@@ -165,5 +167,25 @@ class HomeFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         // TODO: Use the ViewModel
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    private fun signOut() { //ska denna vara här?
+
+        // [START auth_fui_signout]
+        AuthUI.getInstance()
+            .signOut(context!!)
+            .addOnCompleteListener {
+                (context as MainActivity).recreate()
+            }
+        // [END auth_fui_signout]
+
+        Log.d("==========================google id AFTER LOG OUT ", FirebaseAuth.getInstance().currentUser!!.uid )
+
+
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }

@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
+import com.example.golie.MainActivity
 
 import com.example.golie.R
 import com.example.golie.data.dataClasses.Goal
@@ -51,6 +52,10 @@ class categoryFragment : Fragment() {
         if (arguments != null) { //We came here from home
             currentCategoryId = (arguments!!.getString("categoryId"))!!
             displayCategory(currentCategoryId, view, savedInstanceState)
+
+            //Making sure that the favorite button in the navbar is not checked!
+            (activity as MainActivity).navView.menu.getItem(1).setChecked(false)
+            (activity as MainActivity).navView.menu.getItem(0).setChecked(true)
         }
 
         else { //We came here from favorite button!

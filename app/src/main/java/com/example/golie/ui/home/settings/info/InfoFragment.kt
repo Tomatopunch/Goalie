@@ -40,7 +40,7 @@ class InfoFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         super.onOptionsItemSelected(item)
         val navController = findNavController()
-        navController.navigate(R.id.nav_category)
+        navController.navigate(R.id.nav_home)
 
         return true
     }
