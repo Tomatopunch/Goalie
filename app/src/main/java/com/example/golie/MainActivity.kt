@@ -11,12 +11,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.golie.data.repositoryClasses.UserRepository
-import com.example.golie.ui.category.addGoal.AddGoalFragment
+import com.example.golie.ui.home.HomeFragment
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
@@ -43,25 +40,6 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController,appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        //Handling login functionality
-        Log.d("==========================google id BEFORE LOGIN", FirebaseAuth.getInstance().currentUser.toString() )
-
-        if (FirebaseAuth.getInstance().currentUser == null) { // No user is logged in
-
-
-            // Choose authentication providers
-            val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
-
-            // Create and launch sign-in intent
-            startActivityForResult(
-                AuthUI.getInstance()
-                    .createSignInIntentBuilder()
-                    .setAvailableProviders(providers)
-                    .build(),
-                RC_SIGN_IN)
-        }
-
-        Log.d("=======================================google id AFTER LOGIN", FirebaseAuth.getInstance().currentUser.toString() )
 
 
     }
@@ -82,20 +60,19 @@ class MainActivity : AppCompatActivity() {
 
                 //Getting user id for current user and putting it in db
                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
-
                 val userRepository = UserRepository()
 
                 userRepository.checkIfUserExists(userId)
                     .addOnSuccessListener { document ->//A user exist with this id
-                        Log.d("user document", document.toString())
-                        Log.d("onsuccess", userId)
+
                         if(document == null) {
                             userRepository.createUser(userId)
                         }
+
+                        supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, HomeFragment()).commit()
                     }
                     .addOnFailureListener{ //No user exists with this id! Proceed to create one!
                         //db error
-                        Log.d("failure", userId )
                     }
 
             }
@@ -107,19 +84,26 @@ class MainActivity : AppCompatActivity() {
                 }
 
                else { //Login actually failed (eg wrong password or username) //do i need to do this???
-                    val errors = response!!.getError()!!.getErrorCode()
+                    val errors = response.error!!.errorCode
                 }
             }
         }
     }
 
+
+    companion object {
+
+         private const val RC_SIGN_IN = 123
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    /*override fun onResume() {
-        super.onResume()
+
+    fun login() {
+        //Handling login functionality
+        Log.d("==========================google id BEFORE LOGIN", FirebaseAuth.getInstance().currentUser.toString() )
 
         if (FirebaseAuth.getInstance().currentUser == null) { // No user is logged in
-
 
             // Choose authentication providers
             val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
@@ -133,20 +117,38 @@ class MainActivity : AppCompatActivity() {
                 RC_SIGN_IN)
         }
 
-
-    }*/
-
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    companion object {
-
-         private const val RC_SIGN_IN = 123
+        Log.d("=======================================google id AFTER LOGIN", FirebaseAuth.getInstance().currentUser.toString() )
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-
 }
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+// do we need this ?!?!?
+/*override fun onResume() {
+    super.onResume()
+
+    if (FirebaseAuth.getInstance().currentUser == null) { // No user is logged in
+
+
+        // Choose authentication providers
+        val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
+
+        // Create and launch sign-in intent
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .build(),
+            RC_SIGN_IN)
+    }
+
+
+}*/
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 

@@ -47,7 +47,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-
+        val currentUser = FirebaseAuth.getInstance().currentUser
         val view = inflater.inflate(R.layout.home_fragment, container, false)
         val categoryRepository = CategoryRepository()
 
@@ -67,6 +67,7 @@ class HomeFragment : Fragment() {
 
         val listView = view.home_allCategoriesListView
         var allCategories: MutableList<Category> = ArrayList()
+
 
         categoryRepository.getAllCategories(currentUserId)
             .addOnSuccessListener { documents ->
@@ -126,36 +127,64 @@ class HomeFragment : Fragment() {
 
             Log.d("TESTING", "$settingsButton")
 
-            settingsButton.setOnClickListener {
-                Log.d("TESTING", "kommer in i settings")
-                lateinit var navController: NavController
-                AlertDialog.Builder(context!!)
-                    .setTitle("Settings")
-                    .setMessage("What do you want to do?")
-                    .setPositiveButton(
-                        "Select favorite category"
-                    ) { dialog, whichButton ->
+            if(currentUser == null) {//not logged in
+                settingsButton.setOnClickListener {
+                    Log.d("TESTING", "kommer in i settings")
+                    lateinit var navController: NavController
 
-                        navController = findNavController()
-                        navController.navigate(R.id.nav_chooseFavCategory)
+                    AlertDialog.Builder(context!!)
+                        .setTitle("Settings")
+                        .setMessage("What do you want to do?")
+                        .setPositiveButton(
+                            "View info page"
+                        ) { dialog, whichButton ->
 
-                    }.setNegativeButton(
-                        "View info page"
-                    ) { dialog, whichButton ->
+                            navController = findNavController()
+                            navController.navigate(R.id.nav_info)
 
-                        navController = findNavController()
-                        navController.navigate(R.id.nav_info)
+                        }.setNegativeButton(
+                            "Login"
+                        ) { dialog, whichButton ->
 
-                    }.setNeutralButton(
-                        "Logout"
-                    ) { dialog, whichButton ->
+                            (activity as MainActivity).login()
 
-                       signOut()
-
-                    }.show()
-
+                        }.show()
+                }
             }
 
+            //logged in
+            else {
+                settingsButton.setOnClickListener {
+                    Log.d("TESTING", "kommer in i settings")
+                    lateinit var navController: NavController
+
+                    AlertDialog.Builder(context!!)
+                        .setTitle("Settings")
+                        .setMessage("What do you want to do?")
+                        .setPositiveButton(
+                            "Select favorite category"
+                        ) { dialog, whichButton ->
+
+                            navController = findNavController()
+                            navController.navigate(R.id.nav_chooseFavCategory)
+
+                        }.setNegativeButton(
+                            "View info page"
+                        ) { dialog, whichButton ->
+
+                            navController = findNavController()
+                            navController.navigate(R.id.nav_info)
+
+                        }.setNeutralButton(
+                            "Logout"
+                        ) { dialog, whichButton ->
+
+                            signOut()
+
+                        }.show()
+
+                }
+            }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         return view
@@ -178,11 +207,11 @@ class HomeFragment : Fragment() {
         AuthUI.getInstance()
             .signOut(context!!)
             .addOnCompleteListener {
-                (context as MainActivity).recreate()
+                parentFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, HomeFragment()).commit()
             }
+
         // [END auth_fui_signout]
 
-        Log.d("==========================google id AFTER LOG OUT ", FirebaseAuth.getInstance().currentUser!!.uid )
 
 
     }

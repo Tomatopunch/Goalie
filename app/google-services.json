@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "951124416625-tusp79tjq1kks48obv3fj1ml5fn0fhks.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.golie",
+            "certificate_hash": "a883c3db945261e63da3c32ed106299befe2666a"
+          }
+        },
+        {
           "client_id": "951124416625-ju9t1l67l3525b5f3atckqvaaqb0a7po.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
