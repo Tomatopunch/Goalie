@@ -73,9 +73,11 @@ class ChooseFavoriteFragment : Fragment() {
                     val navController = findNavController()
                     navController.navigate(R.id.nav_home)
                 }
+                view.chooseFavCategory_progressBar.visibility = View.GONE
 
             }
             .addOnFailureListener { exception ->
+                view.chooseFavCategory_progressBar.visibility = View.GONE
                 Log.d("Error getting categories: ", exception.toString())
             }
 

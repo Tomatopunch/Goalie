@@ -75,6 +75,7 @@ class AddGoalFragment : Fragment() {
         Log.d("test", "hellooooo")
 
         createButton.setOnClickListener{
+            view.addGoal_progressBar.visibility = View.VISIBLE
             val title = view.addGoal_titleEditText.editableText.toString() // Måste vara editable för att se texten
             val timeSpanText = view.addGoal_timeSpanDate.editableText.toString()
 
@@ -95,9 +96,23 @@ class AddGoalFragment : Fragment() {
                 if(arguments.getString("checkIfUpdating") != null) { // Checking if I'm updating or deleting
                     val goalId = arguments.getString("goalId")!!
                     goalRepository.updateGoal(userId, categoryId, goalId, goal)
+                        .addOnSuccessListener {
+                            view.addGoal_progressBar.visibility = View.GONE
+                        }
+                        .addOnFailureListener{
+                            view.addGoal_progressBar.visibility = View.GONE
+                            Log.d("failureListener", "$it")
+                        }
                 }
                 else {
                     goalRepository.createGoal(userId, categoryId, goal)
+                        .addOnSuccessListener {
+                            view.addGoal_progressBar.visibility = View.GONE
+                        }
+                        .addOnFailureListener{
+                            view.addGoal_progressBar.visibility = View.GONE
+                            Log.d("failureListener", "$it")
+                        }
                 }
 
                     val args = Bundle().apply {
@@ -109,7 +124,8 @@ class AddGoalFragment : Fragment() {
 
             }
             else {
-                    invalidInputTextView.text = invalidInput[0]
+                view.addGoal_progressBar.visibility = View.GONE
+                invalidInputTextView.text = invalidInput[0]
             }
 
         }

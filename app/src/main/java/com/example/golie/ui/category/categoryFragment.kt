@@ -36,7 +36,7 @@ class categoryFragment : Fragment() {
     val userId = "josefin"
     lateinit var categoryId: String
     lateinit var goalId: String
-    val goalRepository = GoalRepository()
+    private val goalRepository = GoalRepository()
 
     lateinit var listView: ListView
 
@@ -62,8 +62,12 @@ class categoryFragment : Fragment() {
                 val category = documentToCategory(document)
                 Log.d("categoryCheck", "$category")
                 userNameTextView.text = category.name
+                view.category_progressBar.visibility = View.GONE
             }
-
+            .addOnFailureListener{
+                view.category_progressBar.visibility = View.GONE
+                Log.d("failureListener", "$it")
+            }
 
         //Fetching all goals from database
 
@@ -182,8 +186,11 @@ class categoryFragment : Fragment() {
                         }.show()*/
                 }
 
+                view.category_progressBar.visibility = View.GONE
+
             }
             .addOnFailureListener { exception ->
+                view.category_progressBar.visibility = View.GONE
                 Log.d("Error getting goals: ", exception.toString())
             }
 
@@ -223,18 +230,22 @@ class categoryFragment : Fragment() {
 
     fun setBackgroundColor(position: Int, colorId: Int, init: Boolean){
         var listItem: View
+        val view = requireView()
         if(init) {
             listItem = listView.adapter.getView(position, null, listView)
         }
         else {
             listItem = listView.getChildAt(position)
         }
-        goalRepository.updateColorId(userId, categoryId, allGoals[position].id, colorId).addOnSuccessListener {
-            allGoals[position].colorId = colorId
-            adapter.notifyDataSetChanged()
-            listItem.setBackgroundColor(requireContext().getColor(colorId))
-        }
+        goalRepository.updateColorId(userId, categoryId, allGoals[position].id, colorId)
+            .addOnSuccessListener {
+                allGoals[position].colorId = colorId
+                adapter.notifyDataSetChanged()
+                listItem.setBackgroundColor(requireContext().getColor(colorId))
+                view.category_progressBar.visibility = View.GONE
+            }
             .addOnFailureListener {
+                view.category_progressBar.visibility = View.GONE
                 Log.d("updateColorId", "Error updating colorId in categoryFragment")
             }
 

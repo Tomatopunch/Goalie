@@ -67,9 +67,11 @@ class GoalDialogFragment : DialogFragment {
                 val goal =
                     categoryFragment.allGoals[position] // Next item to be displayed on pos deleted
                 categoryFragment.setBackgroundColor(position, goal.colorId, false)
+                view.goaldialog_progressBar.visibility = View.GONE
                 dismiss()
 
             }.addOnFailureListener{
+                view.goaldialog_progressBar.visibility = View.GONE
                 Log.d("deleteError", "Error deleting goal")
             }
         }
@@ -79,6 +81,13 @@ class GoalDialogFragment : DialogFragment {
             //categoryFragment.setBackgroundColor(R.color.red)
 
             categoryFragment.setBackgroundColor(position, R.color.green, false)
+            val args = Bundle().apply{
+                putString("categoryId", categoryId)
+                putString("userId", userId)
+                putString("goalId", goalId)
+            }
+            val navController = findNavController()
+            navController.navigate(R.id.nav_finishedGoal, args)
             dismiss()
         }
 
@@ -107,7 +116,11 @@ class GoalDialogFragment : DialogFragment {
                 }
 
                 navController.navigate(R.id.nav_addGoal, args)
+                view.goaldialog_progressBar.visibility = View.GONE
                 dismiss()
+            }.addOnFailureListener{
+                Log.d("failureListener", "error")
+                view.goaldialog_progressBar.visibility = View.GONE
             }
             //TODO: Fetch data in current goalId
             // pass all of the data to add_goal_fragment

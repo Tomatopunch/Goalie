@@ -11,7 +11,10 @@ import android.widget.ArrayAdapter
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
+import com.example.golie.data.documentToGoal
+import com.example.golie.data.repositoryClasses.GoalRepository
 import kotlinx.android.synthetic.main.category_fragment.view.*
+import kotlinx.android.synthetic.main.finished_goal_fragment.view.*
 
 class FinishedGoalFragment : Fragment() {
 
@@ -21,6 +24,9 @@ class FinishedGoalFragment : Fragment() {
 
     private lateinit var viewModel: FinishedGoalViewModel
 
+    private lateinit var userId: String
+    private lateinit var categoryId: String
+    private lateinit var goalId: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +36,35 @@ class FinishedGoalFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.finished_goal_fragment, container, false)
 
-        val listView = view.category_listView
+        val goToHomeButton = view.finishedGoal_button
+
+        val goalRepository = GoalRepository()
+
+        val arguments = requireArguments()
+
+        userId = arguments.getString("userId")!!
+        categoryId = arguments.getString("categoryId")!!
+        goalId = arguments.getString("goalId")!!
+
+        goalRepository.getGoalById(userId, categoryId, goalId)
+            .addOnSuccessListener {
+                val goal = documentToGoal(it)
+
+                view.finishedGoalTextView.text = "Congratulations!\n\nYou earned ${goal.points} points!"
+            }
+
+        goToHomeButton.setOnClickListener{
+
+            val navController = findNavController()
+            val args = Bundle().apply {
+                putString("userId", userId)
+                putString("categoryId", categoryId)
+            }
+            navController.navigate(R.id.nav_category, args)
+
+        }
+
+        //val listView = view.category_listView
 
         /*adapter = ArrayAdapter(
             context!!,
@@ -41,7 +75,7 @@ class FinishedGoalFragment : Fragment() {
 
         //listView.adapter = adapter
 
-        listView.setOnItemClickListener { parent, view, position, id ->
+        /*listView.setOnItemClickListener { parent, view, position, id ->
 
             /*val finalHost = NavHostFragment.create(R.navigation.example_graph)
             supportFragmentManager.beginTransaction()
@@ -49,7 +83,7 @@ class FinishedGoalFragment : Fragment() {
                 .setPrimaryNavigationFragment(finalHost) // equivalent to app:defaultNavHost="true"
                 .commit()*/
 
-        }
+        }*/
 
         return view
     }

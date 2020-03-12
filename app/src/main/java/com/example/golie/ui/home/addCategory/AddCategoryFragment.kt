@@ -2,6 +2,7 @@ package com.example.golie.ui.home.addCategory
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -45,7 +46,7 @@ class AddCategoryFragment : Fragment() {
         val addCategoryButton = view.addCategory_createCategoryButton
 
         addCategoryButton.setOnClickListener {
-
+            view.addCategory_progressBar.visibility = View.VISIBLE
             val categoryName = (view.addCategory_nameEditText).editableText.toString() //Fetching text in edit text field
             val category = Category(categoryName)
             categoryRepository.createCategory(currentUserId, category)
@@ -56,9 +57,15 @@ class AddCategoryFragment : Fragment() {
                     val navController = findNavController()
                     //val args = Bundle().apply { putString("categoryId", categoryId) } // Add
                     //navController.navigate(R.id.nav_category) // Add
+                    view.addCategory_progressBar.visibility = View.GONE
+
                     navController.navigate(R.id.nav_home) // Remove
                 }
 
+                .addOnFailureListener{
+                    view.addCategory_progressBar.visibility = View.GONE
+                    Log.d("failureListener", "$it")
+                }
 
         }
 

@@ -94,10 +94,12 @@ class HomeFragment : Fragment() {
                     navController.navigate(R.id.nav_category, args)
                 }
 
+                view.home_progressBar.visibility = View.GONE
 
             }
             .addOnFailureListener { exception ->
                 Log.d("Error getting categories: ", exception.toString())
+                view.home_progressBar.visibility = View.GONE
 
             }
 
