@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.golie.MainActivity
@@ -29,6 +30,7 @@ import com.example.golie.data.repositoryClasses.RewardRepository
 import com.example.golie.ui.category.categoryFragment
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.home_fragment.*
 import kotlinx.android.synthetic.main.home_fragment.view.*
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,21 +49,26 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val currentUser = FirebaseAuth.getInstance().currentUser
         val view = inflater.inflate(R.layout.home_fragment, container, false)
         val categoryRepository = CategoryRepository()
+        val currentUserId : String
 
-        //val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
-        val currentUserId ="josefin"
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //Setting the title
+        // Check if user is logged in or not, otherwise set user id to guest AND setting the title
 
         val userNameTextView = view.home_userNameTextView
-        userNameTextView.text = currentUserId //TODO
+        if(FirebaseAuth.getInstance().currentUser == null){
+            currentUserId = "Guest"
+            userNameTextView.text = "Guest"
+        }
+
+        else{
+            currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+            userNameTextView.text = FirebaseAuth.getInstance().currentUser!!.displayName
+            view.home_guestText.isVisible = false
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         // Setting up the list view with all its data and enabling cicking on one list item
 
@@ -94,8 +101,6 @@ class HomeFragment : Fragment() {
                     val args = Bundle().apply { putString("categoryId", categoryId) }
                     navController.navigate(R.id.nav_category, args)
                 }
-
-
             }
             .addOnFailureListener { exception ->
                 Log.d("Error getting categories: ", exception.toString())
@@ -105,88 +110,100 @@ class HomeFragment : Fragment() {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        //Enabling clicking on plus button to add category
+
+
+        //Accessing add button
 
         val addCategoryButton = view.home_addCategoryButton
 
-        addCategoryButton.setOnClickListener {
+        //Hiding button if no user is logged in
 
-            Log.d("==========================google id when clicking add button", FirebaseAuth.getInstance().currentUser!!.uid )
+        if (currentUserId == "Guest") {
+            addCategoryButton.isVisible = false
+        }
+
+        else{
+
+            //Enabling clicking on plus button to add category
+
+            addCategoryButton.setOnClickListener {
+
+                Log.d("==========================google id when clicking add button", FirebaseAuth.getInstance().currentUser!!.uid )
 
 
-            val navController = findNavController()
-            navController.navigate(nav_addCategory)
+                val navController = findNavController()
+                navController.navigate(nav_addCategory)
+            }
         }
 
 
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            //Enabling clicking on settings button
 
-            val settingsButton = view.home_settingsButton
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            Log.d("TESTING", "$settingsButton")
+        //Enabling clicking on settings button
 
-            if(currentUser == null) {//not logged in
-                settingsButton.setOnClickListener {
-                    Log.d("TESTING", "kommer in i settings")
-                    lateinit var navController: NavController
+        val settingsButton = view.home_settingsButton
 
-                    AlertDialog.Builder(context!!)
-                        .setTitle("Settings")
-                        .setMessage("What do you want to do?")
-                        .setPositiveButton(
-                            "View info page"
-                        ) { dialog, whichButton ->
+        Log.d("TESTING", "$settingsButton")
 
-                            navController = findNavController()
-                            navController.navigate(R.id.nav_info)
+        if(currentUserId == "Guest") {//not logged in
+            settingsButton.setOnClickListener {
+                Log.d("TESTING", "kommer in i settings")
+                lateinit var navController: NavController
 
-                        }.setNegativeButton(
-                            "Login"
-                        ) { dialog, whichButton ->
+                AlertDialog.Builder(context!!)
+                    .setTitle("Settings")
+                    .setMessage("What do you want to do?")
+                    .setPositiveButton(
+                        "View info page"
+                    ) { dialog, whichButton ->
 
-                            (activity as MainActivity).login()
+                        navController = findNavController()
+                        navController.navigate(R.id.nav_info)
 
-                        }.show()
-                }
+                    }.setNegativeButton(
+                        "Login"
+                    ) { dialog, whichButton ->
+
+                        (activity as MainActivity).login()
+
+                    }.show()
             }
+        }
 
-            //logged in
-            else {
-                settingsButton.setOnClickListener {
-                    Log.d("TESTING", "kommer in i settings")
-                    lateinit var navController: NavController
+        //logged in
+        else {
+            settingsButton.setOnClickListener {
+                Log.d("TESTING", "kommer in i settings")
+                lateinit var navController: NavController
 
-                    AlertDialog.Builder(context!!)
-                        .setTitle("Settings")
-                        .setMessage("What do you want to do?")
-                        .setPositiveButton(
-                            "Select favorite category"
-                        ) { dialog, whichButton ->
+                AlertDialog.Builder(context!!)
+                    .setTitle("Settings")
+                    .setMessage("What do you want to do?")
+                    .setPositiveButton(
+                        "Select favorite category"
+                    ) { dialog, whichButton ->
 
-                            navController = findNavController()
-                            navController.navigate(R.id.nav_chooseFavCategory)
+                        navController = findNavController()
+                        navController.navigate(R.id.nav_chooseFavCategory)
 
-                        }.setNegativeButton(
-                            "View info page"
-                        ) { dialog, whichButton ->
+                    }.setNegativeButton(
+                        "View info page"
+                    ) { dialog, whichButton ->
 
-                            navController = findNavController()
-                            navController.navigate(R.id.nav_info)
+                        navController = findNavController()
+                        navController.navigate(R.id.nav_info)
 
-                        }.setNeutralButton(
-                            "Logout"
-                        ) { dialog, whichButton ->
+                    }.setNeutralButton(
+                        "Logout"
+                    ) { dialog, whichButton ->
 
-                            signOut()
+                        signOut()
 
-                        }.show()
-
-                }
+                    }.show()
             }
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+        }
         return view
     }
 

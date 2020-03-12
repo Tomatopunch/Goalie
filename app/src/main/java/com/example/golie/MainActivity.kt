@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        Log.d("bla", "blaa")
+
 
         if (requestCode == RC_SIGN_IN) {
             val response = IdpResponse.fromResultIntent(data)
@@ -63,22 +63,32 @@ class MainActivity : AppCompatActivity() {
                 val userRepository = UserRepository()
 
                 userRepository.checkIfUserExists(userId)
-                    .addOnSuccessListener { document ->//A user exist with this id
 
-                        if(document == null) {
+                    .addOnSuccessListener { document ->//Either a user exist with this id OR it does not (and in that case we want to create one)
+
+                        Log.d("we are in success", "yey")
+                        Log.d("KKKKKKKKKKid:   ", document.id)
+
+                        if(!document.exists()) {
                             userRepository.createUser(userId)
+                                .addOnSuccessListener {
+                                    Log.d("", "")
+                                    this.recreate()
+                                }
                         }
 
-                        supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, HomeFragment()).commit()
-                    }
-                    .addOnFailureListener{ //No user exists with this id! Proceed to create one!
-                        //db error
+                        else {
+                            this.recreate()
+                        }
                     }
 
+                    .addOnFailureListener{
+                      //error of some kind
+                        Log.d("we are in failure", "oh no")
+                    }
             }
 
             else {
-
                 if(response == null){ //User exited login by pressing back button, we want to show login again
                     this.recreate()
                 }

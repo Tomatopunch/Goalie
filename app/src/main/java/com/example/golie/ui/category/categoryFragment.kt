@@ -36,16 +36,26 @@ class categoryFragment : Fragment() {
     private lateinit var viewModel: CategoryViewModel
     private lateinit var adapter: ArrayAdapter<Goal>
     private var activeAlertDialog = false
-
-    private val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
     private val categoryRepository = CategoryRepository()
-
+    lateinit var currentUserId : String
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @SuppressLint("ResourceAsColor")
     override fun onCreateView (inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ): View? {
 
         val view = inflater.inflate(R.layout.category_fragment, container, false)
+
+
+        // Check if user is logged in or not, otherwise set user id to guest
+
+
+        if(FirebaseAuth.getInstance().currentUser == null){
+            currentUserId = "Guest"
+        }
+
+        else{
+            currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+        }
 
 
         var currentCategoryId = "-1"
