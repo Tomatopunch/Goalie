@@ -3,6 +3,7 @@ package com.example.golie.ui.shop
 
 import android.content.ContentValues
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -47,9 +48,14 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
 
         holder.itemView.setOnClickListener {
 
-            val fragmentManager = (context as FragmentActivity).supportFragmentManager
-            val shopDialogFragment = ShopBuyDialogFragment(shopPoints)
+            val args = Bundle().apply {
+                putInt("shopPoints", shopPoints)
+            }
 
+            val fragmentManager = (context as FragmentActivity).supportFragmentManager
+            val shopDialogFragment = ShopBuyDialogFragment()
+
+            shopDialogFragment.arguments = args
             shopDialogFragment.show(fragmentManager, "firstFragmentManager")
         }
     }

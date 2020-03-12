@@ -11,10 +11,12 @@ import com.example.golie.R
 import com.example.golie.data.repositoryClasses.PointsRepository
 import kotlinx.android.synthetic.main.shop_boughtdialog_fragment.view.*
 
-class ShopBoughtDialogFragment(var accountWallet: Int, var shopPoints: Int) : DialogFragment() {
+class ShopBoughtDialogFragment: DialogFragment() {
 
     private val pointsRepository = PointsRepository()
     val currentUserId = "josefin"
+    var accountWallet = -1
+    var shopPoints = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,6 +26,17 @@ class ShopBoughtDialogFragment(var accountWallet: Int, var shopPoints: Int) : Di
         super.onCreateView(inflater, container, savedInstanceState)
 
         val view = inflater.inflate(R.layout.shop_boughtdialog_fragment, container, false)
+
+        if (savedInstanceState != null) {
+            accountWallet = savedInstanceState.getInt("accountWallet")
+            shopPoints = savedInstanceState.getInt("shopPoints")
+        }
+        else {
+            val arguments = requireArguments()
+            accountWallet = arguments.getInt("accountWallet")
+            shopPoints = arguments.getInt("shopPoints")
+        }
+
         val newBalance = view.new_point_balance
         val calcNewBalance = accountWallet - shopPoints
         val button = view.acceptButton
@@ -45,16 +58,17 @@ class ShopBoughtDialogFragment(var accountWallet: Int, var shopPoints: Int) : Di
     // Function that sets the new balance for the user logged in.
     private fun setPoints(calcNewBalance: Int) {
         pointsRepository.setPoints(currentUserId, calcNewBalance)
-
-            .addOnSuccessListener { document ->
-                if (document != null) {}
-                else {
-                    Log.d(ContentValues.TAG, "Could not find points!")
-                }
-            }
+            .addOnSuccessListener {}
 
             .addOnFailureListener { exception ->
                 Log.d(ContentValues.TAG, "An exception was thrown when fetching points! ", exception)
             }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putInt("accountWallet", accountWallet)
+        outState.putInt("shopPoints", shopPoints)
     }
 }

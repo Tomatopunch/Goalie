@@ -12,9 +12,10 @@ import com.example.golie.data.documentToPoints
 import com.example.golie.data.repositoryClasses.PointsRepository
 import kotlinx.android.synthetic.main.shop_buydialog_fragment.view.*
 
-class ShopBuyDialogFragment(private val shopPoints: Int) : DialogFragment() {
+class ShopBuyDialogFragment : DialogFragment() {
 
     private var accountWallet = 0
+    var shopPoints = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,6 +29,13 @@ class ShopBuyDialogFragment(private val shopPoints: Int) : DialogFragment() {
         val yesButton = view.yesButton
         val pointsRepository = PointsRepository()
         val currentUserId = "josefin"
+
+        if (savedInstanceState != null) {
+            shopPoints = savedInstanceState.getInt("shopPoints")
+        }
+        else {
+            shopPoints = requireArguments().getInt("shopPoints")
+        }
 
         //get points from user who is currently logged in
         getPoints(currentUserId, pointsRepository)
@@ -47,7 +55,15 @@ class ShopBuyDialogFragment(private val shopPoints: Int) : DialogFragment() {
     private fun validateWalletAmount() {
         if (accountWallet > shopPoints ) {
             dismiss()
-            val shopBoughtDialogFragment = ShopBoughtDialogFragment(accountWallet, shopPoints)
+
+            val args = Bundle().apply {
+                putInt("accountWallet", accountWallet)
+                putInt("shopPoints", shopPoints)
+            }
+
+            val shopBoughtDialogFragment = ShopBoughtDialogFragment()
+
+            shopBoughtDialogFragment.arguments = args
             val fragmentManager = requireActivity().supportFragmentManager
             shopBoughtDialogFragment.show(fragmentManager, "secondFragmentManager")
         }
@@ -77,4 +93,10 @@ class ShopBuyDialogFragment(private val shopPoints: Int) : DialogFragment() {
             }
 
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("shopPoints", shopPoints)
+    }
+
 }
