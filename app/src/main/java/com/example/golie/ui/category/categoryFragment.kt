@@ -21,6 +21,7 @@ import com.example.golie.data.documentToFavoriteCateoryId
 import com.example.golie.data.documentsToGoals
 import com.example.golie.data.repositoryClasses.CategoryRepository
 import com.example.golie.data.repositoryClasses.GoalRepository
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.category_fragment.*
 import kotlinx.android.synthetic.main.category_fragment.view.*
 
@@ -36,7 +37,7 @@ class categoryFragment : Fragment() {
     private lateinit var adapter: ArrayAdapter<Goal>
     private var activeAlertDialog = false
 
-    private val currentUserId = "josefin"
+    private val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
     private val categoryRepository = CategoryRepository()
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////

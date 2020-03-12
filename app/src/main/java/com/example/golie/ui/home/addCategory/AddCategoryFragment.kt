@@ -13,6 +13,7 @@ import com.example.golie.R
 import com.example.golie.R.id.nav_category
 import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.repositoryClasses.CategoryRepository
+import com.google.firebase.auth.FirebaseAuth
 //import com.example.golie.data.repositoryClasses.createCategory
 import kotlinx.android.synthetic.main.add_category_fragment.view.*
 
@@ -37,7 +38,7 @@ class AddCategoryFragment : Fragment() {
 
 
         val view = inflater.inflate(R.layout.add_category_fragment, container, false)
-        val currentUserId = "josefin" //TODO
+        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

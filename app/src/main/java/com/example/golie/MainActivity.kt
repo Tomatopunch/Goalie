@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var navView: BottomNavigationView
 
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,6 +73,8 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        Log.d("bla", "blaa")
+
         if (requestCode == RC_SIGN_IN) {
             val response = IdpResponse.fromResultIntent(data)
 
@@ -83,24 +86,28 @@ class MainActivity : AppCompatActivity() {
                 val userRepository = UserRepository()
 
                 userRepository.checkIfUserExists(userId)
-                    .addOnSuccessListener { //A user exist with this id
-                        //Jahopp vad gör vi här inne då?
+                    .addOnSuccessListener { document ->//A user exist with this id
+                        Log.d("user document", document.toString())
+                        Log.d("onsuccess", userId)
+                        if(document == null) {
+                            userRepository.createUser(userId)
+                        }
                     }
                     .addOnFailureListener{ //No user exists with this id! Proceed to create one!
-                        userRepository.createUser(userId)
+                        //db error
+                        Log.d("failure", userId )
                     }
 
             }
 
             else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                // ...
 
-                if (response != null && response.getError() != null) {
+                if(response == null){ //User exited login by pressing back button, we want to show login again
+                    this.recreate()
+                }
+
+               else { //Login actually failed (eg wrong password or username) //do i need to do this???
                     val errors = response!!.getError()!!.getErrorCode()
-
                 }
             }
         }
@@ -108,7 +115,7 @@ class MainActivity : AppCompatActivity() {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    override fun onResume() {
+    /*override fun onResume() {
         super.onResume()
 
         if (FirebaseAuth.getInstance().currentUser == null) { // No user is logged in
@@ -125,7 +132,9 @@ class MainActivity : AppCompatActivity() {
                     .build(),
                 RC_SIGN_IN)
         }
-    }
+
+
+    }*/
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////

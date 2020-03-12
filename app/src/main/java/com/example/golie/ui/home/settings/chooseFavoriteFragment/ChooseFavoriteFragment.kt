@@ -14,6 +14,7 @@ import com.example.golie.R
 import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.documentsToCategories
 import com.example.golie.data.repositoryClasses.CategoryRepository
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.choose_favorite_fragment.view.*
 
 class ChooseFavoriteFragment : Fragment() {
@@ -33,7 +34,7 @@ class ChooseFavoriteFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.choose_favorite_fragment, container, false)
         val categoryRepository = CategoryRepository()
-        val currentUserId = "josefin" //TODO
+        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

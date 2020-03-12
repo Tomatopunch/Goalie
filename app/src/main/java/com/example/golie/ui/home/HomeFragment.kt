@@ -50,8 +50,9 @@ class HomeFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.home_fragment, container, false)
         val categoryRepository = CategoryRepository()
-        val currentUserId = "josefin" //TODO
 
+        //val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+        val currentUserId ="josefin"
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
