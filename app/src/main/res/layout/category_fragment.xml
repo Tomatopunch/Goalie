@@ -36,6 +36,7 @@
         android:layout_height="80dp"
         android:layout_marginTop="32dp"
         android:textSize="24sp"
+        android:textAlignment="center"
         app:layout_constraintEnd_toStartOf="@+id/category_deleteCategoryButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

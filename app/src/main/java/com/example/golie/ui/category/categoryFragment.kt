@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.example.golie.MainActivity
 
@@ -63,6 +64,7 @@ class categoryFragment : Fragment() {
 
 
         var currentCategoryId = "-1"
+
 
         // WE CAME HERE FROM HOME
         if (arguments != null) {
@@ -224,7 +226,33 @@ class categoryFragment : Fragment() {
                         titleTextView.text = category.name
                     }
 
+
+                //Accessing delete category button
+                val deleteCategoryButton = view.category_deleteCategoryButton
+
+                //Hiding delete category button if no user is logged in
+                if (currentUserId == "Guest") {
+                    deleteCategoryButton.isVisible = false
+                }
+
+                //Enabling clicking on delete category button
+                else {
+
+                    deleteCategoryButton.setOnClickListener {
+
+                        categoryRepository.deleteCategory(
+                            currentUserId,
+                            currentCategoryId,
+                            (activity as MainActivity)
+                        )
+
+                        val navController = findNavController()
+                        navController.navigate(R.id.nav_home)
+
+                    }
+                }
             }
+
 
     }
 
@@ -238,17 +266,12 @@ class categoryFragment : Fragment() {
 
         buttonAdd.setOnClickListener {
 
-            // Here we cast main activity to the interface (below) and this is possible because
-            // main activity extends this interface
             val navController = findNavController()
             val args = Bundle().apply{
                 putString("key", "value")
-            } // Send this to the next navigation object
-            navController.navigate(R.id.nav_addGoal, args) // Skicka med args - argument
+            }
+            navController.navigate(R.id.nav_addGoal, args)
 
-            // Hämta alla argument som skickats med:
-
-            //val def = arguments!!.getString("key")
         }
     }
 

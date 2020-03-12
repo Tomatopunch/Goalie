@@ -62,19 +62,18 @@ class MainActivity : AppCompatActivity() {
                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
                 val userRepository = UserRepository()
 
-                userRepository.checkIfUserExists(userId)
+                userRepository.getUserById(userId) // To check if that user exists or not
 
                     .addOnSuccessListener { document ->//Either a user exist with this id OR it does not (and in that case we want to create one)
 
-                        Log.d("we are in success", "yey")
-                        Log.d("KKKKKKKKKKid:   ", document.id)
-
                         if(!document.exists()) {
-                            userRepository.createUser(userId)
+                            /*userRepository.createUser(userId)
                                 .addOnSuccessListener {
-                                    Log.d("", "")
                                     this.recreate()
-                                }
+                                }*/
+                            userRepository.createUserWithData(userId)
+                            this.recreate()
+
                         }
 
                         else {
