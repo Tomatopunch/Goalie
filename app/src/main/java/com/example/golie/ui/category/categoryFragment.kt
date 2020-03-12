@@ -38,6 +38,7 @@ class categoryFragment : Fragment() {
     private var activeAlertDialog = false
     private val categoryRepository = CategoryRepository()
     lateinit var currentUserId : String
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @SuppressLint("ResourceAsColor")
@@ -46,7 +47,7 @@ class categoryFragment : Fragment() {
         val view = inflater.inflate(R.layout.category_fragment, container, false)
 
 
-        // Check if user is logged in or not, otherwise set user id to guest
+        ///////////// Check if user is logged in or not, otherwise set user id to guest //////////////////
 
 
         if(FirebaseAuth.getInstance().currentUser == null){
@@ -58,25 +59,42 @@ class categoryFragment : Fragment() {
         }
 
 
+        ///////////// Check if we came here from home or favorite, do stuff accordingly //////////////////
+
+
         var currentCategoryId = "-1"
 
-        if (arguments != null) { //We came here from home
+        // WE CAME HERE FROM HOME
+        if (arguments != null) {
+
+            // Setting category id
             currentCategoryId = (arguments!!.getString("categoryId"))!!
             displayCategory(currentCategoryId, view, savedInstanceState)
 
             //Making sure that the favorite button in the navbar is not checked!
             (activity as MainActivity).navView.menu.getItem(1).setChecked(false)
             (activity as MainActivity).navView.menu.getItem(0).setChecked(true)
+
         }
 
+        //WE CAME HERE FROM FAVORITE BUTTON
         else { //We came here from favorite button!
 
             categoryRepository.getFavoriteCategoryId(currentUserId)
 
                 .addOnSuccessListener { document ->
-                    currentCategoryId = documentToFavoriteCateoryId(document)
-                    Log.d("id of fav cat:", currentCategoryId)
-                    displayCategory(currentCategoryId, view, savedInstanceState)
+
+                    if (document.exists()) { // Id of favorite was found
+
+                        currentCategoryId = documentToFavoriteCateoryId(document)
+                        displayCategory(currentCategoryId, view, savedInstanceState)
+                    }
+
+                    else { // Id of favorite was not found
+                        val titleTextView = view.category_titleTextView
+                        titleTextView.text = "You have no favorite category!"
+
+                    }
                 }
 
                 .addOnFailureListener{//We couldnt find the id of the fsvorite category
@@ -198,19 +216,15 @@ class categoryFragment : Fragment() {
 
                 //Setting title
 
-                val userNameTextView = view.category_titleTextView
+                val titleTextView = view.category_titleTextView
                 categoryRepository.getCategoryById(currentUserId, currentCategoryId)
                     .addOnSuccessListener { document ->
+
                         val category = documentToCategory(document)
-                        Log.d("categoryCheck", "$category")
-                        userNameTextView.text = category.name
+                        titleTextView.text = category.name
                     }
 
             }
-            .addOnFailureListener { exception ->
-                view.category_titleTextView.text = "Could not find favorite category."
-            }
-
 
     }
 
