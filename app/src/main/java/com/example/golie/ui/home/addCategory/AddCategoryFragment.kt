@@ -53,40 +53,45 @@ class AddCategoryFragment : Fragment() {
             categoryRepository.createCategory(currentUserId, category)
                 .addOnSuccessListener {
 
-            val categoryName = (view.addCategory_nameEditText).editableText.toString()//Fetching text in edit text field
-            Log.d("name", categoryName)
+                    val categoryName =
+                        (view.addCategory_nameEditText).editableText.toString()//Fetching text in edit text field
+                    Log.d("name", categoryName)
 
-            var validationErrors = validateCategoryInput(categoryName)
+                    val validationErrors = validateCategoryInput(categoryName)
 
-            if (validationErrors.isNotEmpty()) { // There are validation errors
+                    if (validationErrors.isNotEmpty()) { // There are validation errors
 
-                var validationTextView = view.addCategory_validationTextView
-                validationTextView.text = "The following validation error occurred: " + validationErrors
-            }
+                        val validationTextView = view.addCategory_validationTextView
+                        validationTextView.text =
+                            "The following validation error occurred: " + validationErrors
+                    }
+                    else { //There are no validation errors!
 
-            else { //There are no validation errors!
+                        Log.d("validation errors", validationErrors)
+                        val category = Category(categoryName)
+                        categoryRepository.createCategory(currentUserId, category)
+                            .addOnSuccessListener {
 
-                Log.d("validation errors", validationErrors)
-                val category = Category(categoryName)
-                categoryRepository.createCategory(currentUserId, category)
-                    .addOnSuccessListener {
+                                Log.d("success", "did add category")
+                                //val categoryId = it.id
 
-                        Log.d("success", "did add category")
-                        //val categoryId = it.id
+                                val navController = findNavController()
+                                //val args = Bundle().apply { putString("categoryId", categoryId) } // Add
+                                //navController.navigate(R.id.nav_category) // Add
+                                view.addCategory_progressBar.visibility = View.GONE
 
-                    val navController = findNavController()
-                    //val args = Bundle().apply { putString("categoryId", categoryId) } // Add
-                    //navController.navigate(R.id.nav_category) // Add
-                    view.addCategory_progressBar.visibility = View.GONE
+                                navController.navigate(R.id.nav_home) // Remove
+                            }
 
-                    navController.navigate(R.id.nav_home) // Remove
+                            .addOnFailureListener {
+                                view.addCategory_progressBar.visibility = View.GONE
+                                Log.d("failureListener", "$it")
+                            }
+                    }
                 }
-
                 .addOnFailureListener{
-                    view.addCategory_progressBar.visibility = View.GONE
-                    Log.d("failureListener", "$it")
+                    //TODO: Progress baaaaaar
                 }
-
         }
 
         return view
