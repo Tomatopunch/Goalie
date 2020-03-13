@@ -167,93 +167,91 @@ class categoryFragment : Fragment() {
                 }
 
 
-                //Putting all goals in list view
+            //Putting all goals in list view
 
-                adapter = ArrayAdapter(
-                    context!!,
-                    android.R.layout.simple_list_item_1,
-                    android.R.id.text1,
-                    allGoals
-                )
+            adapter = ArrayAdapter(
+                context!!,
+                android.R.layout.simple_list_item_1,
+                android.R.id.text1,
+                allGoals
+            )
 
-                listView.adapter = adapter
+            listView.adapter = adapter
 
-                //Enabling clicking one one list item
+            //Enabling clicking one one list item
 
-                listView.setOnItemClickListener { parent, view, position, _ ->
+            listView.setOnItemClickListener { parent, view, position, _ ->
 
-                    var clickedGoal = listView.adapter.getItem(position) as Goal
-                    var goalId = clickedGoal.id
-                    activeAlertDialog = true
-                    AlertDialog.Builder(context!!)
-                        .setTitle("Manage Goal")
-                        .setMessage("Decide what you want to do with your goal.")
-                        .setPositiveButton(
-                            "Finished"
-                        ) { dialog, whichButton ->
-                            view.setBackgroundColor(R.color.green)
-                            val navController = findNavController()
-                            val args = Bundle().apply {
-                                putString(
-                                    "goalId",
-                                    goalId
-                                ) // TODO: Hämta databas kategorin med detta värde
-                            } // Send this to the next navigation object with variables
-                            activeAlertDialog = false
-                            navController.navigate(R.id.nav_finishedGoal, args)
-                        }.setNegativeButton(
-                            "Failed"
-                        ) { dialog, whichButton ->
-                            view.setBackgroundColor(R.color.red)
-                            activeAlertDialog = false
-                        }.setNeutralButton(
-                            "Do nothing"
-                        ) { dialog, whichButton ->
-                            activeAlertDialog = false
-                        }.setOnCancelListener {
-                            activeAlertDialog = false
-                        }.show()
-                }
-
-
-                //Setting title
-
-                val titleTextView = view.category_titleTextView
-                categoryRepository.getCategoryById(currentUserId, currentCategoryId)
-                    .addOnSuccessListener { document ->
-
-                        val category = documentToCategory(document)
-                        titleTextView.text = category.name
-                    }
-
-
-                //Accessing delete category button
-                val deleteCategoryButton = view.category_deleteCategoryButton
-
-                //Hiding delete category button if no user is logged in
-                if (currentUserId == "Guest") {
-                    deleteCategoryButton.isVisible = false
-                }
-
-                //Enabling clicking on delete category button
-                else {
-
-                    deleteCategoryButton.setOnClickListener {
-
-                        categoryRepository.deleteCategory(
-                            currentUserId,
-                            currentCategoryId,
-                            (activity as MainActivity)
-                        )
-
+                var clickedGoal = listView.adapter.getItem(position) as Goal
+                var goalId = clickedGoal.id
+                activeAlertDialog = true
+                AlertDialog.Builder(context!!)
+                    .setTitle("Manage Goal")
+                    .setMessage("Decide what you want to do with your goal.")
+                    .setPositiveButton(
+                        "Finished"
+                    ) { dialog, whichButton ->
+                        view.setBackgroundColor(R.color.green)
                         val navController = findNavController()
-                        navController.navigate(R.id.nav_home)
-
-                    }
-                }
+                        val args = Bundle().apply {
+                            putString(
+                                "goalId",
+                                goalId
+                            ) // TODO: Hämta databas kategorin med detta värde
+                        } // Send this to the next navigation object with variables
+                        activeAlertDialog = false
+                        navController.navigate(R.id.nav_finishedGoal, args)
+                    }.setNegativeButton(
+                        "Failed"
+                    ) { dialog, whichButton ->
+                        view.setBackgroundColor(R.color.red)
+                        activeAlertDialog = false
+                    }.setNeutralButton(
+                        "Do nothing"
+                    ) { dialog, whichButton ->
+                        activeAlertDialog = false
+                    }.setOnCancelListener {
+                        activeAlertDialog = false
+                    }.show()
             }
 
 
+            //Setting title
+
+            val titleTextView = view.category_titleTextView
+            categoryRepository.getCategoryById(currentUserId, currentCategoryId)
+                .addOnSuccessListener { document ->
+
+                    val category = documentToCategory(document)
+                    titleTextView.text = category.name
+                }
+
+
+            //Accessing delete category button
+            val deleteCategoryButton = view.category_deleteCategoryButton
+
+            //Hiding delete category button if no user is logged in
+            if (currentUserId == "Guest") {
+                deleteCategoryButton.isVisible = false
+            }
+
+            //Enabling clicking on delete category button
+            else {
+
+                deleteCategoryButton.setOnClickListener {
+
+                    categoryRepository.deleteCategory(
+                        currentUserId,
+                        currentCategoryId,
+                        (activity as MainActivity)
+                    )
+
+                    val navController = findNavController()
+                    navController.navigate(R.id.nav_home)
+
+                }
+            }
+        }
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -262,16 +260,29 @@ class categoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val buttonAdd = category_addButton
 
-        buttonAdd.setOnClickListener {
+        // vrf ligger denna koden här?????????????????
 
-            val navController = findNavController()
-            val args = Bundle().apply{
-                putString("key", "value")
+        //Accessing add goal button
+        val addGoalButton = category_addButton
+
+        //Hiding add goal button if no user is logged in
+        if (currentUserId == "Guest") {
+            addGoalButton.isVisible = false
+        }
+
+        //Enabling clicking on plus button to add goal
+        else {
+
+            addGoalButton.setOnClickListener {
+
+                val navController = findNavController()
+                val args = Bundle().apply {
+                    putString("categoryId", "")
+                }
+                navController.navigate(R.id.nav_addGoal, args)
+
             }
-            navController.navigate(R.id.nav_addGoal, args)
-
         }
     }
 
