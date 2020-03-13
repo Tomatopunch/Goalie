@@ -156,8 +156,6 @@ class categoryFragment : Fragment() {
                     goalDialogFragment.show(childFragmentManager, "FragmentManager")
 
 
-
-
                     /*activeAlertDialog = true
                     AlertDialog.Builder(context!!)
                         .setTitle("Manage Goal")
