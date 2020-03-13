@@ -13,6 +13,7 @@ import com.example.golie.R
 import com.example.golie.R.id.nav_category
 import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.repositoryClasses.CategoryRepository
+import com.google.firebase.auth.FirebaseAuth
 //import com.example.golie.data.repositoryClasses.createCategory
 import kotlinx.android.synthetic.main.add_category_fragment.view.*
 
@@ -37,7 +38,7 @@ class AddCategoryFragment : Fragment() {
 
 
         val view = inflater.inflate(R.layout.add_category_fragment, container, false)
-        val currentUserId = "josefin" //TODO
+        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -52,7 +53,26 @@ class AddCategoryFragment : Fragment() {
             categoryRepository.createCategory(currentUserId, category)
                 .addOnSuccessListener {
 
-                    val categoryId = it.id
+            val categoryName = (view.addCategory_nameEditText).editableText.toString()//Fetching text in edit text field
+            Log.d("name", categoryName)
+
+            var validationErrors = validateCategoryInput(categoryName)
+
+            if (validationErrors.isNotEmpty()) { // There are validation errors
+
+                var validationTextView = view.addCategory_validationTextView
+                validationTextView.text = "The following validation error occurred: " + validationErrors
+            }
+
+            else { //There are no validation errors!
+
+                Log.d("validation errors", validationErrors)
+                val category = Category(categoryName)
+                categoryRepository.createCategory(currentUserId, category)
+                    .addOnSuccessListener {
+
+                        Log.d("success", "did add category")
+                        //val categoryId = it.id
 
                     val navController = findNavController()
                     //val args = Bundle().apply { putString("categoryId", categoryId) } // Add

@@ -14,19 +14,18 @@ import com.example.golie.R
 import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.documentsToCategories
 import com.example.golie.data.repositoryClasses.CategoryRepository
-import com.example.golie.ui.favorite.FavoriteFragment
-import com.example.golie.ui.favorite.FavoriteViewModel
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.choose_favorite_fragment.view.*
 
 class ChooseFavoriteFragment : Fragment() {
 
     companion object {
-        fun newInstance() = FavoriteFragment()
+        fun newInstance() = ChooseFavoriteFragment()
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private lateinit var viewModel: FavoriteViewModel
+    private lateinit var viewModel: ChooseFavoriteViewModel
     private lateinit var adapter: ArrayAdapter<Category>
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,7 +34,7 @@ class ChooseFavoriteFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.choose_favorite_fragment, container, false)
         val categoryRepository = CategoryRepository()
-        val currentUserId = "josefin" //TODO
+        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -68,7 +67,6 @@ class ChooseFavoriteFragment : Fragment() {
                     var categoryId = clickedCategory.id
 
                     categoryRepository.setFavoriteCategoryId(currentUserId, categoryId)
-                    //TODO: put this category id in navbar in some way!
 
                     val navController = findNavController()
                     navController.navigate(R.id.nav_home)
@@ -88,7 +86,7 @@ class ChooseFavoriteFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(FavoriteViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(ChooseFavoriteViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

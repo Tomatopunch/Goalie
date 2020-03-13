@@ -10,8 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.example.golie.MainActivity
 
 import com.example.golie.R
 import com.example.golie.R.id.nav_addCategory
@@ -26,6 +28,9 @@ import com.example.golie.data.repositoryClasses.PointsRepository
 import com.example.golie.data.repositoryClasses.RewardRepository
 //import com.example.golie.data.repositoryClasses.getAllCategories
 import com.example.golie.ui.category.categoryFragment
+import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.home_fragment.*
 import kotlinx.android.synthetic.main.home_fragment.view.*
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,22 +49,28 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-
         val view = inflater.inflate(R.layout.home_fragment, container, false)
         val categoryRepository = CategoryRepository()
-        val userId = "josefin" //TODO
+        val userId: String
 
         val goalRepository = GoalRepository()
 
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //Setting the title
+        // Check if user is logged in or not, otherwise set user id to guest AND setting the title
 
         val userNameTextView = view.home_userNameTextView
-        userNameTextView.text = userId //TODO
+        if(FirebaseAuth.getInstance().currentUser == null){
+            userId = "Guest"
+            userNameTextView.text = "Guest"
+        }
+
+        else{
+            userId = FirebaseAuth.getInstance().currentUser!!.uid
+            userNameTextView.text = FirebaseAuth.getInstance().currentUser!!.displayName
+            view.home_guestText.isVisible = false
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         // Setting up the list view with all its data and enabling cicking on one list item
 
@@ -106,28 +117,69 @@ class HomeFragment : Fragment() {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        //Enabling clicking on plus button to add category
+
+
+        //Accessing add button
 
         val addCategoryButton = view.home_addCategoryButton
 
-        addCategoryButton.setOnClickListener {
+        //Hiding button if no user is logged in
+
+        if (currentUserId == "Guest") {
+            addCategoryButton.isVisible = false
+        }
+
+        else{
+
+            //Enabling clicking on plus button to add category
+
+            addCategoryButton.setOnClickListener {
 
             val navController = findNavController()
             navController.navigate(nav_addCategory)
         }
 
 
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            //Enabling clicking on settings button
 
-            val settingsButton = view.home_settingsButton
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            Log.d("TESTING", "$settingsButton")
+        //Enabling clicking on settings button
 
+        val settingsButton = view.home_settingsButton
+
+        Log.d("TESTING", "$settingsButton")
+
+        if(currentUserId == "Guest") {//not logged in
             settingsButton.setOnClickListener {
                 Log.d("TESTING", "kommer in i settings")
                 lateinit var navController: NavController
+
+                AlertDialog.Builder(context!!)
+                    .setTitle("Settings")
+                    .setMessage("What do you want to do?")
+                    .setPositiveButton(
+                        "View info page"
+                    ) { dialog, whichButton ->
+
+                        navController = findNavController()
+                        navController.navigate(R.id.nav_info)
+
+                    }.setNegativeButton(
+                        "Login"
+                    ) { dialog, whichButton ->
+
+                        (activity as MainActivity).login()
+
+                    }.show()
+            }
+        }
+
+        //logged in
+        else {
+            settingsButton.setOnClickListener {
+                lateinit var navController: NavController
+
                 AlertDialog.Builder(context!!)
                     .setTitle("Settings")
                     .setMessage("What do you want to do?")
@@ -149,14 +201,12 @@ class HomeFragment : Fragment() {
                         "Logout"
                     ) { dialog, whichButton ->
 
-                        //TODO: Direct this to the login page
+                        signOut()
 
                     }.show()
 
             }
-
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+        }
         return view
     }
 
@@ -167,5 +217,25 @@ class HomeFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         // TODO: Use the ViewModel
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    private fun signOut() { //ska denna vara här?
+
+        // [START auth_fui_signout]
+        AuthUI.getInstance()
+            .signOut(context!!)
+            .addOnCompleteListener {
+                parentFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, HomeFragment()).commit()
+            }
+
+        // [END auth_fui_signout]
+
+
+
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }

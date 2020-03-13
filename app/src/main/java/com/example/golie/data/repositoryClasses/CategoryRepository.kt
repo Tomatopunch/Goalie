@@ -1,8 +1,13 @@
 package com.example.golie.data.repositoryClasses
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import com.example.golie.MainActivity
+import com.example.golie.R
 import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
 import com.google.android.gms.tasks.Task
@@ -53,7 +58,7 @@ class CategoryRepository : dbCursorRepository() {
 
 
     // Funkar!!
-    fun deleteCategory(currentUserId: String, currentCategoryId: String) {
+    fun deleteCategory(currentUserId: String, currentCategoryId: String, mainActivity: MainActivity) {
 
         // First; fetching and deleting (one at a time) all goals that belong to the category
 
@@ -70,8 +75,9 @@ class CategoryRepository : dbCursorRepository() {
 
                db.collection("users/$currentUserId/categories/").document(currentCategoryId)
                     .delete()
-                    .addOnSuccessListener { Log.d(ContentValues.TAG, "Category successfully deleted!") }
-                    .addOnFailureListener { e -> Log.w(ContentValues.TAG, "Error deleting category.", e) }
+
+                   .addOnSuccessListener {mainActivity.recreate()}
+                   .addOnFailureListener {}
 
 
             }

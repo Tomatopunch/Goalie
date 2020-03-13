@@ -53,7 +53,7 @@
         tools:layout="@layout/info_fragment" />
     <fragment
         android:id="@+id/nav_chooseFavCategory"
-        android:name="com.example.golie.ui.home.settings.chooseFavCategory.ChooseFavCategoryFragment"
+        android:name="com.example.golie.ui.home.settings.chooseFavoriteFragment.ChooseFavoriteFragment"
         android:label="choose_fav_category_fragment"
         tools:layout="@layout/choose_favorite_fragment" />
     <fragment

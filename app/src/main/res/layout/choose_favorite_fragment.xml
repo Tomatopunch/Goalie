@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.settings.chooseFavCategory.ChooseFavCategoryFragment">
+    tools:context=".ui.home.settings.chooseFavoriteFragment.ChooseFavoriteFragment">
 
     <ProgressBar
         android:id="@+id/chooseFavCategory_progressBar"
@@ -20,19 +20,19 @@
         android:id="@+id/chooseFavCategory_titleTextView"
         android:layout_width="368dp"
         android:layout_height="80dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="64dp"
         android:text="Choose favorite category!"
-        android:textSize="30sp"
+        android:textSize="24sp"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/chooseFavCategory_allCategoriesListView"
-        android:layout_width="409dp"
-        android:layout_height="475dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

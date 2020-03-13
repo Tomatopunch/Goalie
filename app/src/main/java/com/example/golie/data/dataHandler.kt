@@ -50,9 +50,6 @@ fun documentsToCategories (documents : QuerySnapshot) : MutableList<Category> {
         val category = documentToCategory(document)
         allCategories.add(category)
 
-        Log.d(ContentValues.TAG, "Success getting category with id ${document.id} and data ${document.data}")
-        Log.d("the id of the category object", " " + category.id + "")
-        Log.d("category object", " " + category + "")
     }
 
     return allCategories
@@ -104,5 +101,11 @@ fun documentToPoints (document: DocumentSnapshot) : Int {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+fun documentToFavoriteCateoryId (document: DocumentSnapshot) : String {
+
+    return document.data!!.getValue("idOfFavoriteCategory").toString()
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
