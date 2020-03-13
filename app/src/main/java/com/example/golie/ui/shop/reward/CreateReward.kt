@@ -1,7 +1,7 @@
 package com.example.golie.ui.shop.reward
 
-import android.content.Intent
-import androidx.lifecycle.ViewModelProviders
+
+import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,11 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.navigation.fragment.findNavController
-
 import com.example.golie.R
-import com.example.golie.ui.shop.ShopAdapter
-import com.example.golie.ui.shop.ShopFragment
-import com.example.golie.ui.shop.ShopItem
+import com.example.golie.data.dataClasses.Reward
+import com.example.golie.data.repositoryClasses.RewardRepository
 import kotlinx.android.synthetic.main.create_reward_fragment.view.*
 
 //TODO: validation on all these fields
@@ -28,9 +26,11 @@ class CreateReward : Fragment() {
         fun newInstance() = CreateReward()
     }
 
-    private lateinit var viewModel: CreateRewardViewModel
     private lateinit var titleText: EditText
     private lateinit var pointContent: EditText
+    private val rewardRepository = RewardRepository()
+
+    val currentUserId = "josefin"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,18 +43,23 @@ class CreateReward : Fragment() {
         titleText = view.create_editTitle
         pointContent = view.create_editPoints
 
+
         //have some sort of validation here
         /////////////////////////////////
 
         confirmButton.setOnClickListener {
 
-            //TODO: Call the additem class from the adapter? but you can't access it?
-            val shopItem = ShopAdapter(context!!)
-            shopItem.addItem(titleText.editableText.toString(), pointContent.editableText.toString())
+            val reward = Reward(titleText.editableText.toString(), pointContent.editableText.toString().toInt())
 
-            val navController = findNavController()
-            navController.navigate(R.id.nav_shop)
+            rewardRepository.createReward(currentUserId, reward)
 
+                .addOnSuccessListener {
+                    val navController = findNavController()
+                    navController.navigate(R.id.nav_shop)
+                }
+                .addOnFailureListener {
+                Log.d(ContentValues.TAG, "An exception was thrown when creating a reward! ")
+            }
         }
 
         setHasOptionsMenu(true)
@@ -68,11 +73,5 @@ class CreateReward : Fragment() {
         navController.navigate(R.id.nav_shop)
 
         return true
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(CreateRewardViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 }

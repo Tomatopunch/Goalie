@@ -35,4 +35,6 @@
     <string name="finishedGoalFragment_celebration">celebration</string>
     <string name="finishedGoalFragment_congratulations">Congratulations! \n\nYou earned ___ points!</string>
     <string name="finishedGoalButton">Back to goals</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

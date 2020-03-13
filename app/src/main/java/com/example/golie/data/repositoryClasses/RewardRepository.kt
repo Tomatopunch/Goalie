@@ -22,6 +22,18 @@ class RewardRepository : dbCursorRepository(){
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    fun createRewardWithSpecificId(currentUserId: String, newReward: Reward, rewardId: String) : Task<Void> {
+
+        //val newRewardMap = hashMapOf("id" to newReward.id)
+
+        return  db.collection("users/$currentUserId/rewards").document(rewardId).set(newReward)
+
+    }
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     fun getAlLRewards (currentUserId: String) : Task<QuerySnapshot> {
 
         return db.collection("users/$currentUserId/rewards").get()

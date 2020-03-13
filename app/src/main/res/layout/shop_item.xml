@@ -10,7 +10,7 @@
         android:padding="8dp">
 
         <TextView
-            android:id="@+id/point_content"
+            android:id="@+id/shop_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Line 1"
@@ -19,11 +19,11 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/shop_title"
+            android:id="@+id/point_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="200dp"
-            android:layout_alignLeft="@id/point_content"
+            android:layout_marginLeft="300dp"
+            android:layout_alignLeft="@id/shop_title"
             android:text="Line 2" />
 
     </RelativeLayout>
