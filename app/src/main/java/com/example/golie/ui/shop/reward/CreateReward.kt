@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.golie.R
 import com.example.golie.data.dataClasses.Reward
 import com.example.golie.data.repositoryClasses.RewardRepository
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.create_reward_fragment.view.*
 
 //TODO: validation on all these fields
@@ -30,7 +31,7 @@ class CreateReward : Fragment() {
     private lateinit var pointContent: EditText
     private val rewardRepository = RewardRepository()
 
-    val currentUserId = "josefin"
+    val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

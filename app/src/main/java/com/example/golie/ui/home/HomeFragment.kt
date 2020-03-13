@@ -1,6 +1,5 @@
 package com.example.golie.ui.home
 
-import android.content.ContentValues
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -18,19 +17,12 @@ import com.example.golie.MainActivity
 import com.example.golie.R
 import com.example.golie.R.id.nav_addCategory
 import com.example.golie.data.dataClasses.Category
-import com.example.golie.data.dataClasses.Goal
-import com.example.golie.data.dataClasses.Reward
 import com.example.golie.data.documentsToCategories
-import com.example.golie.data.documentsToGoals
 import com.example.golie.data.repositoryClasses.CategoryRepository
 import com.example.golie.data.repositoryClasses.GoalRepository
-import com.example.golie.data.repositoryClasses.PointsRepository
-import com.example.golie.data.repositoryClasses.RewardRepository
 //import com.example.golie.data.repositoryClasses.getAllCategories
-import com.example.golie.ui.category.categoryFragment
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.home_fragment.*
 import kotlinx.android.synthetic.main.home_fragment.view.*
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////

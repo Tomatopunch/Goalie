@@ -23,6 +23,7 @@ import com.example.golie.data.documentToPoints
 import com.example.golie.data.documentsToRewards
 import com.example.golie.data.repositoryClasses.PointsRepository
 import com.example.golie.data.repositoryClasses.RewardRepository
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.shop_fragment.*
 import kotlinx.android.synthetic.main.shop_fragment.view.*
 
@@ -34,7 +35,7 @@ class ShopFragment : Fragment() {
     private val pointsRepository = PointsRepository()
     private val rewardRepository = RewardRepository()
 
-    val currentUserId = "josefin"
+    val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +47,7 @@ class ShopFragment : Fragment() {
 
         deleteIcon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_delete)!!
 
-        rewardRepository.getAlLRewards(currentUserId)
+        rewardRepository.getAlLRewards(userId)
             .addOnSuccessListener { document ->
 
                 if (document != null) {
@@ -139,7 +140,7 @@ class ShopFragment : Fragment() {
 
     //Function that retrieves the amount of points from the user currently logged in
     private fun getPoints(points: TextView) {
-        pointsRepository.getPoints(currentUserId)
+        pointsRepository.getPoints(userId)
             .addOnSuccessListener { document ->
 
                 if (document != null) {

@@ -48,14 +48,17 @@ class AddCategoryFragment : Fragment() {
 
         addCategoryButton.setOnClickListener {
             view.addCategory_progressBar.visibility = View.VISIBLE
+
             val categoryName = (view.addCategory_nameEditText).editableText.toString() //Fetching text in edit text field
-            val category = Category(categoryName)
+
+
+            /*val category = Category(categoryName)
             categoryRepository.createCategory(currentUserId, category)
                 .addOnSuccessListener {
 
                     val categoryName =
                         (view.addCategory_nameEditText).editableText.toString()//Fetching text in edit text field
-                    Log.d("name", categoryName)
+                    Log.d("name", categoryName)*/
 
                     val validationErrors = validateCategoryInput(categoryName)
 
@@ -67,20 +70,13 @@ class AddCategoryFragment : Fragment() {
                     }
                     else { //There are no validation errors!
 
-                        Log.d("validation errors", validationErrors)
                         val category = Category(categoryName)
                         categoryRepository.createCategory(currentUserId, category)
                             .addOnSuccessListener {
 
-                                Log.d("success", "did add category")
-                                //val categoryId = it.id
-
-                                val navController = findNavController()
-                                //val args = Bundle().apply { putString("categoryId", categoryId) } // Add
-                                //navController.navigate(R.id.nav_category) // Add
                                 view.addCategory_progressBar.visibility = View.GONE
-
-                                navController.navigate(R.id.nav_home) // Remove
+                                val navController = findNavController()
+                                navController.navigate(R.id.nav_home)
                             }
 
                             .addOnFailureListener {
@@ -89,10 +85,6 @@ class AddCategoryFragment : Fragment() {
                             }
                     }
                 }
-                .addOnFailureListener{
-                    //TODO: Progress baaaaaar
-                }
-        }
 
         return view
     }

@@ -13,9 +13,8 @@
 
     <fragment
         android:id="@+id/nav_category"
-        android:name="com.example.golie.ui.category.categoryFragment"
-        android:label="@string/title_category"
-        tools:layout="@layout/category_fragment" />
+        android:name="com.example.golie.ui.category.CategoryFragment"
+        android:label="@string/title_category" />
     <fragment
         android:id="@+id/nav_addGoal"
         android:name="com.example.golie.ui.category.addGoal.AddGoalFragment"

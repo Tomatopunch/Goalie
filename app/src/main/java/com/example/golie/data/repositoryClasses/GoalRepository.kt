@@ -1,7 +1,7 @@
 package com.example.golie.data.repositoryClasses
 
 import com.example.golie.data.dataClasses.Goal
-import com.example.golie.ui.category.categoryFragment
+import com.example.golie.ui.category.CategoryFragment
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -60,7 +60,7 @@ class GoalRepository : dbCursorRepository() {
 
     }
 
-    fun verifyGoalStatus(allGoals: MutableList<Goal>, categoryFragment: categoryFragment){
+    fun verifyGoalStatus(allGoals: MutableList<Goal>, categoryFragment: CategoryFragment){
 
         for((index, goal) in allGoals.withIndex()){
             if(goal.colorId == -1){ // colorId can be id for red or green, or -1 for a non-existent color.

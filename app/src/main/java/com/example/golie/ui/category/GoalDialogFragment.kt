@@ -18,7 +18,7 @@ class GoalDialogFragment : DialogFragment {
     lateinit var goalId: String
     lateinit var categoryId: String
     var position = -1
-    lateinit var categoryFragment: categoryFragment
+    lateinit var categoryFragment: CategoryFragment
 
     constructor()
 
@@ -32,7 +32,7 @@ class GoalDialogFragment : DialogFragment {
 
         var fragments = requireActivity().supportFragmentManager.fragments
 
-        categoryFragment = parentFragment as categoryFragment
+        categoryFragment = parentFragment as CategoryFragment
 
         if(savedInstanceState != null){ // Happens if the user changed settings on the phone.
             categoryId = savedInstanceState.getString("categoryId")!!
