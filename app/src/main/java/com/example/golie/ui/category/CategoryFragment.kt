@@ -27,6 +27,8 @@ import com.example.golie.data.repositoryClasses.GoalRepository
 import kotlinx.android.synthetic.main.category_fragment.*
 import kotlinx.android.synthetic.main.category_fragment.view.*
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.finished_goal_fragment.view.*
+import kotlinx.android.synthetic.main.goaldialog_fragment.view.*
 import kotlinx.android.synthetic.main.shop_boughtdialog_fragment.*
 
 class CategoryFragment : Fragment() {
@@ -74,14 +76,12 @@ class CategoryFragment : Fragment() {
             // Setting categoryId:
 
             categoryId = requireArguments().getString("categoryId")!!
-            displayCategory(categoryId, view, savedInstanceState)
+            displayCategory(categoryId, view)
 
             // Making sure that the favorite button in the navbar is not checked!
             (activity as MainActivity).navView.menu.getItem(1).setChecked(false)
             (activity as MainActivity).navView.menu.getItem(0).setChecked(true)
         }
-
-        // else if recreatedFragment
 
         // WE CAME HERE FROM FAVORITE
         else{
@@ -90,7 +90,7 @@ class CategoryFragment : Fragment() {
                 .addOnSuccessListener { document ->
                     if(document.exists()){
                         categoryId = documentToFavoriteCateoryId(document)
-                        displayCategory(categoryId, view, savedInstanceState) // Bort med savedInstanceState
+                        displayCategory(categoryId, view) // Bort med savedInstanceState
                     }
 
                     else{
@@ -137,7 +137,7 @@ class CategoryFragment : Fragment() {
     }
 
     @SuppressLint("ResourceAsColor")
-    fun displayCategory(currentCategoryId: String, view: View, savedInstanceState: Bundle?) {
+    fun displayCategory(currentCategoryId: String, view: View) {
 
         val context = requireContext()
 
@@ -165,8 +165,6 @@ class CategoryFragment : Fragment() {
                 )
 
                 listView.adapter = adapter
-
-                //goalRepository.verifyGoalStatus(allGoals, this)
 
                 //Enabling clicking one one list item
                 if(userId != "Guest") {
@@ -201,6 +199,8 @@ class CategoryFragment : Fragment() {
                         titleTextView.text = category.name
                     }
 
+                //TODO: addOnFailure??
+
 
                 //Accessing delete category button
                 val deleteCategoryButton = view.category_deleteCategoryButton
@@ -224,7 +224,6 @@ class CategoryFragment : Fragment() {
 
                         val navController = findNavController()
                         navController.navigate(R.id.nav_home)
-
                     }
                 }
                 view.category_progressBar.visibility = View.GONE
@@ -265,8 +264,6 @@ class CategoryFragment : Fragment() {
             }
     }
 
-
-
     override fun onResume() {
         super.onResume()
         if(::adapter.isInitialized) {
@@ -281,13 +278,6 @@ class CategoryFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(CategoryViewModel::class.java)
         // TODO: Use the ViewModel
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putBoolean("activeAlertDialog", activeAlertDialog)
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

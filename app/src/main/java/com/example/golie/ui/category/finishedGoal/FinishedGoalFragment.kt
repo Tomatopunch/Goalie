@@ -12,7 +12,11 @@ import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
 import com.example.golie.data.documentToGoal
+import com.example.golie.data.documentToPoints
 import com.example.golie.data.repositoryClasses.GoalRepository
+import com.example.golie.data.repositoryClasses.PointsRepository
+import com.example.golie.ui.category.CategoryFragment
+import com.example.golie.ui.category.GoalDialogFragment
 import kotlinx.android.synthetic.main.category_fragment.view.*
 import kotlinx.android.synthetic.main.finished_goal_fragment.view.*
 
@@ -39,6 +43,7 @@ class FinishedGoalFragment : Fragment() {
         val goToHomeButton = view.finishedGoal_button
 
         val goalRepository = GoalRepository()
+        val pointsRepository = PointsRepository()
 
         val arguments = requireArguments()
 
@@ -50,7 +55,16 @@ class FinishedGoalFragment : Fragment() {
             .addOnSuccessListener {
                 val goal = documentToGoal(it)
 
-                view.finishedGoalTextView.text = "Congratulations!\n\nYou earned ${goal.points} points!"
+                pointsRepository.getPoints(userId)
+                    .addOnSuccessListener { document ->
+                        view.finished_goal_progressBar.visibility = View.GONE
+                        view.finishedGoalTextView.text = "Congratulations!\n\nYou earned ${goal.points} points!"
+                    }
+                    .addOnFailureListener{
+                        view.finished_goal_progressBar.visibility = View.GONE
+                        //TODO: print that something went wrong adding points
+                    }
+
             }
 
         goToHomeButton.setOnClickListener{
@@ -63,27 +77,6 @@ class FinishedGoalFragment : Fragment() {
             navController.navigate(R.id.nav_category, args)
 
         }
-
-        //val listView = view.category_listView
-
-        /*adapter = ArrayAdapter(
-            context!!,
-            android.R.layout.simple_list_item_1,
-            android.R.id.text1,
-            toDoRepository.getAllToDos()
-        )*/
-
-        //listView.adapter = adapter
-
-        /*listView.setOnItemClickListener { parent, view, position, id ->
-
-            /*val finalHost = NavHostFragment.create(R.navigation.example_graph)
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.nav_host, finalHost)
-                .setPrimaryNavigationFragment(finalHost) // equivalent to app:defaultNavHost="true"
-                .commit()*/
-
-        }*/
 
         return view
     }

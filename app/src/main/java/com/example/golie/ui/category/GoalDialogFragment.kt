@@ -9,7 +9,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.example.golie.R
 import com.example.golie.data.documentToGoal
+import com.example.golie.data.documentToPoints
 import com.example.golie.data.repositoryClasses.GoalRepository
+import com.example.golie.data.repositoryClasses.PointsRepository
+import kotlinx.android.synthetic.main.finished_goal_fragment.view.*
 import kotlinx.android.synthetic.main.goaldialog_fragment.view.*
 
 class GoalDialogFragment : DialogFragment {
@@ -31,6 +34,7 @@ class GoalDialogFragment : DialogFragment {
         var view = inflater.inflate(R.layout.goaldialog_fragment, container, false)
 
         var fragments = requireActivity().supportFragmentManager.fragments
+        val pointsRepository = PointsRepository()
 
         categoryFragment = parentFragment as CategoryFragment
 
@@ -48,11 +52,19 @@ class GoalDialogFragment : DialogFragment {
             position = arguments.getInt("position")
 
         }
+
+        val goal = categoryFragment.allGoals[position] // Next item to be displayed on pos deleted
+
+        // Check if this goal has been completed already
+        if(goal.colorId != -1){
+            disableCompletionButtons(view)
+        }
+
         val goalRepository = GoalRepository()
 
         val returnButton = view.dialog_returnButton
         val deleteButton = view.dialog_deleteButton
-        val finishedButton = view.dialog_finishGoalButton
+        val finishedButton = view.dialog_finishedGoalButton
         val failedButton = view.dialog_failedGoalButton
         val editButton = view.dialog_editButton
 
@@ -61,12 +73,9 @@ class GoalDialogFragment : DialogFragment {
         }
 
         deleteButton.setOnClickListener{
-
+            view.goaldialog_progressBar.visibility = View.VISIBLE
             goalRepository.deleteGoal(userId, categoryId, goalId).addOnSuccessListener {
                 categoryFragment.deleteGoal(position)
-                val goal =
-                    categoryFragment.allGoals[position] // Next item to be displayed on pos deleted
-                categoryFragment.setBackgroundColor(position, goal.colorId, false)
                 view.goaldialog_progressBar.visibility = View.GONE
                 dismiss()
 
@@ -77,18 +86,36 @@ class GoalDialogFragment : DialogFragment {
         }
 
         finishedButton.setOnClickListener{
+            view.goaldialog_progressBar.visibility = View.VISIBLE
             //TODO: Take the user to a new dialogFragment with an animation.
             //categoryFragment.setBackgroundColor(R.color.red)
+            pointsRepository.getPoints(userId)
+                .addOnSuccessListener { document ->
+                    val existingPoints = documentToPoints(document)
+                    val pointsSum = existingPoints + goal.points
+                    pointsRepository.setPoints(userId, pointsSum)
+                        .addOnSuccessListener {
+                            val args = Bundle().apply{
+                                putString("categoryId", categoryId)
+                                putString("userId", userId)
+                                putString("goalId", goalId)
+                            }
+                            val navController = findNavController()
+                            navController.navigate(R.id.nav_finishedGoal, args)
+                            dismiss()
+                            categoryFragment.setBackgroundColor(position, R.color.green, false)
+                            view.goaldialog_progressBar.visibility = View.GONE
+                        }
+                        .addOnFailureListener{
+                            view.goaldialog_progressBar.visibility = View.GONE
+                            // print that something went wrong adding points
+                        }
+                }
+                .addOnFailureListener{
+                    view.goaldialog_progressBar.visibility = View.GONE
+                    // print that something went wrong adding points
+                }
 
-            categoryFragment.setBackgroundColor(position, R.color.green, false)
-            val args = Bundle().apply{
-                putString("categoryId", categoryId)
-                putString("userId", userId)
-                putString("goalId", goalId)
-            }
-            val navController = findNavController()
-            navController.navigate(R.id.nav_finishedGoal, args)
-            dismiss()
         }
 
         failedButton.setOnClickListener{
@@ -98,6 +125,7 @@ class GoalDialogFragment : DialogFragment {
 
 
         editButton.setOnClickListener{
+            view.goaldialog_progressBar.visibility = View.VISIBLE
             goalRepository.getGoalById(userId, categoryId, goalId).addOnSuccessListener { document ->
 
                 val currentGoal = documentToGoal(document)
@@ -127,6 +155,14 @@ class GoalDialogFragment : DialogFragment {
             // add all of that data to the inputFields in add_goal_fragment
         }
         return view
+    }
+
+    private fun disableCompletionButtons(view: View){
+
+        view.dialog_finishedGoalButton.isEnabled = false
+        view.dialog_failedGoalButton.isEnabled = false
+        view.dialog_finishedGoalButton.isClickable = false
+        view.dialog_failedGoalButton.isClickable = false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

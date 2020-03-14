@@ -35,7 +35,7 @@ class ChooseFavoriteFragment : Fragment() {
         val view = inflater.inflate(R.layout.choose_favorite_fragment, container, false)
         val categoryRepository = CategoryRepository()
         val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
-
+        val context = requireContext()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -52,7 +52,7 @@ class ChooseFavoriteFragment : Fragment() {
                 allCategories = documentsToCategories(documents)
 
                 adapter = ArrayAdapter(
-                    context!!,
+                    context,
                     android.R.layout.simple_list_item_1,
                     android.R.id.text1,
                     allCategories

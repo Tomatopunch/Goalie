@@ -49,17 +49,19 @@ class CreateReward : Fragment() {
         /////////////////////////////////
 
         confirmButton.setOnClickListener {
-
+            view.create_reward_progressBar.visibility = View.VISIBLE
             val reward = Reward(titleText.editableText.toString(), pointContent.editableText.toString().toInt())
 
             rewardRepository.createReward(currentUserId, reward)
 
                 .addOnSuccessListener {
+                    view.create_reward_progressBar.visibility = View.GONE
                     val navController = findNavController()
                     navController.navigate(R.id.nav_shop)
                 }
                 .addOnFailureListener {
-                Log.d(ContentValues.TAG, "An exception was thrown when creating a reward! ")
+                    view.create_reward_progressBar.visibility = View.GONE
+                    Log.d(ContentValues.TAG, "An exception was thrown when creating a reward! ")
             }
         }
 

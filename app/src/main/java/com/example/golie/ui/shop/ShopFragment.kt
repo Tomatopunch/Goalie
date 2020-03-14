@@ -47,7 +47,7 @@ class ShopFragment : Fragment() {
 
         deleteIcon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_delete)!!
 
-        rewardRepository.getAlLRewards(userId)
+        rewardRepository.getAllRewards(userId)
             .addOnSuccessListener { document ->
 
                 if (document != null) {

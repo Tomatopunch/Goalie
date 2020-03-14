@@ -37,4 +37,6 @@
     <string name="finishedGoalButton">Back to goals</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="deleting_goal">deleting goal</string>
+    <string name="return_goal">return</string>
 </resources>

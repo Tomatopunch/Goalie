@@ -34,7 +34,7 @@ class RewardRepository : dbCursorRepository(){
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun getAlLRewards (currentUserId: String) : Task<QuerySnapshot> {
+    fun getAllRewards (currentUserId: String) : Task<QuerySnapshot> {
 
         return db.collection("users/$currentUserId/rewards").get()
 
