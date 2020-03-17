@@ -9,9 +9,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.example.golie.R
 import com.example.golie.data.documentToGoal
-import com.example.golie.data.documentToPoints
 import com.example.golie.data.repositoryClasses.GoalRepository
 import com.example.golie.data.repositoryClasses.PointsRepository
+import com.example.golie.data.repositoryClasses.UserRepository
+import com.example.golie.data.userDocumentToPoints
 import kotlinx.android.synthetic.main.finished_goal_fragment.view.*
 import kotlinx.android.synthetic.main.goaldialog_fragment.view.*
 
@@ -35,6 +36,7 @@ class GoalDialogFragment : DialogFragment {
 
         var fragments = requireActivity().supportFragmentManager.fragments
         val pointsRepository = PointsRepository()
+        val userRepository = UserRepository()
 
         categoryFragment = parentFragment as CategoryFragment
 
@@ -89,9 +91,9 @@ class GoalDialogFragment : DialogFragment {
             view.goaldialog_progressBar.visibility = View.VISIBLE
             //TODO: Take the user to a new dialogFragment with an animation.
             //categoryFragment.setBackgroundColor(R.color.red)
-            pointsRepository.getPoints(userId)
+            userRepository.getUserById(userId)
                 .addOnSuccessListener { document ->
-                    val existingPoints = documentToPoints(document)
+                    val existingPoints = userDocumentToPoints(document)
                     val pointsSum = existingPoints + goal.points
                     pointsRepository.setPoints(userId, pointsSum)
                         .addOnSuccessListener {

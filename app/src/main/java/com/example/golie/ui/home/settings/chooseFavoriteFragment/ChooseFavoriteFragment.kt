@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
@@ -36,47 +37,42 @@ class ChooseFavoriteFragment : Fragment() {
         val categoryRepository = CategoryRepository()
         val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
         val context = requireContext()
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
         // Setting up the list view with all its data and enabling cicking on one list item
 
-        Log.d("inne", "")
         val listView = view.chooseFavCategory_allCategoriesListView
         var allCategories: MutableList<Category> = ArrayList()
 
         categoryRepository.getAllCategories(currentUserId)
             .addOnSuccessListener { documents ->
-                Log.d("catty", "")
 
                 allCategories = documentsToCategories(documents)
-
                 adapter = ArrayAdapter(
                     context,
                     android.R.layout.simple_list_item_1,
                     android.R.id.text1,
                     allCategories
                 )
-
                 listView.adapter = adapter
 
                 listView.setOnItemClickListener { parent, view, position, id ->
 
                     var clickedCategory = listView.adapter.getItem(position) as Category
-
                     var categoryId = clickedCategory.id
-
                     categoryRepository.setFavoriteCategoryId(currentUserId, categoryId)
-
                     val navController = findNavController()
                     navController.navigate(R.id.nav_home)
                 }
                 view.chooseFavCategory_progressBar.visibility = View.GONE
 
             }
-            .addOnFailureListener { exception ->
+
+            .addOnFailureListener {
+                Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                 view.chooseFavCategory_progressBar.visibility = View.GONE
-                Log.d("Error getting categories: ", exception.toString())
             }
 
         return view

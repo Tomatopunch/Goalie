@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.golie.MainActivity
@@ -22,7 +23,7 @@ class CategoryRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //Funkar
+
     fun createCategory(currentUserId: String, newCategory: Category): Task<DocumentReference> {
 
         return db.collection("users/$currentUserId/categories").add(newCategory)
@@ -37,7 +38,7 @@ class CategoryRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //Funkar
+
     fun getAllCategories(currentUserId: String): Task<QuerySnapshot> {
 
         return db.collection("users/$currentUserId/categories").get()
@@ -46,7 +47,7 @@ class CategoryRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //Funkar
+
     fun updateCategory(currentUserId: String, categoryId: String, updatedCategory: Category): Task<Void> {
 
         val updatedCategoryMap = mapOf("name" to updatedCategory.name) //This might seem unnecessary but is included to make all update functions alike and to make this update function more extendable if another attribute was to be added in the Category class
@@ -57,8 +58,8 @@ class CategoryRepository : dbCursorRepository() {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    // Funkar!!
-    fun deleteCategory(currentUserId: String, currentCategoryId: String, mainActivity: MainActivity) {
+
+    fun deleteCategory(currentUserId: String, currentCategoryId: String, navController: NavController) {
 
         // First; fetching and deleting (one at a time) all goals that belong to the category
 
@@ -71,14 +72,17 @@ class CategoryRepository : dbCursorRepository() {
                     goalRepository.deleteGoal(currentUserId, currentCategoryId, idOfGoalToBeDeleted)
                 }
 
-                // Second; all goals are (hopefully) deleted and it is (hopefully) safe to go on and delete the category
+                // Second; all goals are (hopefully) deleted and it is (hopefully) safe to go on and delete the category (.......)
 
                db.collection("users/$currentUserId/categories/").document(currentCategoryId)
                     .delete()
 
-                   .addOnSuccessListener {mainActivity.recreate()}
-                   .addOnFailureListener {}
+                   .addOnSuccessListener {
+                       navController.navigate(R.id.nav_home)
+                   }
 
+                   .addOnFailureListener {
+                   }
 
             }
 
@@ -94,22 +98,17 @@ class CategoryRepository : dbCursorRepository() {
 
     fun setFavoriteCategoryId(currentUserId: String, idOfNewFavorite: String): Task<Void> {
 
-        val idOfFavMap = hashMapOf("idOfFavoriteCategory" to idOfNewFavorite)
+        val idOfFavMap = hashMapOf("favoriteCategoryId" to idOfNewFavorite)
 
-        return db.collection("users/$currentUserId/favorites").document("favoriteCategory").set(idOfFavMap)
-
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    fun getFavoriteCategoryId(currentUserId: String): Task<DocumentSnapshot> {
-
-        return db.collection("users/$currentUserId/favorites").document("favoriteCategory").get()
+        return db.collection("users").document(currentUserId).set(idOfFavMap)
 
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
 
 }

@@ -12,11 +12,11 @@ import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
 import com.example.golie.data.documentToGoal
-import com.example.golie.data.documentToPoints
 import com.example.golie.data.repositoryClasses.GoalRepository
-import com.example.golie.data.repositoryClasses.PointsRepository
+import com.example.golie.data.repositoryClasses.UserRepository
 import com.example.golie.ui.category.CategoryFragment
 import com.example.golie.ui.category.GoalDialogFragment
+import com.firebase.ui.auth.data.model.User
 import kotlinx.android.synthetic.main.category_fragment.view.*
 import kotlinx.android.synthetic.main.finished_goal_fragment.view.*
 
@@ -43,7 +43,7 @@ class FinishedGoalFragment : Fragment() {
         val goToHomeButton = view.finishedGoal_button
 
         val goalRepository = GoalRepository()
-        val pointsRepository = PointsRepository()
+        val userRepository = UserRepository()
 
         val arguments = requireArguments()
 
@@ -55,7 +55,7 @@ class FinishedGoalFragment : Fragment() {
             .addOnSuccessListener {
                 val goal = documentToGoal(it)
 
-                pointsRepository.getPoints(userId)
+                userRepository.getUserById(userId)
                     .addOnSuccessListener { document ->
                         view.finished_goal_progressBar.visibility = View.GONE
                         view.finishedGoalTextView.text = "Congratulations!\n\nYou earned ${goal.points} points!"

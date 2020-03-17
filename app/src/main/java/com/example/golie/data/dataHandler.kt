@@ -94,16 +94,16 @@ fun documentsToRewards(documents : QuerySnapshot) : MutableList<Reward> {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-fun documentToPoints (document: DocumentSnapshot) : Int {
+fun userDocumentToPoints (document: DocumentSnapshot) : Int {
 
     return document.data!!.getValue("points").toString().toInt()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-fun documentToFavoriteCateoryId (document: DocumentSnapshot) : String {
+fun userDocumentToFavoriteCategoryId (document: DocumentSnapshot) : String {
 
-    return document.data!!.getValue("idOfFavoriteCategory").toString()
+    return document.data!!.getValue("favoriteCategoryId").toString()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////

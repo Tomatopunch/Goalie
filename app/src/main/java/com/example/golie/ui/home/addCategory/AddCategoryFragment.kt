@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
@@ -49,42 +50,33 @@ class AddCategoryFragment : Fragment() {
         addCategoryButton.setOnClickListener {
             view.addCategory_progressBar.visibility = View.VISIBLE
 
-            val categoryName = (view.addCategory_nameEditText).editableText.toString() //Fetching text in edit text field
+            val categoryName = (view.addCategory_nameEditText).editableText.toString()
 
 
-            /*val category = Category(categoryName)
-            categoryRepository.createCategory(currentUserId, category)
-                .addOnSuccessListener {
+            val validationErrors = validateCategoryInput(categoryName)
 
-                    val categoryName =
-                        (view.addCategory_nameEditText).editableText.toString()//Fetching text in edit text field
-                    Log.d("name", categoryName)*/
+            if (validationErrors.isNotEmpty()) {
+                val validationTextView = view.addCategory_validationTextView
+                validationTextView.text =
+                    "The following validation error occurred: " + validationErrors
+            }
 
-                    val validationErrors = validateCategoryInput(categoryName)
+            else {
 
-                    if (validationErrors.isNotEmpty()) { // There are validation errors
-
-                        val validationTextView = view.addCategory_validationTextView
-                        validationTextView.text =
-                            "The following validation error occurred: " + validationErrors
+                val category = Category(categoryName)
+                categoryRepository.createCategory(currentUserId, category)
+                    .addOnSuccessListener {
+                        view.addCategory_progressBar.visibility = View.GONE
+                        val navController = findNavController()
+                        navController.navigate(R.id.nav_home)
                     }
-                    else { //There are no validation errors!
 
-                        val category = Category(categoryName)
-                        categoryRepository.createCategory(currentUserId, category)
-                            .addOnSuccessListener {
-
-                                view.addCategory_progressBar.visibility = View.GONE
-                                val navController = findNavController()
-                                navController.navigate(R.id.nav_home)
-                            }
-
-                            .addOnFailureListener {
-                                view.addCategory_progressBar.visibility = View.GONE
-                                Log.d("failureListener", "$it")
-                            }
+                    .addOnFailureListener {
+                        Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                        view.addCategory_progressBar.visibility = View.GONE
                     }
-                }
+            }
+        }
 
         return view
     }

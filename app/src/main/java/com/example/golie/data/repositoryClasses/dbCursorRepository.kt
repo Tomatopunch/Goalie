@@ -4,8 +4,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 open class dbCursorRepository {
 
-    //init{}
-
     val db = FirebaseFirestore.getInstance()
 
 }

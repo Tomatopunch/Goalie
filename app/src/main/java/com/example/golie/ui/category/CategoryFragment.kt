@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -20,10 +21,11 @@ import com.example.golie.R
 import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
 import com.example.golie.data.documentToCategory
-import com.example.golie.data.documentToFavoriteCateoryId
 import com.example.golie.data.documentsToGoals
 import com.example.golie.data.repositoryClasses.CategoryRepository
 import com.example.golie.data.repositoryClasses.GoalRepository
+import com.example.golie.data.repositoryClasses.UserRepository
+import com.example.golie.data.userDocumentToFavoriteCategoryId
 import kotlinx.android.synthetic.main.category_fragment.*
 import kotlinx.android.synthetic.main.category_fragment.view.*
 import com.google.firebase.auth.FirebaseAuth
@@ -42,6 +44,7 @@ class CategoryFragment : Fragment() {
     lateinit var goalId: String
     private val goalRepository = GoalRepository()
     private val categoryRepository = CategoryRepository()
+    private val userRepository = UserRepository()
     lateinit var listView: ListView
 
     @SuppressLint("ResourceAsColor")
@@ -53,8 +56,6 @@ class CategoryFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.category_fragment, container, false)
         val context = requireContext()
-
-
 
 
         //////////// Check if user is logged in or not, otherwise set user id to guest ////////////
@@ -74,7 +75,6 @@ class CategoryFragment : Fragment() {
         if(arguments != null){
 
             // Setting categoryId:
-
             categoryId = requireArguments().getString("categoryId")!!
             displayCategory(categoryId, view)
 
@@ -84,32 +84,42 @@ class CategoryFragment : Fragment() {
         }
 
         // WE CAME HERE FROM FAVORITE
-        else{
-            categoryRepository.getFavoriteCategoryId(userId)
+        else {
+            userRepository.getUserById(userId)
+                .addOnSuccessListener { document -> //Could get user document
 
-                .addOnSuccessListener { document ->
-                    if(document.exists()){
-                        categoryId = documentToFavoriteCateoryId(document)
-                        displayCategory(categoryId, view) // Bort med savedInstanceState
-                    }
+                    categoryId = userDocumentToFavoriteCategoryId(document)
+                    categoryRepository.getCategoryById(userId, categoryId)
 
-                    else{
-                        val titleTextView = view.category_titleTextView
-                        titleTextView.text = "You have no favorite category!"
-                        val deleteButton = view.category_deleteCategoryButton
-                        deleteButton.isVisible = false
-                    }
+                        .addOnSuccessListener { category ->
+
+                            if (category.exists()) { // The id corresponds to an existing category, can go ahead an display it
+                                displayCategory(categoryId, view)
+                            }
+
+                            else { // The id was found but there is no category with that id any more!
+                                val titleTextView = view.category_titleTextView
+                                titleTextView.text = "You have deleted your favorite category :("
+                                val deleteButton = view.category_deleteCategoryButton
+                                deleteButton.isVisible = false
+                            }
+                        }
+
+                        .addOnFailureListener{ //Could not get category due to db error
+                            Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                            view.category_progressBar.visibility = View.GONE
+                        }
+
                     view.category_progressBar.visibility = View.GONE
                 }
 
-                .addOnFailureListener{
-                    Log.d("FailureListener", "$it")
+                .addOnFailureListener{ //Could not get user document due to db error
+                    Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                     view.category_progressBar.visibility = View.GONE
                 }
         }
 
-    return view
-
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -197,9 +207,13 @@ class CategoryFragment : Fragment() {
 
                         val category = documentToCategory(document)
                         titleTextView.text = category.name
+                        view.category_progressBar.visibility = View.GONE
                     }
 
-                //TODO: addOnFailure??
+                    .addOnFailureListener {
+                        Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                        view.category_progressBar.visibility = View.GONE
+                    }
 
 
                 //Accessing delete category button
@@ -218,18 +232,16 @@ class CategoryFragment : Fragment() {
                         categoryRepository.deleteCategory(
                             userId,
                             currentCategoryId,
-                            (activity as MainActivity)
+                            findNavController()
                         )
-                            // TODO: Need addOnSuccess for progressionbar. Find a solution :)
 
-                        val navController = findNavController()
-                        navController.navigate(R.id.nav_home)
+                        // TODO: Need addOnSuccess for progressionbar. Find a solution :) Cannot give you that Kim, sorry :(
                     }
                 }
                 view.category_progressBar.visibility = View.GONE
             }
             .addOnFailureListener{
-                Log.d("FailureListener", "$it")
+                Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                 view.category_progressBar.visibility = View.GONE
 
             }
@@ -259,8 +271,8 @@ class CategoryFragment : Fragment() {
                 view.category_progressBar.visibility = View.GONE
             }
             .addOnFailureListener {
+                Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                 view.category_progressBar.visibility = View.GONE
-                Log.d("updateColorId", "Error updating colorId in categoryFragment")
             }
     }
 

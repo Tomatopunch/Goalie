@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
@@ -49,7 +50,6 @@ class HomeFragment : Fragment() {
         val userId: String
         val context = requireContext()
 
-        val goalRepository = GoalRepository()
 
         // Check if user is logged in or not, otherwise set user id to guest AND setting the title
 
@@ -57,7 +57,9 @@ class HomeFragment : Fragment() {
         if (FirebaseAuth.getInstance().currentUser == null) {
             userId = "Guest"
             userNameTextView.text = "Guest"
-        } else {
+        }
+
+        else {
             userId = FirebaseAuth.getInstance().currentUser!!.uid
             userNameTextView.text = FirebaseAuth.getInstance().currentUser!!.displayName
             view.home_guestText.isVisible = false
@@ -78,8 +80,8 @@ class HomeFragment : Fragment() {
                 allCategories = documentsToCategories(documents)
 
                 adapter = ArrayAdapter(
-                    context, // Casting our fragment into a context?
-                    android.R.layout.simple_list_item_1, // Has to do with presentation (we want to display it as a simple_list_item_1)
+                    context,
+                    android.R.layout.simple_list_item_1,
                     android.R.id.text1,
                     allCategories
                 )
@@ -89,11 +91,7 @@ class HomeFragment : Fragment() {
                 listView.setOnItemClickListener { parent, view, position, id ->
 
                     val clickedCategory = listView.adapter.getItem(position) as Category
-
                     val categoryId = clickedCategory.id
-                    Log.d("id of clicked category", categoryId)
-
-
                     val navController = findNavController()
                     val args = Bundle().apply { putString("categoryId", categoryId) }
                     navController.navigate(R.id.nav_category, args)
@@ -103,7 +101,7 @@ class HomeFragment : Fragment() {
 
             }
             .addOnFailureListener { exception ->
-                Log.d("Error getting categories: ", exception.toString())
+                Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                 view.home_progressBar.visibility = View.GONE
 
             }
@@ -119,7 +117,9 @@ class HomeFragment : Fragment() {
 
         if (userId == "Guest") {
             addCategoryButton.isVisible = false
-        } else {
+        }
+
+        else {
 
             //Enabling clicking on plus button to add category
 
@@ -132,71 +132,66 @@ class HomeFragment : Fragment() {
         }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            //Enabling clicking on settings button
+        //Enabling clicking on settings button
 
-            val settingsButton = view.home_settingsButton
+        val settingsButton = view.home_settingsButton
 
-            Log.d("TESTING", "$settingsButton")
+        if (userId == "Guest") {//not logged in
+            settingsButton.setOnClickListener {
 
-            if (userId == "Guest") {//not logged in
-                settingsButton.setOnClickListener {
-                    Log.d("TESTING", "kommer in i settings")
-                    lateinit var navController: NavController
+                lateinit var navController: NavController
+                AlertDialog.Builder(context)
+                    .setTitle("Settings")
+                    .setMessage("What do you want to do?")
+                    .setPositiveButton(
+                        "View info page"
+                    ){ dialog, whichButton ->
+                        navController = findNavController()
+                        navController.navigate(R.id.nav_info)
 
-                    AlertDialog.Builder(context)
-                        .setTitle("Settings")
-                        .setMessage("What do you want to do?")
-                        .setPositiveButton(
-                            "View info page"
-                        ) { dialog, whichButton ->
+                    }
+                    .setNegativeButton(
+                        "Login"
+                    ){ dialog, whichButton ->
 
-                            navController = findNavController()
-                            navController.navigate(R.id.nav_info)
+                        (activity as MainActivity).login()
 
-                        }.setNegativeButton(
-                            "Login"
-                        ) { dialog, whichButton ->
-
-                            (activity as MainActivity).login()
-
-                        }.show()
-                }
+                    }.show()
             }
+        }
 
-            //logged in
-            else {
-                settingsButton.setOnClickListener {
-                    lateinit var navController: NavController
+        //logged in
+        else {
+            settingsButton.setOnClickListener {
+                lateinit var navController: NavController
 
-                    AlertDialog.Builder(context)
-                        .setTitle("Settings")
-                        .setMessage("What do you want to do?")
-                        .setPositiveButton(
-                            "Select favorite category"
-                        ) { dialog, whichButton ->
+                AlertDialog.Builder(context)
+                    .setTitle("Settings")
+                    .setMessage("What do you want to do?")
+                    .setPositiveButton(
+                        "Select favorite category"
+                    ) { dialog, whichButton ->
+                        navController = findNavController()
+                        navController.navigate(R.id.nav_chooseFavCategory)
 
-                            navController = findNavController()
-                            navController.navigate(R.id.nav_chooseFavCategory)
+                    }.setNegativeButton(
+                        "View info page"
+                    ) { dialog, whichButton ->
 
-                        }.setNegativeButton(
-                            "View info page"
-                        ) { dialog, whichButton ->
+                        navController = findNavController()
+                        navController.navigate(R.id.nav_info)
 
-                            navController = findNavController()
-                            navController.navigate(R.id.nav_info)
-
-                        }.setNeutralButton(
-                            "Logout"
-                        ) { dialog, whichButton ->
-
-                            signOut()
-
-                        }.show()
-                }
+                    }.setNeutralButton(
+                        "Logout"
+                    ) { dialog, whichButton ->
+                        signOut()
+                    }.show()
             }
-        return view
+        }
+    return view
     }
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -204,12 +199,8 @@ class HomeFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private fun signOut() { //ska denna vara här?
 
@@ -223,6 +214,7 @@ class HomeFragment : Fragment() {
 
         // [END auth_fui_signout]
 
-
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

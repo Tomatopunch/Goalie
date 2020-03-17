@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.example.golie.R
-import com.example.golie.data.documentToPoints
-import com.example.golie.data.repositoryClasses.PointsRepository
+import com.example.golie.data.repositoryClasses.UserRepository
+import com.example.golie.data.userDocumentToPoints
 import kotlinx.android.synthetic.main.shop_buydialog_fragment.view.*
 
 class ShopBuyDialogFragment : DialogFragment() {
@@ -27,7 +27,7 @@ class ShopBuyDialogFragment : DialogFragment() {
         val view = inflater.inflate(R.layout.shop_buydialog_fragment, container, false)
         val noButton = view.noButton
         val yesButton = view.yesButton
-        val pointsRepository = PointsRepository()
+        val userRepository = UserRepository()
         val currentUserId = "josefin"
 
         if (savedInstanceState != null) {
@@ -38,7 +38,7 @@ class ShopBuyDialogFragment : DialogFragment() {
         }
 
         //get points from user who is currently logged in
-        getPoints(currentUserId, pointsRepository)
+        getPoints(currentUserId, userRepository)
 
         // call next fragment dialog
         yesButton.setOnClickListener {
@@ -77,12 +77,12 @@ class ShopBuyDialogFragment : DialogFragment() {
     }
 
     // Function that retrieves the points from the user currently logged in.
-    private fun getPoints(currentUserId: String, pointsRepository: PointsRepository) {
-        pointsRepository.getPoints(currentUserId)
+    private fun getPoints(currentUserId: String, userRepository: UserRepository) {
+        userRepository.getUserById(currentUserId)
 
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    accountWallet  = documentToPoints(document)
+                    accountWallet  = userDocumentToPoints(document)
                 }
                 else {
                     Log.d(ContentValues.TAG, "Could not find points!")

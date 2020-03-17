@@ -19,10 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.golie.R
 import com.example.golie.data.dataClasses.Reward
-import com.example.golie.data.documentToPoints
 import com.example.golie.data.documentsToRewards
 import com.example.golie.data.repositoryClasses.PointsRepository
 import com.example.golie.data.repositoryClasses.RewardRepository
+import com.example.golie.data.repositoryClasses.UserRepository
+import com.example.golie.data.userDocumentToPoints
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.shop_fragment.*
 import kotlinx.android.synthetic.main.shop_fragment.view.*
@@ -32,7 +33,7 @@ class ShopFragment : Fragment() {
     private var swipeBackground: ColorDrawable = ColorDrawable(Color.parseColor("#FF0000"))
     private lateinit var deleteIcon: Drawable
     private var rewards = mutableListOf<Reward>()
-    private val pointsRepository = PointsRepository()
+    private val userRepository = UserRepository()
     private val rewardRepository = RewardRepository()
 
     val userId = FirebaseAuth.getInstance().currentUser!!.uid
@@ -140,11 +141,11 @@ class ShopFragment : Fragment() {
 
     //Function that retrieves the amount of points from the user currently logged in
     private fun getPoints(points: TextView) {
-        pointsRepository.getPoints(userId)
+        userRepository.getUserById(userId)
             .addOnSuccessListener { document ->
 
                 if (document != null) {
-                    points.text = documentToPoints(document).toString()
+                    points.text = userDocumentToPoints(document).toString()
                 }
                 else {
                     Log.d(ContentValues.TAG, "Could not find points!")

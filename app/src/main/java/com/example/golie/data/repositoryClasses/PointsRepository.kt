@@ -10,18 +10,11 @@ import com.google.firebase.firestore.DocumentSnapshot
 
 class PointsRepository : dbCursorRepository(){
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // Funkar
-   fun getPoints(currentUserId: String) : Task<DocumentSnapshot> {
-
-       return db.collection("users").document(currentUserId).get()
-
-   }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // Funkar
+
     fun setPoints(currentUserId: String, points: Int) : Task<Void>{
 
         val pointsDocumentData = hashMapOf(
@@ -32,7 +25,6 @@ class PointsRepository : dbCursorRepository(){
         return db.collection("users").document(currentUserId).set(pointsDocumentData)
 
     }
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

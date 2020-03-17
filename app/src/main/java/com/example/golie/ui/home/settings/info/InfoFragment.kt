@@ -41,7 +41,6 @@ class InfoFragment : Fragment() {
         super.onOptionsItemSelected(item)
         val navController = findNavController()
         navController.navigate(R.id.nav_home)
-
         return true
     }
 

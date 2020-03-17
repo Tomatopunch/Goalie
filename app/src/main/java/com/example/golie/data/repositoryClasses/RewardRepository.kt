@@ -13,7 +13,7 @@ class RewardRepository : dbCursorRepository(){
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //Funkar
+
     fun createReward(currentUserId: String, newReward: Reward) : Task<DocumentReference> {
 
         return  db.collection("users/$currentUserId/rewards").add(newReward)
@@ -42,7 +42,7 @@ class RewardRepository : dbCursorRepository(){
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //Funkar
+
     fun updateReward(currentUserId: String, rewardId: String, updatedReward: Reward) : Task<Void>{
 
         val updatedRewardMap = mapOf("title" to updatedReward.title, "price" to updatedReward.price)
@@ -53,7 +53,7 @@ class RewardRepository : dbCursorRepository(){
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //Funkar
+
     fun deleteReward(currentUserId: String, rewardId: String) : Task<Void>{
 
         return db.collection("users/$currentUserId/rewards").document(rewardId).delete()

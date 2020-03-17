@@ -70,8 +70,8 @@ class MainActivity : AppCompatActivity() {
                                 .addOnSuccessListener {
                                     this.recreate()
                                 }*/
-                            userRepository.createUserWithData(userId)
-                            this.recreate()
+                            userRepository.createUserWithData(userId, this)
+                            //this.recreate()
 
                         }
 
