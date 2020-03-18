@@ -98,9 +98,9 @@ class CategoryRepository : dbCursorRepository() {
 
     fun setFavoriteCategoryId(currentUserId: String, idOfNewFavorite: String): Task<Void> {
 
-        val idOfFavMap = hashMapOf("favoriteCategoryId" to idOfNewFavorite)
+        val idOfFavMap = mapOf("favoriteCategoryId" to idOfNewFavorite)
 
-        return db.collection("users").document(currentUserId).set(idOfFavMap)
+        return db.collection("users").document(currentUserId).update(idOfFavMap)
 
     }
 

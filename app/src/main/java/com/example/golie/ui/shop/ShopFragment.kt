@@ -61,8 +61,16 @@ class ShopFragment : Fragment() {
                 else {
                     Log.d(ContentValues.TAG, "Could not find rewards!")
                 }
+                //TODO: OBS DENNIS! Progressbar raden måste ligga längst ner. Lägg allt under denna raden sen.
+                // Return view ska fortfarande va utanför success/failure listeners
+
+
+
+                view.shop_progressBar.visibility = View.GONE
+
             }
             .addOnFailureListener { exception ->
+                view.shop_progressBar.visibility = View.GONE
                 Log.d(ContentValues.TAG, "An exception was thrown when fetching rewards! ", exception)
             }
 
@@ -134,6 +142,7 @@ class ShopFragment : Fragment() {
     // when we get back here fetch the points again to update the view
     override fun onResume() {
         super.onResume()
+        requireView().shop_progressBar.visibility = View.VISIBLE
 
         val points = shop_balance
         getPoints(points)
@@ -141,6 +150,7 @@ class ShopFragment : Fragment() {
 
     //Function that retrieves the amount of points from the user currently logged in
     private fun getPoints(points: TextView) {
+        val view = requireView()
         userRepository.getUserById(userId)
             .addOnSuccessListener { document ->
 
@@ -150,8 +160,10 @@ class ShopFragment : Fragment() {
                 else {
                     Log.d(ContentValues.TAG, "Could not find points!")
                 }
+                view.shop_progressBar.visibility = View.GONE // Happens for onResume
             }
             .addOnFailureListener { exception ->
+                view.shop_progressBar.visibility = View.GONE // Happens for onResume
                 Log.d(ContentValues.TAG, "An exception was thrown when fetching points! ", exception)
             }
     }

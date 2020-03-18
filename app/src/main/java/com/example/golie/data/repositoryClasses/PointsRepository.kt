@@ -17,12 +17,11 @@ class PointsRepository : dbCursorRepository(){
 
     fun setPoints(currentUserId: String, points: Int) : Task<Void>{
 
-        val pointsDocumentData = hashMapOf(
+        val pointsDocumentData = mapOf(
             "points" to points
         )
 
-
-        return db.collection("users").document(currentUserId).set(pointsDocumentData)
+        return db.collection("users").document(currentUserId).update(pointsDocumentData)
 
     }
 

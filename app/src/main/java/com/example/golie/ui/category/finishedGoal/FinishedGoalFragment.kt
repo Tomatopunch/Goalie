@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
@@ -61,10 +62,14 @@ class FinishedGoalFragment : Fragment() {
                         view.finishedGoalTextView.text = "Congratulations!\n\nYou earned ${goal.points} points!"
                     }
                     .addOnFailureListener{
+                        Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                         view.finished_goal_progressBar.visibility = View.GONE
-                        //TODO: print that something went wrong adding points
                     }
 
+            }
+            .addOnFailureListener{
+                Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                view.finished_goal_progressBar.visibility = View.GONE
             }
 
         goToHomeButton.setOnClickListener{
@@ -93,13 +98,6 @@ class FinishedGoalFragment : Fragment() {
         navController.navigate(R.id.nav_category)
 
         return true
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        //adapter.notifyDataSetChanged()
-
     }
 }
 

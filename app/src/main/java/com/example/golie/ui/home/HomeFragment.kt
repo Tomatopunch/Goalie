@@ -101,7 +101,7 @@ class HomeFragment : Fragment() {
 
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                 view.home_progressBar.visibility = View.GONE
 
             }
@@ -153,7 +153,6 @@ class HomeFragment : Fragment() {
                     .setNegativeButton(
                         "Login"
                     ){ dialog, whichButton ->
-
                         (activity as MainActivity).login()
 
                     }.show()
@@ -188,7 +187,8 @@ class HomeFragment : Fragment() {
                     }.show()
             }
         }
-    return view
+
+        return view
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////

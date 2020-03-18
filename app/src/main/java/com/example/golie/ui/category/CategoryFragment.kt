@@ -79,8 +79,8 @@ class CategoryFragment : Fragment() {
             displayCategory(categoryId, view)
 
             // Making sure that the favorite button in the navbar is not checked!
-            (activity as MainActivity).navView.menu.getItem(1).setChecked(false)
-            (activity as MainActivity).navView.menu.getItem(0).setChecked(true)
+            (activity as MainActivity).navView.menu.getItem(0).setChecked(false)
+            (activity as MainActivity).navView.menu.getItem(1).setChecked(true)
         }
 
         // WE CAME HERE FROM FAVORITE

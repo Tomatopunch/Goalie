@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.example.golie.R
@@ -82,15 +83,13 @@ class GoalDialogFragment : DialogFragment {
                 dismiss()
 
             }.addOnFailureListener{
+                Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                 view.goaldialog_progressBar.visibility = View.GONE
-                Log.d("deleteError", "Error deleting goal")
             }
         }
 
         finishedButton.setOnClickListener{
             view.goaldialog_progressBar.visibility = View.VISIBLE
-            //TODO: Take the user to a new dialogFragment with an animation.
-            //categoryFragment.setBackgroundColor(R.color.red)
             userRepository.getUserById(userId)
                 .addOnSuccessListener { document ->
                     val existingPoints = userDocumentToPoints(document)
@@ -109,11 +108,13 @@ class GoalDialogFragment : DialogFragment {
                             view.goaldialog_progressBar.visibility = View.GONE
                         }
                         .addOnFailureListener{
+                            Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                             view.goaldialog_progressBar.visibility = View.GONE
                             // print that something went wrong adding points
                         }
                 }
                 .addOnFailureListener{
+                    Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                     view.goaldialog_progressBar.visibility = View.GONE
                     // print that something went wrong adding points
                 }
@@ -149,12 +150,9 @@ class GoalDialogFragment : DialogFragment {
                 view.goaldialog_progressBar.visibility = View.GONE
                 dismiss()
             }.addOnFailureListener{
-                Log.d("failureListener", "error")
+                Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                 view.goaldialog_progressBar.visibility = View.GONE
             }
-            //TODO: Fetch data in current goalId
-            // pass all of the data to add_goal_fragment
-            // add all of that data to the inputFields in add_goal_fragment
         }
         return view
     }

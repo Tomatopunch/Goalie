@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -15,10 +16,6 @@ import com.example.golie.data.repositoryClasses.GoalRepository
 import kotlinx.android.synthetic.main.add_goal_fragment.view.*
 
 class AddGoalFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = AddGoalFragment()
-    }
 
     private lateinit var viewModel: AddGoalViewModel
 
@@ -56,23 +53,10 @@ class AddGoalFragment : Fragment() {
 
         timeSpan.setOnClickListener{
 
-
             val dialogFragment = DatePickerFragment(it)
             dialogFragment.show(requireActivity().supportFragmentManager, "FragmentManager")
-            /*var args = Bundle().apply {
-                putString("title", "$title")
-                putString("reOccurring", "$reOccurring")
-                putString("points", "$points")
-                putString("invalidInput", "$invalidInputTextView")
-            }
-            //val navController = findNavController()
-
-            navController.navigate(R.id.navigation_addGoal, args)
-             */
 
         }
-
-        Log.d("test", "hellooooo")
 
         createButton.setOnClickListener{
             view.addGoal_progressBar.visibility = View.VISIBLE
@@ -83,9 +67,6 @@ class AddGoalFragment : Fragment() {
 
             val pointsText = view.addGoal_pointsEditText.editableText.toString()
             var invalidInputTextView = view.addGoal_invalidInputText
-
-            Log.d("checkSpan", timeSpanText)
-
 
 
             val invalidInput = validateInput(title, pointsText)
@@ -100,8 +81,8 @@ class AddGoalFragment : Fragment() {
                             view.addGoal_progressBar.visibility = View.GONE
                         }
                         .addOnFailureListener{
+                            Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                             view.addGoal_progressBar.visibility = View.GONE
-                            Log.d("failureListener", "$it")
                         }
                 }
                 else {
@@ -110,8 +91,8 @@ class AddGoalFragment : Fragment() {
                             view.addGoal_progressBar.visibility = View.GONE
                         }
                         .addOnFailureListener{
+                            Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                             view.addGoal_progressBar.visibility = View.GONE
-                            Log.d("failureListener", "$it")
                         }
                 }
 
