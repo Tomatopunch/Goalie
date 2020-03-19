@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.example.golie.R
 import com.example.golie.data.documentToGoal
+import com.example.golie.data.documentsToGoals
 import com.example.golie.data.repositoryClasses.GoalRepository
 import com.example.golie.data.repositoryClasses.PointsRepository
 import com.example.golie.data.repositoryClasses.UserRepository
@@ -77,15 +78,27 @@ class GoalDialogFragment : DialogFragment {
 
         deleteButton.setOnClickListener{
             view.goaldialog_progressBar.visibility = View.VISIBLE
-            goalRepository.deleteGoal(userId, categoryId, goalId).addOnSuccessListener {
-                categoryFragment.deleteGoal(position)
-                view.goaldialog_progressBar.visibility = View.GONE
-                dismiss()
+            goalRepository.deleteGoal(userId, categoryId, goalId)
+                .addOnSuccessListener {
+                    categoryFragment.deleteGoal(position)
+                    goalRepository.getAllGoalsWithinCategory(userId, categoryId)
+                        .addOnSuccessListener {document ->
+                            // Need to update the background color for the new goal in the position we just deleted.
+                            val allGoals = documentsToGoals(document)
+                            categoryFragment.setBackgroundColor(position, allGoals[position].colorId, false)
+                            view.goaldialog_progressBar.visibility = View.GONE
+                            dismiss()
+                        }
+                        .addOnFailureListener{
+                            Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                            view.goaldialog_progressBar.visibility = View.GONE
+                        }
 
-            }.addOnFailureListener{
-                Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
-                view.goaldialog_progressBar.visibility = View.GONE
-            }
+                }
+                .addOnFailureListener{
+                    Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                    view.goaldialog_progressBar.visibility = View.GONE
+                }
         }
 
         finishedButton.setOnClickListener{

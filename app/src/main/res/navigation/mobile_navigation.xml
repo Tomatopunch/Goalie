@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/nav_addGoal"
         android:name="com.example.golie.ui.category.addGoal.AddGoalFragment"
-        android:label="add_goal_fragment"
+        android:label="Add Goal"
         tools:layout="@layout/add_goal_fragment" />
     <fragment
         android:id="@+id/nav_shop"
@@ -28,32 +28,32 @@
     <fragment
         android:id="@+id/nav_createReward"
         android:name="com.example.golie.ui.shop.reward.CreateReward"
-        android:label="create_reward_fragment"
+        android:label="@string/create_reward"
         tools:layout="@layout/create_reward_fragment" />
     <fragment
         android:id="@+id/nav_finishedGoal"
         android:name="com.example.golie.ui.category.finishedGoal.FinishedGoalFragment"
-        android:label="finished_goal_fragment"
+        android:label="@string/dialog_finishedGoal"
         tools:layout="@layout/finished_goal_fragment" />
     <fragment
         android:id="@+id/nav_addCategory"
         android:name="com.example.golie.ui.home.addCategory.AddCategoryFragment"
-        android:label="add_category_fragment"
+        android:label="Add Category"
         tools:layout="@layout/add_category_fragment" />
     <fragment
         android:id="@+id/nav_settings"
         android:name="com.example.golie.ui.home.settings.SettingsFragment"
-        android:label="settings_fragment"
+        android:label="Settings Fragment"
         tools:layout="@layout/settings_fragment" />
     <fragment
         android:id="@+id/nav_info"
         android:name="com.example.golie.ui.home.settings.info.InfoFragment"
-        android:label="info_fragment"
+        android:label="@android:string/status_bar_notification_info_overflow"
         tools:layout="@layout/info_fragment" />
     <fragment
         android:id="@+id/nav_chooseFavCategory"
         android:name="com.example.golie.ui.home.settings.chooseFavoriteFragment.ChooseFavoriteFragment"
-        android:label="choose_fav_category_fragment"
+        android:label="Choose Fav Category"
         tools:layout="@layout/choose_favorite_fragment" />
     <fragment
         android:id="@+id/nav_favorite"

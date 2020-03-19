@@ -33,7 +33,6 @@ class UserRepository : dbCursorRepository(){
         val categoryRepository = CategoryRepository()
         val goalRepository = GoalRepository()
         val rewardRepository = RewardRepository()
-        val pointsRepository = PointsRepository()
 
         val initialDataMap = hashMapOf("points" to 0, "favoriteCategoryId" to "")
         db.collection("users").document(newUserId).set(initialDataMap)

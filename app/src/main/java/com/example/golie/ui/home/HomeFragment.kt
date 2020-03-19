@@ -103,7 +103,6 @@ class HomeFragment : Fragment() {
             .addOnFailureListener { exception ->
                 Toast.makeText(context,getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                 view.home_progressBar.visibility = View.GONE
-
             }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////

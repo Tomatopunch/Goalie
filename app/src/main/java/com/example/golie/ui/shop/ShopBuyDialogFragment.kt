@@ -6,10 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.golie.R
 import com.example.golie.data.repositoryClasses.UserRepository
 import com.example.golie.data.userDocumentToPoints
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.shop_buydialog_fragment.view.*
 
 class ShopBuyDialogFragment : DialogFragment() {
@@ -28,7 +30,7 @@ class ShopBuyDialogFragment : DialogFragment() {
         val noButton = view.noButton
         val yesButton = view.yesButton
         val userRepository = UserRepository()
-        val currentUserId = "josefin"
+        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
         if (savedInstanceState != null) {
             shopPoints = savedInstanceState.getInt("shopPoints")
@@ -38,7 +40,7 @@ class ShopBuyDialogFragment : DialogFragment() {
         }
 
         //get points from user who is currently logged in
-        getPoints(currentUserId, userRepository)
+        getPoints(currentUserId, userRepository, view)
 
         // call next fragment dialog
         yesButton.setOnClickListener {
@@ -77,7 +79,7 @@ class ShopBuyDialogFragment : DialogFragment() {
     }
 
     // Function that retrieves the points from the user currently logged in.
-    private fun getPoints(currentUserId: String, userRepository: UserRepository) {
+    private fun getPoints(currentUserId: String, userRepository: UserRepository, view: View) {
         userRepository.getUserById(currentUserId)
 
             .addOnSuccessListener { document ->
@@ -87,9 +89,12 @@ class ShopBuyDialogFragment : DialogFragment() {
                 else {
                     Log.d(ContentValues.TAG, "Could not find points!")
                 }
+                view.shop_buyDialog_progressBar.visibility = View.GONE
             }
             .addOnFailureListener { exception ->
-                Log.d(ContentValues.TAG, "An exception was thrown when fetching points! ", exception)
+                Toast.makeText(context,getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                view.shop_buyDialog_progressBar.visibility = View.GONE
+
             }
 
     }

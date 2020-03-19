@@ -12,7 +12,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.golie.R
 import com.example.golie.data.dataClasses.Reward
 import com.example.golie.data.documentsToRewards
-import com.example.golie.data.repositoryClasses.PointsRepository
 import com.example.golie.data.repositoryClasses.RewardRepository
 import com.example.golie.data.repositoryClasses.UserRepository
 import com.example.golie.data.userDocumentToPoints
@@ -35,8 +36,9 @@ class ShopFragment : Fragment() {
     private var rewards = mutableListOf<Reward>()
     private val userRepository = UserRepository()
     private val rewardRepository = RewardRepository()
+    private lateinit var userId: String
 
-    val userId = FirebaseAuth.getInstance().currentUser!!.uid
+   // val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +47,13 @@ class ShopFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.shop_fragment, container, false)
         val points = view.shop_balance
+
+        userId = if (FirebaseAuth.getInstance().currentUser == null) {
+            "Guest"
+        }
+        else {
+            FirebaseAuth.getInstance().currentUser!!.uid
+        }
 
         deleteIcon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_delete)!!
 
@@ -61,69 +70,66 @@ class ShopFragment : Fragment() {
                 else {
                     Log.d(ContentValues.TAG, "Could not find rewards!")
                 }
-                //TODO: OBS DENNIS! Progressbar raden måste ligga längst ner. Lägg allt under denna raden sen.
-                // Return view ska fortfarande va utanför success/failure listeners
 
+                if (userId != "Guest") {
 
+                    val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
-                view.shop_progressBar.visibility = View.GONE
+                        // This is only used for moving, but we don't use that.
+                        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean { return false }
 
+                        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, position: Int) {
+                            (view.shop_view.adapter as ShopAdapter).removeItem(viewHolder as ShopAdapter.CustomViewHolder, view)
+                        }
+
+                        override fun onChildDraw(
+                            c: Canvas,
+                            recyclerView: RecyclerView,
+                            viewHolder: RecyclerView.ViewHolder,
+                            dX: Float,
+                            dY: Float,
+                            actionState: Int,
+                            isCurrentlyActive: Boolean
+                        ) {
+                            val itemView = viewHolder.itemView
+
+                            // calculate the distance between the top of the icon and the bottom of the recyclerview.
+                            // so that we can get the icon to appear in the center of each item vertically.
+                            val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / 2
+
+                            if (dX > 0) {
+                                swipeBackground.setBounds(itemView.left, itemView.top, dX.toInt(), itemView.bottom)
+
+                                deleteIcon.setBounds(itemView.left + iconMargin, itemView.top + iconMargin, itemView.left + iconMargin + deleteIcon.intrinsicWidth,
+                                    itemView.bottom - iconMargin)
+                            }
+                            else {
+                                swipeBackground.setBounds(itemView.right + dX.toInt(), itemView.top, itemView.right, itemView.bottom)
+
+                                deleteIcon.setBounds(itemView.right - iconMargin - deleteIcon.intrinsicWidth, itemView.top + iconMargin, itemView.right - iconMargin,
+                                    itemView.bottom - iconMargin)
+                            }
+
+                            //c is our canvas that we want to draw.
+                            swipeBackground.draw(c)
+                            deleteIcon.draw(c)
+
+                            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                        }
+                    }
+
+                    val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+                    itemTouchHelper.attachToRecyclerView(view.shop_view)
+
+                }
+
+                // get points from the current user
+                getPoints(userId, points)
             }
             .addOnFailureListener { exception ->
+                Toast.makeText(context,getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                 view.shop_progressBar.visibility = View.GONE
-                Log.d(ContentValues.TAG, "An exception was thrown when fetching rewards! ", exception)
             }
-
-        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-
-            // This is only used for moving, but we don't use that.
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean { return false }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, position: Int) {
-                (view.shop_view.adapter as ShopAdapter).removeItem(viewHolder as ShopAdapter.CustomViewHolder)
-            }
-
-            override fun onChildDraw(
-                c: Canvas,
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                dX: Float,
-                dY: Float,
-                actionState: Int,
-                isCurrentlyActive: Boolean
-            ) {
-                val itemView = viewHolder.itemView
-
-                // calculate the distance between the top of the icon and the bottom of the recyclerview.
-                // so that we can get the icon to appear in the center of each item vertically.
-                val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / 2
-
-                if (dX > 0) {
-                    swipeBackground.setBounds(itemView.left, itemView.top, dX.toInt(), itemView.bottom)
-
-                    deleteIcon.setBounds(itemView.left + iconMargin, itemView.top + iconMargin, itemView.left + iconMargin + deleteIcon.intrinsicWidth,
-                        itemView.bottom - iconMargin)
-                }
-                else {
-                    swipeBackground.setBounds(itemView.right + dX.toInt(), itemView.top, itemView.right, itemView.bottom)
-
-                    deleteIcon.setBounds(itemView.right - iconMargin - deleteIcon.intrinsicWidth, itemView.top + iconMargin, itemView.right - iconMargin,
-                        itemView.bottom - iconMargin)
-                }
-
-                //c is our canvas that we want to draw.
-                swipeBackground.draw(c)
-                deleteIcon.draw(c)
-
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-            }
-        }
-
-        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
-        itemTouchHelper.attachToRecyclerView(view.shop_view)
-
-        // get points from the current user
-        getPoints(points)
 
         return view
     }
@@ -133,9 +139,15 @@ class ShopFragment : Fragment() {
 
         val buttonCreateReward = shop_floatingActionButton
 
-        buttonCreateReward.setOnClickListener {
-            val navController = findNavController()
-            navController.navigate(R.id.nav_createReward)
+        if (userId == "Guest") {
+            buttonCreateReward.isVisible = false
+        }
+
+        else {
+            buttonCreateReward.setOnClickListener {
+                val navController = findNavController()
+                navController.navigate(R.id.nav_createReward)
+            }
         }
     }
 
@@ -145,26 +157,26 @@ class ShopFragment : Fragment() {
         requireView().shop_progressBar.visibility = View.VISIBLE
 
         val points = shop_balance
-        getPoints(points)
+        getPoints(userId, points)
     }
 
     //Function that retrieves the amount of points from the user currently logged in
-    private fun getPoints(points: TextView) {
+    private fun getPoints(userId: String, points: TextView) {
         val view = requireView()
         userRepository.getUserById(userId)
             .addOnSuccessListener { document ->
 
-                if (document != null) {
+                if (document.exists()) {
                     points.text = userDocumentToPoints(document).toString()
                 }
                 else {
                     Log.d(ContentValues.TAG, "Could not find points!")
                 }
-                view.shop_progressBar.visibility = View.GONE // Happens for onResume
+                view.shop_progressBar.visibility = View.GONE
             }
             .addOnFailureListener { exception ->
-                view.shop_progressBar.visibility = View.GONE // Happens for onResume
-                Log.d(ContentValues.TAG, "An exception was thrown when fetching points! ", exception)
+                Toast.makeText(context,getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                view.shop_progressBar.visibility = View.GONE
             }
     }
 

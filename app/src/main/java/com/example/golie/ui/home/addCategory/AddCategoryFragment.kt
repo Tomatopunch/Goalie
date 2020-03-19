@@ -59,6 +59,8 @@ class AddCategoryFragment : Fragment() {
                 val validationTextView = view.addCategory_validationTextView
                 validationTextView.text =
                     "The following validation error occurred: " + validationErrors
+                view.addCategory_progressBar.visibility = View.GONE
+
             }
 
             else {

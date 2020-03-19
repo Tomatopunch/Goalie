@@ -34,4 +34,19 @@
         android:layout_marginTop="20dp"
         android:text="No     " />
 
+    <ProgressBar
+        android:id="@+id/shop_buyDialog_progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/noButton"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="188dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="188dp"
+        android:layout_marginBottom="44dp"
+        android:visibility="visible" />
+
 </RelativeLayout>

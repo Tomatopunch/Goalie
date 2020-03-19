@@ -1,20 +1,20 @@
 package com.example.golie.ui.shop
 
-import android.content.ContentValues
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.golie.R
 import com.example.golie.data.repositoryClasses.PointsRepository
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.shop_boughtdialog_fragment.view.*
 
 class ShopBoughtDialogFragment: DialogFragment() {
 
     private val pointsRepository = PointsRepository()
-    val currentUserId = "josefin"
+    val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
     var accountWallet = -1
     var shopPoints = -1
 
@@ -44,11 +44,9 @@ class ShopBoughtDialogFragment: DialogFragment() {
         newBalance.text = calcNewBalance.toString()
 
         // set the accounts points to the new one
-        setPoints(calcNewBalance)
+        setPoints(calcNewBalance, view)
 
         button.setOnClickListener {
-            // weird workaround that probably isn't correct? startActivityForResult() launches a new activity and returns the input from there. which in this case fires onResume()
-            // inside shopFragment - > which lets us update the view when we get back from our dialog fragment. I leave this here because it works.
             activity?.startActivityForResult(requireActivity().intent, 10);
             dismiss()
         }
@@ -56,12 +54,16 @@ class ShopBoughtDialogFragment: DialogFragment() {
     }
 
     // Function that sets the new balance for the user logged in.
-    private fun setPoints(calcNewBalance: Int) {
+    private fun setPoints(calcNewBalance: Int, view: View) {
+
         pointsRepository.setPoints(currentUserId, calcNewBalance)
-            .addOnSuccessListener {}
+            .addOnSuccessListener {
+                view.shopBoughtDialog_progressBar.visibility = View.GONE
+            }
 
             .addOnFailureListener { exception ->
-                Log.d(ContentValues.TAG, "An exception was thrown when fetching points! ", exception)
+                Toast.makeText(context, getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                view.shopBoughtDialog_progressBar.visibility = View.GONE
             }
     }
 

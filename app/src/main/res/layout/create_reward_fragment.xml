@@ -84,4 +84,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/addreward_validationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="175dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="175dp"
+        android:layout_marginBottom="200dp"
+        app:layout_constraintBottom_toTopOf="@+id/create_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create_editPoints" />
 </androidx.constraintlayout.widget.ConstraintLayout>

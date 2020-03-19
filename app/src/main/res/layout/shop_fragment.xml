@@ -31,32 +31,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
         android:id="@+id/shop_rewardText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="44dp"
         android:text="@string/shop_rewards"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/shop_title_hardcoded" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shop_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="49dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="225dp"
+        android:fitsSystemWindows="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shop_rewardText"
-        app:layout_constraintVertical_bias="0.035" />
+        app:layout_constraintTop_toBottomOf="@+id/shop_rewardText" />
 
     <TextView
         android:id="@+id/shop_balance"

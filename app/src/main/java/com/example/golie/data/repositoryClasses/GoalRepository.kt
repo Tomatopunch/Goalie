@@ -64,18 +64,4 @@ class GoalRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-    fun verifyGoalStatus(allGoals: MutableList<Goal>, categoryFragment: CategoryFragment){
-
-        for((index, goal) in allGoals.withIndex()){
-            if(goal.colorId == -1){ // colorId can be id for red or green, or -1 for a non-existent color.
-                continue
-            }
-            else{
-                categoryFragment.setBackgroundColor(index, goal.colorId, true) // index is one too high
-            }
-        }
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 }

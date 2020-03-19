@@ -1,22 +1,22 @@
 package com.example.golie.ui.shop
 
 
-import android.content.ContentValues
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.golie.R
 import com.example.golie.data.dataClasses.Reward
 import com.example.golie.data.repositoryClasses.RewardRepository
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.shop_fragment.view.*
 import kotlinx.android.synthetic.main.shop_item.view.*
-
 
 
 open class ShopAdapter(val context: Context, private var rewards: MutableList<Reward> ) : RecyclerView.Adapter<ShopAdapter.CustomViewHolder>() {
@@ -25,7 +25,7 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
     private var removedPosition: Int = 0
     private lateinit var removedItem: Reward
 
-    val currentUserId = "josefin"
+    val currentUserId =  FirebaseAuth.getInstance().currentUser?.uid
 
     //Creates your recyclerview by adding a layout xml to it
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
@@ -46,17 +46,20 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
         holder.shopTitle.text = shopTitle
         holder.shopPoints.text = shopPoints.toString()
 
-        holder.itemView.setOnClickListener {
+        if (currentUserId != null) {
 
-            val args = Bundle().apply {
-                putInt("shopPoints", shopPoints)
+            holder.itemView.setOnClickListener {
+
+                val args = Bundle().apply {
+                    putInt("shopPoints", shopPoints)
+                }
+
+                val fragmentManager = (context as FragmentActivity).supportFragmentManager
+                val shopDialogFragment = ShopBuyDialogFragment()
+
+                shopDialogFragment.arguments = args
+                shopDialogFragment.show(fragmentManager, "firstFragmentManager")
             }
-
-            val fragmentManager = (context as FragmentActivity).supportFragmentManager
-            val shopDialogFragment = ShopBuyDialogFragment()
-
-            shopDialogFragment.arguments = args
-            shopDialogFragment.show(fragmentManager, "firstFragmentManager")
         }
     }
 
@@ -71,41 +74,52 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
         val shopPoints: TextView = itemView.point_content
     }
 
-    fun removeItem(viewHolder: CustomViewHolder) {
+    fun removeItem(viewHolder: CustomViewHolder, view: View) {
 
-        //before you remove, cache the position it was previously on.
-        removedPosition = viewHolder.adapterPosition
-        removedItem = rewards[removedPosition]
-
-        rewardRepository.deleteReward(currentUserId, rewards[removedPosition].id)
-
-            .addOnSuccessListener {
-                rewards.removeAt(viewHolder.adapterPosition)
-                notifyItemRemoved(viewHolder.adapterPosition)
-
-            }.addOnFailureListener {
-                Log.d(ContentValues.TAG, "An exception was thrown when deleting a reward! ")
-            }
-
-        //Give the user information that an item was deleted.
-        //When pressing UNDO - > revert the changes
-        Snackbar.make(viewHolder.itemView, "$removedItem deleted.", Snackbar.LENGTH_LONG)
-            .setAction("UNDO") {
-
-                rewardRepository.createRewardWithSpecificId(
-                    currentUserId,
-                    removedItem,
-                    removedItem.id
+        if (currentUserId != null) {
+            //before you remove, cache the position it was previously on.
+            removedPosition = viewHolder.adapterPosition
+            removedItem = rewards[removedPosition]
+            view.shop_progressBar.visibility = View.VISIBLE
 
 
-                ).addOnSuccessListener {
-                        rewards.add(removedPosition, removedItem)
-                        notifyItemInserted(removedPosition)
+            rewardRepository.deleteReward(currentUserId, rewards[removedPosition].id)
 
+                .addOnSuccessListener {
+
+                    rewards.removeAt(viewHolder.adapterPosition)
+                    notifyItemRemoved(viewHolder.adapterPosition)
+
+                    //Give the user information that an item was deleted.
+                    //When pressing UNDO - > revert the changes
+                    Snackbar.make(viewHolder.itemView, "$removedItem deleted.", Snackbar.LENGTH_LONG)
+                        .setAction("UNDO") {
+                            view.shop_progressBar.visibility = View.VISIBLE
+                            rewardRepository.createRewardWithSpecificId(
+                                currentUserId,
+                                removedItem,
+                                removedItem.id
+
+
+                            ).addOnSuccessListener {
+                                rewards.add(removedPosition, removedItem)
+                                notifyItemInserted(removedPosition)
+                                view.shop_progressBar.visibility = View.GONE
+
+
+                            }.addOnFailureListener {
+                                Toast.makeText(context, context.getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                                view.shop_progressBar.visibility = View.GONE
+                            }
+                        }.show()
+                    view.shop_progressBar.visibility = View.GONE
 
                 }.addOnFailureListener {
-                    Log.d(ContentValues.TAG, "An exception was thrown when deleting a reward! ")
+                    Toast.makeText(context, context.getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                    view.shop_progressBar.visibility = View.GONE
                 }
-            }.show()
+
+
+        }
     }
 }
