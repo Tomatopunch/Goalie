@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.util.Log
+import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -13,6 +14,7 @@ import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
+import kotlinx.android.synthetic.main.category_fragment.view.*
 
 
 class CategoryRepository : dbCursorRepository() {
@@ -59,32 +61,40 @@ class CategoryRepository : dbCursorRepository() {
 
 
 
-    fun deleteCategory(currentUserId: String, currentCategoryId: String, navController: NavController) {
+    fun deleteCategory(currentUserId: String, currentCategoryId: String, navController: NavController, view: View) {
 
         // First; fetching and deleting (one at a time) all goals that belong to the category
 
         db.collection("users/$currentUserId/categories/$currentCategoryId/allGoals").get()
 
             .addOnSuccessListener { allGoals -> //All goals were fetched successfully!
-
+                var deleteCounter = 0
                 for (document in allGoals) {
                     var idOfGoalToBeDeleted = document.id
                     goalRepository.deleteGoal(currentUserId, currentCategoryId, idOfGoalToBeDeleted)
+                        .addOnSuccessListener {
+                            deleteCounter += 1
+                            if(deleteCounter == allGoals.size()){
+                                db.collection("users/$currentUserId/categories/").document(currentCategoryId)
+                                    .delete()
+
+                                    .addOnSuccessListener {
+                                        view.category_progressBar.visibility = View.GONE
+                                        navController.navigate(R.id.nav_home)
+                                    }
+
+                                    .addOnFailureListener {
+                                        view.category_progressBar.visibility = View.GONE
+                                    }
+
+                            }
+                            }
+                        }
                 }
 
                 // Second; all goals are (hopefully) deleted and it is (hopefully) safe to go on and delete the category (.......)
 
-               db.collection("users/$currentUserId/categories/").document(currentCategoryId)
-                    .delete()
 
-                   .addOnSuccessListener {
-                       navController.navigate(R.id.nav_home)
-                   }
-
-                   .addOnFailureListener {
-                   }
-
-            }
 
             .addOnFailureListener { exception -> // All goals were NOT fetched successfully :(
                 Log.d(ContentValues.TAG, "Error getting goals: ", exception)

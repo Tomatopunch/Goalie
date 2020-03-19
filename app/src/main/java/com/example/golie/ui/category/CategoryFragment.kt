@@ -226,16 +226,9 @@ class CategoryFragment : Fragment() {
 
                 //Enabling clicking on delete category button
                 else {
-
                     deleteCategoryButton.setOnClickListener {
-
-                        categoryRepository.deleteCategory(
-                            userId,
-                            currentCategoryId,
-                            findNavController()
-                        )
-
-                        // TODO: Need addOnSuccess for progressionbar. Find a solution :) Cannot give you that Kim, sorry :(
+                        view.category_progressBar.visibility = View.VISIBLE
+                        categoryRepository.deleteCategory(userId, currentCategoryId, findNavController(), view)
                     }
                 }
                 view.category_progressBar.visibility = View.GONE
