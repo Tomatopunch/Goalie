@@ -37,12 +37,9 @@
     <string name="deleting_goal">Radera mål</string>
     <string name="return_goal">Återvänd</string>
     <string name="onDbFailureMessage">Ett anslutningsfel uppstod</string>
-    <string name="categoryId">categoryId</string>
-    <string name="userId">userId</string>
     <string name="goalValidator_title">Titel: Måste ange en titel</string>
     <string name="goalValidator_titleMax">Titel: För lång. Max 30 karaktärer</string>
     <string name="goalValidator_points">Poäng: Du måste ligga till poäng</string>
-    <string name="guest">Gäst</string>
     <string name="categoryFragment_deleted">Du har tagit bort en favorit kategori</string>
     <string name="addCategory_validationError">Följande validerings fel hände</string>
     <string name="categoryValidator_title">Måste ange en titel!</string>
@@ -73,11 +70,11 @@
     <string name="better_luck_next_time">Bättre lycka nästa gång</string>
     <string name="not_enough_money_yet">Inte tillräckligt med pengar</string>
     <string name="got_questions_look_here">Några frågor? Kolla här!</string>
-    <string name="lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_fusce_sagittis_augue_turpis_eget_rutrum_libero_venenatis_dictum_nullam_vitae_mauris_sed_dui_lacinia_aliquam_aenean_placerat_risus_ex_vel_laoreet_nisl_luctus_aliquam_cras_sodales_elit_a_mauris_tempus_nec_efficitur_quam_dapibus_nunc_eleifend_maximus_ipsum_sagittis_imperdiet_urna_sollicitudin_id_aliquam_varius_libero_non_dui_ultrices_aliquam_curabitur_rutrum_est_condimentum_neque_aliquet_et_ullamcorper_dui_consequat_etiam_eget_porttitor_nunc_vestibulum_fringilla_scelerisque_urna_ac_vulputate_in_vel_ex_ipsum_proin_eget_sem_viverra_tempus_metus_non_semper_sapien_donec_sagittis_ultricies_elit_a_varius_quam_consectetur_at_sed_sapien_arcu_scelerisque_at_sapien_vel_suscipit_posuere_nunc_nam_posuere_tincidunt_lorem_lobortis_bibendum_sapien_curabitur_nec_porttitor_nisi_et_tincidunt_massa_duis_posuere_consequat_magna_nulla_sed_convallis_orci_fusce_convallis_urna_in_tellus_dapibus_molestie_suspendisse_potenti_etiam_vitae_nibh_id_quam_accumsan_cursus_sed_varius_turpis_ut_elit_vulputate_a_venenatis_tellus_posuere_praesent_at_turpis_nunc_aenean_metus_nibh_consequat_id_ligula_sed_elementum_porta_risus_quisque_quis_mi_in_mi_tempor_efficitur_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_fusce_sagittis_augue_turpis_eget_rutrum_libero_venenatis_dictum_nullam_vitae_mauris_sed_dui_lacinia_aliquam_aenean_placerat_risus_ex_vel_laoreet_nisl_luctus_aliquam_cras_sodales_elit_a_mauris_tempus_nec_efficitur_quam_dapibus_nunc_eleifend_maximus_ipsum_sagittis_imperdiet_urna_sollicitudin_id_aliquam_varius_libero_non_dui_ultrices_aliquam_curabitur_rutrum_est_condimentum_neque_aliquet_et_ullamcorper_dui_consequat_etiam_eget_porttitor_nunc_vestibulum_fringilla_scelerisque_urna_ac_vulputate_in_vel_ex_ipsum_proin_eget_sem_viverra_tempus_metus_non_semper_sapien_donec_sagittis_ultricies_elit_a_varius_quam_consectetur_at_sed_sapien_arcu_scelerisque_at_sapien_vel_suscipit_posuere_nunc_nam_posuere_tincidunt_lorem_lobortis_bibendum_sapien_curabitur_nec_porttitor_nisi_et_tincidunt_massa_duis_posuere_consequat_magna_nulla_sed_convallis_orci_fusce_convallis_urna_in_tellus_dapibus_molestie_suspendisse_potenti_etiam_vitae_nibh_id_quam_accumsan_cursus_sed_varius_turpis_ut_elit_vulputate_a_venenatis_tellus_posuere_praesent_at_turpis_nunc_aenean_metus_nibh_consequat_id_ligula_sed_elementum_porta_risus_quisque_quis_mi_in_mi_tempor_efficitur">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sagittis augue turpis, eget rutrum libero venenatis dictum. Nullam vitae mauris sed dui lacinia aliquam. Aenean placerat risus ex, vel laoreet nisl luctus aliquam. Cras sodales elit a mauris tempus, nec efficitur quam dapibus. Nunc eleifend maximus ipsum, sagittis imperdiet urna sollicitudin id. Aliquam varius libero non dui ultrices aliquam. Curabitur rutrum est condimentum neque aliquet, et ullamcorper dui consequat. Etiam eget porttitor nunc. Vestibulum fringilla scelerisque urna ac vulputate. In vel ex ipsum. Proin eget sem viverra, tempus metus non</string>
     <string name="create_new_category">Skapa Ny Kategori!</string>
     <string name="name">Namn:</string>
     <string name="create">Skapa</string>
-    <string name="you_earned_points">Du tjänade ____ poäng!</string>
     <string name="you_earned">Du tjänade</string>
     <string name="points">poäng!</string>
+    <string name="addCategory">Lägg till Kategori</string>
+    <string name="addGoal">Lägg till Mål</string>
 </resources>

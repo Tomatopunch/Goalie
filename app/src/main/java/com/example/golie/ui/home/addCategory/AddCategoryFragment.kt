@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -36,6 +37,7 @@ class AddCategoryFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        setHasOptionsMenu(true)
 
 
         val view = inflater.inflate(R.layout.add_category_fragment, container, false)
@@ -89,6 +91,16 @@ class AddCategoryFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(AddCategoryViewModel::class.java)
         // TODO: Use the ViewModel
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+        val navController = findNavController()
+        navController.navigate(R.id.nav_home)
+
+        return true
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////

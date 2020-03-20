@@ -14,6 +14,7 @@ import com.example.golie.MainActivity
 import com.example.golie.R
 import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
+import com.example.golie.data.documentsToGoals
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.category_fragment.view.*
@@ -42,7 +43,6 @@ class CategoryRepository : dbCursorRepository() {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
     fun getAllCategories(userId: String): Task<QuerySnapshot> {
 
         return db.collection("users/$userId/categories").get()
@@ -52,25 +52,15 @@ class CategoryRepository : dbCursorRepository() {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    fun updateCategory(userId: String, categoryId: String, updatedCategory: Category): Task<Void> {
-
-        val updatedCategoryMap = mapOf("name" to updatedCategory.name) //This might seem unnecessary but is included to make all update functions alike and to make this update function more extendable if another attribute was to be added in the Category class
-
-        return db.collection("users/$userId/categories").document(categoryId).update(updatedCategoryMap)
-
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
     fun deleteCategory(userId: String, categoryId: String, navController: NavController, view: View, context: Context) {
 
         // First; fetching and deleting (one at a time) all goals that belong to the category
 
         db.collection("users/$userId/categories/$categoryId/allGoals").get()
 
-            .addOnSuccessListener { allGoals -> //All goals were fetched successfully!
-                if(allGoals.isEmpty){
+            .addOnSuccessListener { document -> //All goals were fetched successfully!
+                val allGoals = documentsToGoals(document)
+                if(allGoals.isEmpty()){
                     deleteEmptyCategory(userId, categoryId, view, navController, context)
                 }
                 var deleteCounter = 0
@@ -78,7 +68,8 @@ class CategoryRepository : dbCursorRepository() {
                     var idOfGoalToBeDeleted = document.id
                     goalRepository.deleteGoal(userId, categoryId, idOfGoalToBeDeleted)
                         .addOnSuccessListener {
-                            if(deleteCounter == allGoals.size()){
+                            deleteCounter += 1
+                            if(deleteCounter == allGoals.size){
                                 db.collection("users/$userId/categories/").document(categoryId)
                                     .delete()
 
@@ -92,7 +83,6 @@ class CategoryRepository : dbCursorRepository() {
                                         Toast.makeText(context, context.getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                                     }
                             }
-                            deleteCounter += 1
                         }
                         .addOnFailureListener{
                             view.category_progressBar.visibility = View.GONE

@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/nav_addGoal"
         android:name="com.example.golie.ui.category.addGoal.AddGoalFragment"
-        android:label="Add Goal"
+        android:label="@string/addGoal"
         tools:layout="@layout/add_goal_fragment" />
     <fragment
         android:id="@+id/nav_shop"
@@ -38,26 +38,16 @@
     <fragment
         android:id="@+id/nav_addCategory"
         android:name="com.example.golie.ui.home.addCategory.AddCategoryFragment"
-        android:label="Add Category"
+        android:label="@string/addCategory"
         tools:layout="@layout/add_category_fragment" />
-    <fragment
-        android:id="@+id/nav_settings"
-        android:name="com.example.golie.ui.home.settings.SettingsFragment"
-        android:label="Settings Fragment"
-        tools:layout="@layout/settings_fragment" />
     <fragment
         android:id="@+id/nav_info"
         android:name="com.example.golie.ui.home.settings.info.InfoFragment"
-        android:label="@android:string/status_bar_notification_info_overflow"
+        android:label="@string/info"
         tools:layout="@layout/info_fragment" />
     <fragment
         android:id="@+id/nav_chooseFavCategory"
         android:name="com.example.golie.ui.home.settings.chooseFavoriteFragment.ChooseFavoriteFragment"
-        android:label="Choose Fav Category"
+        android:label="@string/choose_favorite_category"
         tools:layout="@layout/choose_favorite_fragment" />
-    <fragment
-        android:id="@+id/nav_favorite"
-        android:name="com.example.golie.ui.favorite.FavoriteFragment"
-        android:label="Favorite"
-        tools:layout="@layout/favorite_fragment" />
 </navigation>

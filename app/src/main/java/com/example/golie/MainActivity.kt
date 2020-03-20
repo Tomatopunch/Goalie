@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var navView: BottomNavigationView
 
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,23 +32,17 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_shop
+                R.id.nav_home, R.id.nav_shop, R.id.nav_finishedGoal
             )
         )
         setupActionBarWithNavController(navController,appBarConfiguration)
         navView.setupWithNavController(navController)
-
-
-
     }
-
-
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
 
 
         if (requestCode == RC_SIGN_IN) {
@@ -66,13 +59,7 @@ class MainActivity : AppCompatActivity() {
                     .addOnSuccessListener { document ->//Either a user exist with this id OR it does not (and in that case we want to create one)
 
                         if(!document.exists()) {
-                            /*userRepository.createUser(userId)
-                                .addOnSuccessListener {
-                                    this.recreate()
-                                }*/
                             userRepository.createUserWithData(userId, this)
-                            //this.recreate()
-
                         }
 
                         else {
@@ -81,7 +68,6 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     .addOnFailureListener{
-                      //error of some kind
                         Log.d("we are in failure", "oh no")
                     }
             }
@@ -108,8 +94,6 @@ class MainActivity : AppCompatActivity() {
 
 
     fun login() {
-        //Handling login functionality
-        Log.d("==========================google id BEFORE LOGIN", FirebaseAuth.getInstance().currentUser.toString() )
 
         if (FirebaseAuth.getInstance().currentUser == null) { // No user is logged in
 
@@ -124,39 +108,5 @@ class MainActivity : AppCompatActivity() {
                     .build(),
                 RC_SIGN_IN)
         }
-
-        Log.d("=======================================google id AFTER LOGIN", FirebaseAuth.getInstance().currentUser.toString() )
     }
-
 }
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-// do we need this ?!?!?
-/*override fun onResume() {
-    super.onResume()
-
-    if (FirebaseAuth.getInstance().currentUser == null) { // No user is logged in
-
-
-        // Choose authentication providers
-        val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
-
-        // Create and launch sign-in intent
-        startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .build(),
-            RC_SIGN_IN)
-    }
-
-
-}*/
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
