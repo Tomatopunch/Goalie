@@ -40,6 +40,7 @@ class DatePickerFragment : DialogFragment, DatePickerDialog.OnDateSetListener {
 
         theView.addGoal_timeSpanDate.setText(date)
 
+        //Unncessary log?
         val timeSpanText = theView.addGoal_timeSpanDate.editableText.toString()
         Log.d("checkSpan", "$timeSpanText")
 

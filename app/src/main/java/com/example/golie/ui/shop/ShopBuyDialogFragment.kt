@@ -102,5 +102,4 @@ class ShopBuyDialogFragment : DialogFragment() {
         super.onSaveInstanceState(outState)
         outState.putInt("shopPoints", shopPoints)
     }
-
 }

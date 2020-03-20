@@ -47,7 +47,7 @@ class ShopFragment : Fragment() {
         val points = view.shop_balance
 
         userId = if (FirebaseAuth.getInstance().currentUser == null) {
-            "Guest"
+            getString(R.string.guest)
         }
         else {
             FirebaseAuth.getInstance().currentUser!!.uid
@@ -69,7 +69,7 @@ class ShopFragment : Fragment() {
                     Log.d(ContentValues.TAG, "Could not find rewards!")
                 }
 
-                if (userId != "Guest") {
+                if (userId != getString(R.string.guest)) {
 
                     val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
@@ -137,7 +137,7 @@ class ShopFragment : Fragment() {
 
         val buttonCreateReward = shop_floatingActionButton
 
-        if (userId == "Guest") {
+        if (userId == getString(R.string.guest)) {
             buttonCreateReward.isVisible = false
         }
 

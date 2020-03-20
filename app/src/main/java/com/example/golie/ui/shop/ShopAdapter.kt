@@ -100,7 +100,6 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
                                 removedItem,
                                 removedItem.id
 
-
                             ).addOnSuccessListener {
                                 rewards.add(removedPosition, removedItem)
                                 notifyItemInserted(removedPosition)
@@ -118,8 +117,6 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
                     Toast.makeText(context, context.getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                     view.shop_progressBar.visibility = View.GONE
                 }
-
-
         }
     }
 }

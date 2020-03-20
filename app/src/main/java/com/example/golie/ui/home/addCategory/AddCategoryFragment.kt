@@ -1,8 +1,8 @@
 package com.example.golie.ui.home.addCategory
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 
 import com.example.golie.R
-import com.example.golie.R.id.nav_category
 import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.repositoryClasses.CategoryRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -35,6 +34,7 @@ class AddCategoryFragment : Fragment() {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
 
@@ -53,12 +53,12 @@ class AddCategoryFragment : Fragment() {
             val categoryName = (view.addCategory_nameEditText).editableText.toString()
 
 
-            val validationErrors = validateCategoryInput(categoryName)
+            val validationErrors = validateCategoryInput(categoryName, context)
 
             if (validationErrors.isNotEmpty()) {
                 val validationTextView = view.addCategory_validationTextView
                 validationTextView.text =
-                    "The following validation error occurred: " + validationErrors
+                    getString(R.string.addCategory_validationError) + validationErrors
                 view.addCategory_progressBar.visibility = View.GONE
 
             }

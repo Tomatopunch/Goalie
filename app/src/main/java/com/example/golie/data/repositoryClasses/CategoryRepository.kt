@@ -104,11 +104,8 @@ class CategoryRepository : dbCursorRepository() {
                 // Second; all goals are (hopefully) deleted and it is (hopefully) safe to go on and delete the category (.......)
 
             .addOnFailureListener { exception -> // All goals were NOT fetched successfully :(
-                Log.d(ContentValues.TAG, "Error getting goals: ", exception)
                 Toast.makeText(context, context.getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
             }
-
-
     }
 
     fun deleteEmptyCategory(userId: String, categoryId: String, view: View, navController: NavController, context: Context){

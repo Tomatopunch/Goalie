@@ -1,17 +1,9 @@
 package com.example.golie.data
-import android.content.ContentValues
-import android.util.Log
-import android.widget.TextView
 import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
 import com.example.golie.data.dataClasses.Reward
-import com.example.golie.data.repositoryClasses.GoalRepository
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
-import org.w3c.dom.Document
-import java.util.*
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

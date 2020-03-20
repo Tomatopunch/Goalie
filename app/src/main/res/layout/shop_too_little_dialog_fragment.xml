@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="Oh No! :("
+        android:text="@string/oh_no"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"/>
@@ -30,7 +30,7 @@
         android:layout_below="@+id/view1"
         android:layout_marginTop="78dp"
 
-        android:text="better luck next time" />
+        android:text="@string/better_luck_next_time" />
 
     <TextView
         android:id="@+id/content_text"
@@ -39,7 +39,7 @@
         android:layout_below="@+id/view1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
-        android:text="Not enough money yet "
+        android:text="@string/not_enough_money_yet"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

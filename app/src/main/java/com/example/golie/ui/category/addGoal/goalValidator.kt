@@ -1,16 +1,21 @@
 package com.example.golie.ui.category.addGoal
 
-fun validateInput(title: String, points: String): MutableList<String> {
+import android.content.Context
+import com.example.golie.R
+
+fun validateInput(title: String, points: String, context: Context?): MutableList<String> {
     val invalidInput: MutableList<String> = ArrayList()
-    if(title.isEmpty()){
-        invalidInput.add("Title: Must enter a title.")
-    }else if(title.length > 30){
-        invalidInput.add("Title: It's too long. Max 30 characters")
+
+    if(title.isEmpty()) {
+        invalidInput.add(context!!.getString(R.string.goalValidator_title))
+    }
+    else if(title.length > 30) {
+        invalidInput.add(context!!.getString(R.string.goalValidator_titleMax))
     }
 
     //val numberRegex = "[0-9]".toRegex()
-    if(points.isEmpty()){
-        invalidInput.add("Points: You need to add some points")
+    if(points.isEmpty()) {
+        invalidInput.add(context!!.getString(R.string.goalValidator_points))
     }
 
     return invalidInput

@@ -1,7 +1,7 @@
 package com.example.golie.ui.shop.reward
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -28,6 +28,7 @@ class CreateReward : Fragment() {
 
     val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,11 +43,11 @@ class CreateReward : Fragment() {
             titleText = view.create_editTitle
             pointContent = view.create_editPoints
 
-            val validationErrors = validateRewardInput(titleText.editableText.toString(), pointContent.editableText.toString())
+            val validationErrors = validateRewardInput(titleText.editableText.toString(), pointContent.editableText.toString(), context)
 
             if (validationErrors.isNotEmpty()) {
                 val validationTextView = view.addreward_validationTextView
-                validationTextView.text = "The following validation error occurred: " + validationErrors
+                validationTextView.text = getString(R.string.createReward_validationError) + validationErrors
             }
             else {
                 val reward = Reward(titleText.editableText.toString(), pointContent.editableText.toString().toInt())

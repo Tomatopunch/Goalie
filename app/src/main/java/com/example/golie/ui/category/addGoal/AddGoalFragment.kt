@@ -1,7 +1,6 @@
 package com.example.golie.ui.category.addGoal
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -29,7 +28,6 @@ class AddGoalFragment : Fragment() {
         val view = inflater.inflate(R.layout.add_goal_fragment, container, false)
         val userId = arguments.getString("userId")!!
         val categoryId : String  = (arguments.getString("categoryId"))!!
-        Log.d("category", categoryId)
         val goalRepository = GoalRepository()
 
         val createButton = view.addGoal_CreateGoalButton
@@ -69,9 +67,9 @@ class AddGoalFragment : Fragment() {
             var invalidInputTextView = view.addGoal_invalidInputText
 
 
-            val invalidInput = validateInput(title, pointsText)
+            val invalidInput = validateInput(title, pointsText, context)
             if(invalidInput.isEmpty()){
-                //TODO: Sätt in alla värden i databasen här
+
                 val points = pointsText.toInt()
                 val goal = Goal(title, timeSpanText, reOccurring, points) // Behöver vi GoalId?
                 if(arguments.getString("checkIfUpdating") != null) { // Checking if I'm updating or deleting
@@ -97,7 +95,7 @@ class AddGoalFragment : Fragment() {
                 }
 
                     val args = Bundle().apply {
-                        putString("categoryId", categoryId)
+                        putString(getString(R.string.categoryId), categoryId)
                     }
 
                     val navController = findNavController()
@@ -121,8 +119,8 @@ class AddGoalFragment : Fragment() {
         val userId = arguments.getString("userId")!!
         val categoryId : String  = (arguments.getString("categoryId"))!!
         val args = Bundle().apply{
-            putString("categoryId", categoryId)
-            putString("userId", userId)
+            putString(getString(R.string.categoryId), categoryId)
+            putString(getString(R.string.userId), userId)
         }
 
         navController.navigate(R.id.nav_category, args)

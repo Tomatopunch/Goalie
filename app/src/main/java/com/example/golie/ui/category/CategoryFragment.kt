@@ -47,7 +47,7 @@ class CategoryFragment : Fragment() {
     private val userRepository = UserRepository()
     lateinit var listView: ListView
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint("ResourceAsColor", "SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,7 +61,7 @@ class CategoryFragment : Fragment() {
         //////////// Check if user is logged in or not, otherwise set user id to guest ////////////
 
         if(FirebaseAuth.getInstance().currentUser == null){
-            userId = "Guest"
+            userId = getString(R.string.guest)
         }
 
         else{
@@ -99,7 +99,7 @@ class CategoryFragment : Fragment() {
 
                             else { // The id was found but there is no category with that id any more!
                                 val titleTextView = view.category_titleTextView
-                                titleTextView.text = "You have deleted your favorite category :("
+                                titleTextView.text = getString(R.string.categoryFragment_deleted)
                                 val deleteButton = view.category_deleteCategoryButton
                                 deleteButton.isVisible = false
                             }
@@ -128,7 +128,7 @@ class CategoryFragment : Fragment() {
         val addGoalButton = category_addButton
 
         //val categoryId : String  = (requireArguments().getString("categoryId"))!!
-        if(userId == "Guest"){
+        if(userId == getString(R.string.guest)){
             addGoalButton.isVisible = false
         }
         else {
@@ -177,7 +177,7 @@ class CategoryFragment : Fragment() {
                 listView.adapter = adapter
 
                 //Enabling clicking one one list item
-                if(userId != "Guest") {
+                if(userId != getString(R.string.guest)) {
                     listView.setOnItemClickListener { parent, view, position, _ ->
                         Log.d("show me the way", "${view.category_progressBar}")
 
@@ -220,7 +220,7 @@ class CategoryFragment : Fragment() {
                 val deleteCategoryButton = view.category_deleteCategoryButton
 
                 //Hiding delete category button if no user is logged in
-                if (userId == "Guest") {
+                if (userId == getString(R.string.guest)) {
                     deleteCategoryButton.isVisible = false
                 }
 

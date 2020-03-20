@@ -1,5 +1,6 @@
 package com.example.golie.ui.category.finishedGoal
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -33,6 +34,7 @@ class FinishedGoalFragment : Fragment() {
     private lateinit var categoryId: String
     private lateinit var goalId: String
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,7 +61,7 @@ class FinishedGoalFragment : Fragment() {
                 userRepository.getUserById(userId)
                     .addOnSuccessListener { document ->
                         view.finished_goal_progressBar.visibility = View.GONE
-                        view.finishedGoalTextView.text = "Congratulations!\n\nYou earned ${goal.points} points!"
+                        view.earnedPointsTextView.text = "${goal.points}"
                     }
                     .addOnFailureListener{
                         Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
@@ -80,9 +82,7 @@ class FinishedGoalFragment : Fragment() {
                 putString("categoryId", categoryId)
             }
             navController.navigate(R.id.nav_category, args)
-
         }
-
         return view
     }
 

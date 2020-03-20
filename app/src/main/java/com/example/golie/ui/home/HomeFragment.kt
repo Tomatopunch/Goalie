@@ -56,7 +56,7 @@ class HomeFragment : Fragment() {
         val userNameTextView = view.home_userNameTextView
         if (FirebaseAuth.getInstance().currentUser == null) {
             userId = "Guest"
-            userNameTextView.text = "Guest"
+            userNameTextView.text = getString(R.string.guest)
         }
 
         else {
@@ -140,17 +140,17 @@ class HomeFragment : Fragment() {
 
                 lateinit var navController: NavController
                 AlertDialog.Builder(context)
-                    .setTitle("Settings")
-                    .setMessage("What do you want to do?")
+                    .setTitle(getString(R.string.homeFragment_dialog_title))
+                    .setMessage(getString(R.string.homeFragment_dialog_message))
                     .setPositiveButton(
-                        "View info page"
+                        getString(R.string.homeFragment_dialog_buttonText)
                     ){ dialog, whichButton ->
                         navController = findNavController()
                         navController.navigate(R.id.nav_info)
 
                     }
                     .setNegativeButton(
-                        "Login"
+                        getString(R.string.homeFragment_dialog_login)
                     ){ dialog, whichButton ->
                         (activity as MainActivity).login()
 
@@ -164,23 +164,23 @@ class HomeFragment : Fragment() {
                 lateinit var navController: NavController
 
                 AlertDialog.Builder(context)
-                    .setTitle("Settings")
-                    .setMessage("What do you want to do?")
+                    .setTitle(getString(R.string.homeFragment_dialog_title))
+                    .setMessage(getString(R.string.homeFragment_dialog_message))
                     .setPositiveButton(
-                        "Select favorite category"
+                        getString(R.string.homeFragment_dialog_selectFavorite)
                     ) { dialog, whichButton ->
                         navController = findNavController()
                         navController.navigate(R.id.nav_chooseFavCategory)
 
                     }.setNegativeButton(
-                        "View info page"
+                        getString(R.string.homeFragment_dialog_viewInfo)
                     ) { dialog, whichButton ->
 
                         navController = findNavController()
                         navController.navigate(R.id.nav_info)
 
                     }.setNeutralButton(
-                        "Logout"
+                        getString(R.string.homeFragment_dialog_logout)
                     ) { dialog, whichButton ->
                         signOut()
                     }.show()
