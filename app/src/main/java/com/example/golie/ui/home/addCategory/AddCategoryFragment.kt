@@ -39,7 +39,7 @@ class AddCategoryFragment : Fragment() {
 
 
         val view = inflater.inflate(R.layout.add_category_fragment, container, false)
-        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -66,7 +66,7 @@ class AddCategoryFragment : Fragment() {
             else {
 
                 val category = Category(categoryName)
-                categoryRepository.createCategory(currentUserId, category)
+                categoryRepository.createCategory(userId, category)
                     .addOnSuccessListener {
                         view.addCategory_progressBar.visibility = View.GONE
                         val navController = findNavController()

@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.shop_boughtdialog_fragment.view.*
 class ShopBoughtDialogFragment: DialogFragment() {
 
     private val pointsRepository = PointsRepository()
-    val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+    val userId = FirebaseAuth.getInstance().currentUser!!.uid
     var accountWallet = -1
     var shopPoints = -1
 
@@ -56,7 +56,7 @@ class ShopBoughtDialogFragment: DialogFragment() {
     // Function that sets the new balance for the user logged in.
     private fun setPoints(calcNewBalance: Int, view: View) {
 
-        pointsRepository.setPoints(currentUserId, calcNewBalance)
+        pointsRepository.setPoints(userId, calcNewBalance)
             .addOnSuccessListener {
                 view.shopBoughtDialog_progressBar.visibility = View.GONE
             }

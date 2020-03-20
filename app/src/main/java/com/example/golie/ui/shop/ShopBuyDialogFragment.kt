@@ -30,7 +30,7 @@ class ShopBuyDialogFragment : DialogFragment() {
         val noButton = view.noButton
         val yesButton = view.yesButton
         val userRepository = UserRepository()
-        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
         if (savedInstanceState != null) {
             shopPoints = savedInstanceState.getInt("shopPoints")
@@ -40,7 +40,7 @@ class ShopBuyDialogFragment : DialogFragment() {
         }
 
         //get points from user who is currently logged in
-        getPoints(currentUserId, userRepository, view)
+        getPoints(userId, userRepository, view)
 
         // call next fragment dialog
         yesButton.setOnClickListener {
@@ -79,8 +79,8 @@ class ShopBuyDialogFragment : DialogFragment() {
     }
 
     // Function that retrieves the points from the user currently logged in.
-    private fun getPoints(currentUserId: String, userRepository: UserRepository, view: View) {
-        userRepository.getUserById(currentUserId)
+    private fun getPoints(userId: String, userRepository: UserRepository, view: View) {
+        userRepository.getUserById(userId)
 
             .addOnSuccessListener { document ->
                 if (document != null) {
@@ -96,7 +96,6 @@ class ShopBuyDialogFragment : DialogFragment() {
                 view.shop_buyDialog_progressBar.visibility = View.GONE
 
             }
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

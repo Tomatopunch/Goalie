@@ -35,7 +35,7 @@ class ChooseFavoriteFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.choose_favorite_fragment, container, false)
         val categoryRepository = CategoryRepository()
-        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
         val context = requireContext()
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ class ChooseFavoriteFragment : Fragment() {
         val listView = view.chooseFavCategory_allCategoriesListView
         var allCategories: MutableList<Category> = ArrayList()
 
-        categoryRepository.getAllCategories(currentUserId)
+        categoryRepository.getAllCategories(userId)
             .addOnSuccessListener { documents ->
 
                 allCategories = documentsToCategories(documents)
@@ -62,7 +62,7 @@ class ChooseFavoriteFragment : Fragment() {
 
                     var clickedCategory = listView.adapter.getItem(position) as Category
                     var categoryId = clickedCategory.id
-                    categoryRepository.setFavoriteCategoryId(currentUserId, categoryId)
+                    categoryRepository.setFavoriteCategoryId(userId, categoryId)
                     val navController = findNavController()
                     navController.navigate(R.id.nav_home)
                 }

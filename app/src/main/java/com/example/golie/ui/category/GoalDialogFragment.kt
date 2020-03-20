@@ -81,19 +81,17 @@ class GoalDialogFragment : DialogFragment {
             goalRepository.deleteGoal(userId, categoryId, goalId)
                 .addOnSuccessListener {
                     categoryFragment.deleteGoal(position)
-                    goalRepository.getAllGoalsWithinCategory(userId, categoryId)
-                        .addOnSuccessListener {document ->
                             // Need to update the background color for the new goal in the position we just deleted.
-                            val allGoals = documentsToGoals(document)
-                            categoryFragment.setBackgroundColor(position, allGoals[position].colorId, false)
+                            val navController = findNavController()
+                            val args = Bundle().apply {
+                                putString("userId", userId)
+                                putString("categoryId", categoryId)
+                                putString("goalId", goalId)
+                                putInt("position", position)
+                            }
+                            navController.navigate(R.id.nav_category, args)
                             view.goaldialog_progressBar.visibility = View.GONE
                             dismiss()
-                        }
-                        .addOnFailureListener{
-                            Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
-                            view.goaldialog_progressBar.visibility = View.GONE
-                        }
-
                 }
                 .addOnFailureListener{
                     Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
@@ -144,16 +142,16 @@ class GoalDialogFragment : DialogFragment {
             view.goaldialog_progressBar.visibility = View.VISIBLE
             goalRepository.getGoalById(userId, categoryId, goalId).addOnSuccessListener { document ->
 
-                val currentGoal = documentToGoal(document)
+                val goal = documentToGoal(document)
 
                 val navController = findNavController()
 
                 val args = Bundle().apply{
-                    putString("title", currentGoal.title)
-                    putString("timeSpan", currentGoal.timeSpan)
-                    putInt("points", currentGoal.points)
-                    putBoolean("reoccurring", currentGoal.reoccurring)
-                    putString("goalId", currentGoal.id)
+                    putString("title", goal.title)
+                    putString("timeSpan", goal.timeSpan)
+                    putInt("points", goal.points)
+                    putBoolean("reoccurring", goal.reoccurring)
+                    putString("goalId", goal.id)
                     putString("userId", userId)
                     putString("checkIfUpdating", "updating")
                     putString("categoryId", categoryId)

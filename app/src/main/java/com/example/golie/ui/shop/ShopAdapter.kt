@@ -25,7 +25,7 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
     private var removedPosition: Int = 0
     private lateinit var removedItem: Reward
 
-    val currentUserId =  FirebaseAuth.getInstance().currentUser?.uid
+    val userId =  FirebaseAuth.getInstance().currentUser?.uid
 
     //Creates your recyclerview by adding a layout xml to it
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
@@ -46,7 +46,7 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
         holder.shopTitle.text = shopTitle
         holder.shopPoints.text = shopPoints.toString()
 
-        if (currentUserId != null) {
+        if (userId != null) {
 
             holder.itemView.setOnClickListener {
 
@@ -76,14 +76,14 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
 
     fun removeItem(viewHolder: CustomViewHolder, view: View) {
 
-        if (currentUserId != null) {
+        if (userId != null) {
             //before you remove, cache the position it was previously on.
             removedPosition = viewHolder.adapterPosition
             removedItem = rewards[removedPosition]
             view.shop_progressBar.visibility = View.VISIBLE
 
 
-            rewardRepository.deleteReward(currentUserId, rewards[removedPosition].id)
+            rewardRepository.deleteReward(userId, rewards[removedPosition].id)
 
                 .addOnSuccessListener {
 
@@ -96,7 +96,7 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
                         .setAction("UNDO") {
                             view.shop_progressBar.visibility = View.VISIBLE
                             rewardRepository.createRewardWithSpecificId(
-                                currentUserId,
+                                userId,
                                 removedItem,
                                 removedItem.id
 

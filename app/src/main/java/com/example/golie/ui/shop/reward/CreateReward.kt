@@ -26,7 +26,7 @@ class CreateReward : Fragment() {
     private lateinit var pointContent: EditText
     private val rewardRepository = RewardRepository()
 
-    val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+    val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,7 +51,7 @@ class CreateReward : Fragment() {
             else {
                 val reward = Reward(titleText.editableText.toString(), pointContent.editableText.toString().toInt())
 
-                rewardRepository.createReward(currentUserId, reward)
+                rewardRepository.createReward(userId, reward)
 
                     .addOnSuccessListener {
                         view.create_reward_progressBar.visibility = View.GONE

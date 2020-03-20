@@ -29,7 +29,7 @@ class AddGoalFragment : Fragment() {
         val view = inflater.inflate(R.layout.add_goal_fragment, container, false)
         val userId = arguments.getString("userId")!!
         val categoryId : String  = (arguments.getString("categoryId"))!!
-        Log.d("currentCategory", categoryId)
+        Log.d("category", categoryId)
         val goalRepository = GoalRepository()
 
         val createButton = view.addGoal_CreateGoalButton

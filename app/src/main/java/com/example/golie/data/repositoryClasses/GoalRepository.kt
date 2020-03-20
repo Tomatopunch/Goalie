@@ -14,51 +14,51 @@ class GoalRepository : dbCursorRepository() {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    fun createGoal(currentUserId : String, currentCategoryId: String, newGoal: Goal) : Task<DocumentReference>{
+    fun createGoal(userId : String, categoryId: String, newGoal: Goal) : Task<DocumentReference>{
 
-        return db.collection("users/$currentUserId/categories/$currentCategoryId/allGoals").add(newGoal)
+        return db.collection("users/$userId/categories/$categoryId/allGoals").add(newGoal)
     }
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    fun getAllGoalsWithinCategory(currentUserId : String, currentCategoryId: String) : Task<QuerySnapshot> {
+    fun getAllGoalsWithinCategory(userId : String, categoryId: String) : Task<QuerySnapshot> {
 
-        return db.collection("users/$currentUserId/categories/$currentCategoryId/allGoals").get()
+        return db.collection("users/$userId/categories/$categoryId/allGoals").get()
 
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun getGoalById(currentUserId: String, categoryId: String, goalId: String) : Task<DocumentSnapshot> {
-        return db.collection("users/$currentUserId/categories/$categoryId/allGoals").document(goalId).get()
+    fun getGoalById(userId: String, categoryId: String, goalId: String) : Task<DocumentSnapshot> {
+        return db.collection("users/$userId/categories/$categoryId/allGoals").document(goalId).get()
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    fun updateGoal(currentUserId : String, currentCategoryId: String, goalId: String, updatedGoal: Goal) : Task<Void> {
+    fun updateGoal(userId : String, categoryId: String, goalId: String, updatedGoal: Goal) : Task<Void> {
 
         val updatedGoalMap = mapOf("title" to updatedGoal.title, "timeSpan" to updatedGoal.timeSpan, "reoccurring" to updatedGoal.reoccurring, "points" to updatedGoal.points)
-        return db.collection("users/$currentUserId/categories/$currentCategoryId/allGoals").document(goalId).update(updatedGoalMap)
+        return db.collection("users/$userId/categories/$categoryId/allGoals").document(goalId).update(updatedGoalMap)
 
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun updateColorId(currentUserId: String, currentCategoryId: String, goalId: String, updatedColorId: Int) : Task<Void>{
+    fun updateColorId(userId: String, categoryId: String, goalId: String, updatedColorId: Int) : Task<Void>{
 
-        return db.collection("users/$currentUserId/categories/$currentCategoryId/allGoals").document(goalId).update("colorId", updatedColorId)
+        return db.collection("users/$userId/categories/$categoryId/allGoals").document(goalId).update("colorId", updatedColorId)
 
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    fun deleteGoal (currentUserId : String, currentCategoryId: String, goalId: String) : Task<Void> {
+    fun deleteGoal (userId : String, categoryId: String, goalId: String) : Task<Void> {
 
-       return db.collection("users/$currentUserId/categories/$currentCategoryId/allGoals").document(goalId).delete()
+       return db.collection("users/$userId/categories/$categoryId/allGoals").document(goalId).delete()
 
     }
 

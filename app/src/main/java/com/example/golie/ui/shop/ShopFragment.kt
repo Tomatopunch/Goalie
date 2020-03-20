@@ -38,8 +38,6 @@ class ShopFragment : Fragment() {
     private val rewardRepository = RewardRepository()
     private lateinit var userId: String
 
-   // val userId = FirebaseAuth.getInstance().currentUser!!.uid
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -14,19 +14,19 @@ class RewardRepository : dbCursorRepository(){
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    fun createReward(currentUserId: String, newReward: Reward) : Task<DocumentReference> {
+    fun createReward(userId: String, newReward: Reward) : Task<DocumentReference> {
 
-        return  db.collection("users/$currentUserId/rewards").add(newReward)
+        return  db.collection("users/$userId/rewards").add(newReward)
 
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun createRewardWithSpecificId(currentUserId: String, newReward: Reward, rewardId: String) : Task<Void> {
+    fun createRewardWithSpecificId(userId: String, newReward: Reward, rewardId: String) : Task<Void> {
 
         //val newRewardMap = hashMapOf("id" to newReward.id)
 
-        return  db.collection("users/$currentUserId/rewards").document(rewardId).set(newReward)
+        return  db.collection("users/$userId/rewards").document(rewardId).set(newReward)
 
     }
 
@@ -34,29 +34,29 @@ class RewardRepository : dbCursorRepository(){
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun getAllRewards (currentUserId: String) : Task<QuerySnapshot> {
+    fun getAllRewards (userId: String) : Task<QuerySnapshot> {
 
-        return db.collection("users/$currentUserId/rewards").get()
+        return db.collection("users/$userId/rewards").get()
 
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    fun updateReward(currentUserId: String, rewardId: String, updatedReward: Reward) : Task<Void>{
+    fun updateReward(userId: String, rewardId: String, updatedReward: Reward) : Task<Void>{
 
         val updatedRewardMap = mapOf("title" to updatedReward.title, "price" to updatedReward.price)
 
-        return db.collection("users/$currentUserId/rewards").document(rewardId).update(updatedRewardMap)
+        return db.collection("users/$userId/rewards").document(rewardId).update(updatedRewardMap)
 
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    fun deleteReward(currentUserId: String, rewardId: String) : Task<Void>{
+    fun deleteReward(userId: String, rewardId: String) : Task<Void>{
 
-        return db.collection("users/$currentUserId/rewards").document(rewardId).delete()
+        return db.collection("users/$userId/rewards").document(rewardId).delete()
 
     }
 

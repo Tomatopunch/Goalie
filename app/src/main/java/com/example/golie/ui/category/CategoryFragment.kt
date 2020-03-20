@@ -147,7 +147,7 @@ class CategoryFragment : Fragment() {
     }
 
     @SuppressLint("ResourceAsColor")
-    fun displayCategory(currentCategoryId: String, view: View) {
+    fun displayCategory(categoryId: String, view: View) {
 
         val context = requireContext()
 
@@ -156,7 +156,7 @@ class CategoryFragment : Fragment() {
         val goalRepository = GoalRepository()
 
 
-        goalRepository.getAllGoalsWithinCategory(userId, currentCategoryId)
+        goalRepository.getAllGoalsWithinCategory(userId, categoryId)
             .addOnSuccessListener { documents ->
 
                 //casting documents into goal objects
@@ -202,7 +202,7 @@ class CategoryFragment : Fragment() {
                 //Setting title
 
                 val titleTextView = view.category_titleTextView
-                categoryRepository.getCategoryById(userId, currentCategoryId)
+                categoryRepository.getCategoryById(userId, categoryId)
                     .addOnSuccessListener { document ->
 
                         val category = documentToCategory(document)
@@ -228,7 +228,7 @@ class CategoryFragment : Fragment() {
                 else {
                     deleteCategoryButton.setOnClickListener {
                         view.category_progressBar.visibility = View.VISIBLE
-                        categoryRepository.deleteCategory(userId, currentCategoryId, findNavController(), view)
+                        categoryRepository.deleteCategory(userId, categoryId, findNavController(), view, context)
                     }
                 }
                 view.category_progressBar.visibility = View.GONE
@@ -248,19 +248,19 @@ class CategoryFragment : Fragment() {
     }
 
     fun setBackgroundColor(position: Int, colorId: Int, init: Boolean){
-        var listItem: View
         val view = requireView()
-        if(init) {
-            listItem = listView.adapter.getView(position, null, listView)
-        }
-        else {
-            listItem = listView.getChildAt(position)
-        }
+
+        val listItem = listView.getChildAt(position)
         goalRepository.updateColorId(userId, categoryId, allGoals[position].id, colorId)
             .addOnSuccessListener {
                 allGoals[position].colorId = colorId
                 adapter.notifyDataSetChanged()
-                listItem.setBackgroundColor(requireContext().getColor(colorId))
+                if(colorId == -1) { // Came here from delete when next listItem isn't completed
+                    listItem.setBackgroundColor(requireContext().getColor(R.color.defaultBackground))
+                }
+                else{
+                    listItem.setBackgroundColor(requireContext().getColor(colorId))
+                }
                 view.category_progressBar.visibility = View.GONE
             }
             .addOnFailureListener {
