@@ -8,11 +8,11 @@
     tools:context=".ui.home.settings.info.InfoFragment">
 
     <TextView
-        android:id="@+id/info_headerText"
+        android:id="@+id/info_titleText"
         android:layout_width="355dp"
         android:layout_height="89dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="16dp"
         android:text="@string/got_questions_look_here"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,10 +31,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/info_headerText">
+        app:layout_constraintTop_toBottomOf="@+id/info_titleText">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/info_infoText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_fusce_sagittis_augue_turpis_eget_rutrum_libero_venenatis_dictum_nullam_vitae_mauris_sed_dui_lacinia_aliquam_aenean_placerat_risus_ex_vel_laoreet_nisl_luctus_aliquam_cras_sodales_elit_a_mauris_tempus_nec_efficitur_quam_dapibus_nunc_eleifend_maximus_ipsum_sagittis_imperdiet_urna_sollicitudin_id_aliquam_varius_libero_non_dui_ultrices_aliquam_curabitur_rutrum_est_condimentum_neque_aliquet_et_ullamcorper_dui_consequat_etiam_eget_porttitor_nunc_vestibulum_fringilla_scelerisque_urna_ac_vulputate_in_vel_ex_ipsum_proin_eget_sem_viverra_tempus_metus_non_semper_sapien_donec_sagittis_ultricies_elit_a_varius_quam_consectetur_at_sed_sapien_arcu_scelerisque_at_sapien_vel_suscipit_posuere_nunc_nam_posuere_tincidunt_lorem_lobortis_bibendum_sapien_curabitur_nec_porttitor_nisi_et_tincidunt_massa_duis_posuere_consequat_magna_nulla_sed_convallis_orci_fusce_convallis_urna_in_tellus_dapibus_molestie_suspendisse_potenti_etiam_vitae_nibh_id_quam_accumsan_cursus_sed_varius_turpis_ut_elit_vulputate_a_venenatis_tellus_posuere_praesent_at_turpis_nunc_aenean_metus_nibh_consequat_id_ligula_sed_elementum_porta_risus_quisque_quis_mi_in_mi_tempor_efficitur_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_fusce_sagittis_augue_turpis_eget_rutrum_libero_venenatis_dictum_nullam_vitae_mauris_sed_dui_lacinia_aliquam_aenean_placerat_risus_ex_vel_laoreet_nisl_luctus_aliquam_cras_sodales_elit_a_mauris_tempus_nec_efficitur_quam_dapibus_nunc_eleifend_maximus_ipsum_sagittis_imperdiet_urna_sollicitudin_id_aliquam_varius_libero_non_dui_ultrices_aliquam_curabitur_rutrum_est_condimentum_neque_aliquet_et_ullamcorper_dui_consequat_etiam_eget_porttitor_nunc_vestibulum_fringilla_scelerisque_urna_ac_vulputate_in_vel_ex_ipsum_proin_eget_sem_viverra_tempus_metus_non_semper_sapien_donec_sagittis_ultricies_elit_a_varius_quam_consectetur_at_sed_sapien_arcu_scelerisque_at_sapien_vel_suscipit_posuere_nunc_nam_posuere_tincidunt_lorem_lobortis_bibendum_sapien_curabitur_nec_porttitor_nisi_et_tincidunt_massa_duis_posuere_consequat_magna_nulla_sed_convallis_orci_fusce_convallis_urna_in_tellus_dapibus_molestie_suspendisse_potenti_etiam_vitae_nibh_id_quam_accumsan_cursus_sed_varius_turpis_ut_elit_vulputate_a_venenatis_tellus_posuere_praesent_at_turpis_nunc_aenean_metus_nibh_consequat_id_ligula_sed_elementum_porta_risus_quisque_quis_mi_in_mi_tempor_efficitur"

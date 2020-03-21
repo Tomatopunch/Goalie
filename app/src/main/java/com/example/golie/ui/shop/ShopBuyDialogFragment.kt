@@ -19,16 +19,12 @@ class ShopBuyDialogFragment : DialogFragment() {
     private var accountWallet = 0
     var shopPoints = -1
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         val view = inflater.inflate(R.layout.shop_buydialog_fragment, container, false)
-        val noButton = view.noButton
-        val yesButton = view.yesButton
+        val noButton = view.shopBuyDialog_noButton
+        val yesButton = view.shopBuyDialog_yesButton
         val userRepository = UserRepository()
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -46,6 +42,7 @@ class ShopBuyDialogFragment : DialogFragment() {
         yesButton.setOnClickListener {
             validateWalletAmount()
         }
+
         // go back
         noButton.setOnClickListener {
             dismiss()
@@ -64,8 +61,8 @@ class ShopBuyDialogFragment : DialogFragment() {
             }
 
             val shopBoughtDialogFragment = ShopBoughtDialogFragment()
-
             shopBoughtDialogFragment.arguments = args
+
             val fragmentManager = requireActivity().supportFragmentManager
             shopBoughtDialogFragment.show(fragmentManager, "secondFragmentManager")
         }
@@ -80,8 +77,8 @@ class ShopBuyDialogFragment : DialogFragment() {
 
     // Function that retrieves the points from the user currently logged in.
     private fun getPoints(userId: String, userRepository: UserRepository, view: View) {
-        userRepository.getUserById(userId)
 
+        userRepository.getUserById(userId)
             .addOnSuccessListener { document ->
                 if (document != null) {
                     accountWallet  = userDocumentToPoints(document)
@@ -89,12 +86,11 @@ class ShopBuyDialogFragment : DialogFragment() {
                 else {
                     Log.d(ContentValues.TAG, "Could not find points!")
                 }
-                view.shop_buyDialog_progressBar.visibility = View.GONE
+                view.shopBuyDialog_progressBar.visibility = View.GONE
             }
-            .addOnFailureListener { exception ->
+            .addOnFailureListener {
                 Toast.makeText(context,getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
-                view.shop_buyDialog_progressBar.visibility = View.GONE
-
+                view.shopBuyDialog_progressBar.visibility = View.GONE
             }
     }
 

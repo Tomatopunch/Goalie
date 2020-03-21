@@ -2,7 +2,7 @@ package com.example.golie.data.repositoryClasses
 
 import com.google.firebase.firestore.FirebaseFirestore
 
-open class dbCursorRepository {
+open class DbCursorRepository {
 
     val db = FirebaseFirestore.getInstance()
 

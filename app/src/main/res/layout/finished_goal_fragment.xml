@@ -8,7 +8,7 @@
     tools:context=".ui.category.finishedGoal.FinishedGoalFragment">
 
     <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/celebrationGif"
+        android:id="@+id/finishedGoal_celebrationGif"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="32dp"
@@ -17,10 +17,10 @@
         app:layout_constraintBottom_toTopOf="@+id/finishedGoal_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/earnedPointsTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/finishedGoal_earnedPointsText" />
 
     <TextView
-        android:id="@+id/finishedGoalTextView"
+        android:id="@+id/finishedGoal_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -55,37 +55,37 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/earnedPointsTextView"
+        android:id="@+id/finishedGoal_earnedPointsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/you_earned_points"
         android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@id/pointsTextView"
-        app:layout_constraintStart_toEndOf="@id/youEarnedTextView"
-        app:layout_constraintTop_toBottomOf="@id/finishedGoalTextView" />
+        app:layout_constraintEnd_toStartOf="@id/finishedGoal_pointsText"
+        app:layout_constraintStart_toEndOf="@id/finishedGoal_youEarnedText"
+        app:layout_constraintTop_toBottomOf="@id/finishedGoal_Title" />
 
     <TextView
-        android:id="@+id/youEarnedTextView"
+        android:id="@+id/finishedGoal_youEarnedText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/you_earned"
         android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@id/earnedPointsTextView"
+        app:layout_constraintEnd_toStartOf="@id/finishedGoal_earnedPointsText"
         app:layout_constraintStart_toStartOf="parent"
 
-        app:layout_constraintTop_toBottomOf="@id/finishedGoalTextView" />
+        app:layout_constraintTop_toBottomOf="@id/finishedGoal_Title" />
 
     <TextView
-        android:id="@+id/pointsTextView"
+        android:id="@+id/finishedGoal_pointsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/points"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/earnedPointsTextView"
-        app:layout_constraintTop_toBottomOf="@id/finishedGoalTextView" />
+        app:layout_constraintStart_toEndOf="@id/finishedGoal_earnedPointsText"
+        app:layout_constraintTop_toBottomOf="@id/finishedGoal_Title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

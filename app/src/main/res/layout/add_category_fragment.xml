@@ -7,7 +7,7 @@
     tools:context=".ui.home.addCategory.AddCategoryFragment" >
 
     <TextView
-        android:id="@+id/addCategory_titleTextView"
+        android:id="@+id/addCategory_titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
@@ -27,10 +27,11 @@
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addCategory_titleTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/addCategory_titleText"
+        android:importantForAutofill="no" />
 
     <TextView
-        android:id="@+id/addCategory_nameTextView"
+        android:id="@+id/addCategory_nameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/name"
@@ -48,10 +49,10 @@
         android:text="@string/create"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addCategory_validationTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/addCategory_validationText" />
 
     <TextView
-        android:id="@+id/addCategory_validationTextView"
+        android:id="@+id/addCategory_validationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

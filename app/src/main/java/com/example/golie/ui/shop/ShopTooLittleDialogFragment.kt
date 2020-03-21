@@ -10,10 +10,7 @@ import kotlinx.android.synthetic.main.shop_too_little_dialog_fragment.view.*
 
 class ShopTooLittleDialogFragment : DialogFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         val view = inflater.inflate(R.layout.shop_too_little_dialog_fragment, container, false)

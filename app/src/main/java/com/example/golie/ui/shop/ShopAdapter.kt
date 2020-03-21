@@ -24,10 +24,9 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
     private val rewardRepository = RewardRepository()
     private var removedPosition: Int = 0
     private lateinit var removedItem: Reward
-
     val userId =  FirebaseAuth.getInstance().currentUser?.uid
 
-    //Creates your recyclerview by adding a layout xml to it
+    //Creates the recyclerview by adding a layout xml to it
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val cellForRow = layoutInflater.inflate(R.layout.shop_item, parent, false)
@@ -35,11 +34,9 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
         return CustomViewHolder(cellForRow)
     }
 
-    //Binds your data together
+    //Binds the data together
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
 
-        // get all rewards from the current user
-        // separate this into another function
         val shopTitle = rewards[position].title
         val shopPoints = rewards[position].price
 
@@ -53,7 +50,6 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
                 val args = Bundle().apply {
                     putInt("shopPoints", shopPoints)
                 }
-
                 val fragmentManager = (context as FragmentActivity).supportFragmentManager
                 val shopDialogFragment = ShopBuyDialogFragment()
 
@@ -63,15 +59,15 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
         }
     }
 
-    //number of item
+    //number of items
     override fun getItemCount(): Int {
         return rewards.size
     }
 
     //Custom view holder class used for displaying items on the recyclerview
     class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val shopTitle: TextView = itemView.shop_title
-        val shopPoints: TextView = itemView.point_content
+        val shopTitle: TextView = itemView.shopItem_titleText
+        val shopPoints: TextView = itemView.shopItem_priceText
     }
 
     fun removeItem(viewHolder: CustomViewHolder, view: View) {
@@ -104,7 +100,6 @@ open class ShopAdapter(val context: Context, private var rewards: MutableList<Re
                                 rewards.add(removedPosition, removedItem)
                                 notifyItemInserted(removedPosition)
                                 view.shop_progressBar.visibility = View.GONE
-
 
                             }.addOnFailureListener {
                                 Toast.makeText(context, context.getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()

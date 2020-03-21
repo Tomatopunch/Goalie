@@ -13,7 +13,6 @@ fun validateInput(title: String, points: String, context: Context?): MutableList
         invalidInput.add(context!!.getString(R.string.goalValidator_titleMax))
     }
 
-    //val numberRegex = "[0-9]".toRegex()
     if(points.isEmpty()) {
         invalidInput.add(context!!.getString(R.string.goalValidator_points))
     }

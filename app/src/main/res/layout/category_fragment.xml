@@ -39,12 +39,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/category_titleTextView" >
+        app:layout_constraintTop_toBottomOf="@id/category_titleText" >
 
     </ListView>
 
     <TextView
-        android:id="@+id/category_titleTextView"
+        android:id="@+id/category_titleText"
         android:layout_width="331dp"
         android:layout_height="80dp"
         android:layout_marginTop="32dp"

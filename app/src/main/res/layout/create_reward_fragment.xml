@@ -16,10 +16,10 @@
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/create_titleText" />
+        app:layout_constraintTop_toBottomOf="@+id/create_titleRewardText" />
 
     <TextView
-        android:id="@+id/create_titleText"
+        android:id="@+id/create_titleRewardText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="37dp"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/create_title"
+        android:id="@+id/create_titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_title"
@@ -52,7 +52,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/create_editPoints"
+        android:id="@+id/create_editPointsEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -63,16 +63,16 @@
         app:layout_constraintTop_toBottomOf="@+id/create_editTitle" />
 
     <TextView
-        android:id="@+id/create_points"
+        android:id="@+id/create_pointsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_points"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/create_editPoints"
-        app:layout_constraintEnd_toStartOf="@+id/create_editPoints"
+        app:layout_constraintBottom_toBottomOf="@+id/create_editPointsEditText"
+        app:layout_constraintEnd_toStartOf="@+id/create_editPointsEditText"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/create_editPoints" />
+        app:layout_constraintTop_toTopOf="@+id/create_editPointsEditText" />
 
     <ProgressBar
         android:id="@+id/create_reward_progressBar"
@@ -86,7 +86,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/addreward_validationTextView"
+        android:id="@+id/addreward_validationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="175dp"
@@ -96,5 +96,5 @@
         app:layout_constraintBottom_toTopOf="@+id/create_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/create_editPoints" />
+        app:layout_constraintTop_toBottomOf="@+id/create_editPointsEditText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -41,12 +41,12 @@ class CreateReward : Fragment() {
             view.create_reward_progressBar.visibility = View.VISIBLE
 
             titleText = view.create_editTitle
-            pointContent = view.create_editPoints
+            pointContent = view.create_editPointsEditText
 
             val validationErrors = validateRewardInput(titleText.editableText.toString(), pointContent.editableText.toString(), context)
 
             if (validationErrors.isNotEmpty()) {
-                val validationTextView = view.addreward_validationTextView
+                val validationTextView = view.addreward_validationText
                 validationTextView.text = getString(R.string.createReward_validationError) + validationErrors
                 view.create_reward_progressBar.visibility = View.GONE
             }

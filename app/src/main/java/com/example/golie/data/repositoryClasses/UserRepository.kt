@@ -5,28 +5,11 @@ import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
 import com.example.golie.data.dataClasses.Reward
 import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 
-class UserRepository : dbCursorRepository(){
+class UserRepository : DbCursorRepository(){
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // THE ONE JOSEFIN WANTED TO HAVE
-
-    fun createUser(newUserId: String) : Task<Void> {
-
-        val initialDataMap = hashMapOf(
-            "points" to 0,
-            "favoriteCategoryId" to ""
-        )
-
-        return  db.collection("users").document(newUserId).set(initialDataMap)
-
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //THE ONE KIM WANTED TO HAVE ;)
 
     fun createUserWithData(newUserId: String, mainActivity: MainActivity) {
 
@@ -115,49 +98,9 @@ class UserRepository : dbCursorRepository(){
             }
     }
 
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // THE ONE NO ONE WANTED BECAUSE IT IS INCORRECT
-
-    fun createUserWithDataTheNiceButIncorrectOne(newUserId: String)  {
-
-        val categoryRepository = CategoryRepository()
-        val goalRepository = GoalRepository()
-        val rewardRepository = RewardRepository()
-
-        val initialDataMap = hashMapOf("points" to 0, "favoriteCategoryId" to "")
-        db.collection("users").document(newUserId).set(initialDataMap)
-            .addOnSuccessListener {
-
-                categoryRepository.createCategory(newUserId, Category("Today"))
-                    .addOnSuccessListener {document ->
-                        goalRepository.createGoal(newUserId, document.id, Goal("Take a walk", "", false, 10))
-                        goalRepository.createGoal(newUserId, document.id, Goal("Clean kitchen", "", false, 10))
-                        goalRepository.createGoal(newUserId, document.id, Goal("Workout", "", false, 10))
-
-                        categoryRepository.setFavoriteCategoryId(newUserId, document.id)
-                    }
-
-                categoryRepository.createCategory(newUserId, Category("This Week"))
-                    .addOnSuccessListener {document->
-                        goalRepository.createGoal(newUserId, document.id, Goal("Do homework", "", false, 30))
-                    }
-
-                rewardRepository.createReward(newUserId, Reward("Eat ice cram", 20))
-                rewardRepository.createReward(newUserId, Reward("Watch a movie with friends", 30))
-                rewardRepository.createReward(newUserId, Reward("Spa weekend with bestie", 200))
-
-
-            }
-    }
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     fun getUserById(userId: String): Task<DocumentSnapshot> {
-
         return  db.collection("users").document(userId).get()
     }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

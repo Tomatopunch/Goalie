@@ -12,9 +12,6 @@
     <string name="addGoal_titleText">Title:</string>
     <string name="addGoal_invalidTitleMinLength">You must enter a title!</string>
     <string name="addGoal_invalidTitleMaxLength">Title is too long! Max 30 characters</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="shop_rewards">Rewards:</string>
     <string name="addGoal_createGoal">Create Goal!</string>
     <string name="addGoal_points">Points:</string>

@@ -18,6 +18,5 @@ fun validateCategoryInput(name: String, context: Context?): String {
                     R.string.categoryValidator_characters)
     }
 
-
     return validationErrors
 }

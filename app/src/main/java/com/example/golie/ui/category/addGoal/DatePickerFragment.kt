@@ -3,7 +3,6 @@ package com.example.golie.ui.category.addGoal
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
@@ -13,7 +12,7 @@ import java.util.*
 
 class DatePickerFragment : DialogFragment, DatePickerDialog.OnDateSetListener {
 
-    lateinit var theView: View
+    var theView: View
 
     constructor(view: View) : super(){
         this.theView = view
@@ -33,18 +32,9 @@ class DatePickerFragment : DialogFragment, DatePickerDialog.OnDateSetListener {
 
     override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
 
-
         val theMonth = month + 1
         val date = ("$year-$theMonth-$day")
 
-
         theView.addGoal_timeSpanDate.setText(date)
-
-        //Unncessary log?
-        val timeSpanText = theView.addGoal_timeSpanDate.editableText.toString()
-        Log.d("checkSpan", "$timeSpanText")
-
-
-
     }
 }

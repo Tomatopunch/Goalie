@@ -8,7 +8,7 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/alert_dialog_text"
+        android:id="@+id/shopBuyDialog_titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
@@ -19,34 +19,34 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/yesButton"
+        android:id="@+id/shopBuyDialog_yesButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="24dp"
         android:text="@string/yes"
-        app:layout_constraintBaseline_toBaselineOf="@+id/noButton"
-        app:layout_constraintBottom_toBottomOf="@+id/noButton"
-        app:layout_constraintRight_toRightOf="@+id/alert_dialog_text" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/shopBuyDialog_noButton"
+        app:layout_constraintBottom_toBottomOf="@+id/shopBuyDialog_noButton"
+        app:layout_constraintRight_toRightOf="@+id/shopBuyDialog_titleText" />
 
     <Button
-        android:id="@+id/noButton"
+        android:id="@+id/shopBuyDialog_noButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="20dp"
         android:text="@string/no"
-        app:layout_constraintLeft_toLeftOf="@+id/alert_dialog_text"
-        app:layout_constraintTop_toBottomOf="@+id/alert_dialog_text" />
+        app:layout_constraintLeft_toLeftOf="@+id/shopBuyDialog_titleText"
+        app:layout_constraintTop_toBottomOf="@+id/shopBuyDialog_titleText" />
 
     <ProgressBar
-        android:id="@+id/shop_buyDialog_progressBar"
+        android:id="@+id/shopBuyDialog_progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
         android:layout_marginBottom="45dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/noButton"
+        app:layout_constraintBottom_toBottomOf="@+id/shopBuyDialog_noButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

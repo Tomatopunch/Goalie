@@ -4,7 +4,7 @@
     android:layout_height="250dp">
 
     <TextView
-        android:id="@+id/titleText"
+        android:id="@+id/shopTooLittle_titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -15,11 +15,11 @@
         android:layout_marginBottom="20dp"/>
 
     <View
-        android:id="@+id/view1"
+        android:id="@+id/shopTooLittle_backgroundView"
         android:layout_width="fill_parent"
         android:layout_height="2dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/titleText"
+        android:layout_below="@+id/shopTooLittle_titleText"
         android:background="#03bd70" />
 
     <Button
@@ -27,16 +27,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/view1"
+        android:layout_below="@+id/shopTooLittle_backgroundView"
         android:layout_marginTop="78dp"
 
         android:text="@string/better_luck_next_time" />
 
     <TextView
-        android:id="@+id/content_text"
+        android:id="@+id/shopTooLittle_noMoneyText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/view1"
+        android:layout_below="@+id/shopTooLittle_backgroundView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
         android:text="@string/not_enough_money_yet"

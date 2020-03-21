@@ -17,12 +17,9 @@ class ShopBoughtDialogFragment: DialogFragment() {
     val userId = FirebaseAuth.getInstance().currentUser!!.uid
     var accountWallet = -1
     var shopPoints = -1
+    val requestCode = 10
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         val view = inflater.inflate(R.layout.shop_boughtdialog_fragment, container, false)
@@ -37,17 +34,17 @@ class ShopBoughtDialogFragment: DialogFragment() {
             shopPoints = arguments.getInt("shopPoints")
         }
 
-        val newBalance = view.new_point_balance
+        val newBalance = view.shopBoughtDialog_pointsText
         val calcNewBalance = accountWallet - shopPoints
-        val button = view.acceptButton
+        val button = view.shopBoughtDialog_acceptButton
 
         newBalance.text = calcNewBalance.toString()
 
-        // set the accounts points to the new one
+        // set the users points
         setPoints(calcNewBalance, view)
 
         button.setOnClickListener {
-            activity?.startActivityForResult(requireActivity().intent, 10);
+            activity?.startActivityForResult(requireActivity().intent, requestCode)
             dismiss()
         }
         return view
@@ -61,7 +58,7 @@ class ShopBoughtDialogFragment: DialogFragment() {
                 view.shopBoughtDialog_progressBar.visibility = View.GONE
             }
 
-            .addOnFailureListener { exception ->
+            .addOnFailureListener {
                 Toast.makeText(context, getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                 view.shopBoughtDialog_progressBar.visibility = View.GONE
             }

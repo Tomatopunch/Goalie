@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.golie.R
 import com.example.golie.data.dataClasses.Goal
@@ -16,24 +15,19 @@ import kotlinx.android.synthetic.main.add_goal_fragment.view.*
 
 class AddGoalFragment : Fragment() {
 
-    private lateinit var viewModel: AddGoalViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        setHasOptionsMenu(true) // This is used with the back button. Can now handle it with onOptionsItemSelected
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        setHasOptionsMenu(true)
 
         val arguments = requireArguments()
         val view = inflater.inflate(R.layout.add_goal_fragment, container, false)
         val userId = arguments.getString("userId")!!
         val categoryId : String  = (arguments.getString("categoryId"))!!
         val goalRepository = GoalRepository()
-
         val createButton = view.addGoal_CreateGoalButton
         val timeSpan = view.addGoal_timeSpanDate
 
-        if(arguments.getString("checkIfUpdating") != null){ // Checking if I got here to update
+        // Checking if I got here to update
+        if(arguments.getString("checkIfUpdating") != null){
             val titleText = arguments.getString("title")
             val timeSpanText = arguments.getString("timeSpan")
             val reoccurring = arguments.getBoolean("reoccurring")
@@ -42,37 +36,33 @@ class AddGoalFragment : Fragment() {
             view.addGoal_timeSpanDate.setText(timeSpanText)
             view.addGoal_reoccurringCheckBox.isChecked = reoccurring
             view.addGoal_pointsEditText.setText(points.toString())
-
             view.addGoal_CreateGoalButton.text = getString(R.string.updateGoal)
             view.addGoal_createGoalText.text = getString(R.string.updateGoal)
-
-
         }
 
-        timeSpan.setOnClickListener{
 
+        timeSpan.setOnClickListener{
             val dialogFragment = DatePickerFragment(it)
             dialogFragment.show(requireActivity().supportFragmentManager, "FragmentManager")
-
         }
 
         createButton.setOnClickListener{
             view.addGoal_progressBar.visibility = View.VISIBLE
-            val title = view.addGoal_titleEditText.editableText.toString() // Måste vara editable för att se texten
+            val title = view.addGoal_titleEditText.editableText.toString()
             val timeSpanText = view.addGoal_timeSpanDate.editableText.toString()
-
             val reOccurring = view.addGoal_reoccurringCheckBox.isChecked.toString().toBoolean()
-
             val pointsText = view.addGoal_pointsEditText.editableText.toString()
-            var invalidInputTextView = view.addGoal_invalidInputText
+            val invalidInputTextView = view.addGoal_invalidInputText
 
 
             val invalidInput = validateInput(title, pointsText, context)
             if(invalidInput.isEmpty()){
 
                 val points = pointsText.toInt()
-                val goal = Goal(title, timeSpanText, reOccurring, points) // Behöver vi GoalId?
-                if(arguments.getString("checkIfUpdating") != null) { // Checking if I'm updating or deleting
+                val goal = Goal(title, timeSpanText, reOccurring, points)
+
+                // Checking if I'm updating or deleting
+                if(arguments.getString("checkIfUpdating") != null) {
                     val goalId = arguments.getString("goalId")!!
                     goalRepository.updateGoal(userId, categoryId, goalId, goal)
                         .addOnSuccessListener {
@@ -106,9 +96,7 @@ class AddGoalFragment : Fragment() {
                 view.addGoal_progressBar.visibility = View.GONE
                 invalidInputTextView.text = invalidInput[0]
             }
-
         }
-
         return view
     }
 
@@ -127,11 +115,4 @@ class AddGoalFragment : Fragment() {
 
         return true
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(AddGoalViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
 }

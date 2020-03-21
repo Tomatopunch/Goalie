@@ -8,14 +8,14 @@
 
 
     <View
-        android:id="@+id/view1"
+        android:id="@+id/shopTooLittle_backgroundView"
         android:layout_width="0dp"
         android:layout_height="10dp"
         android:layout_marginTop="8dp"
         android:background="#03bd70"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleText" />
+        app:layout_constraintTop_toBottomOf="@id/shopTooLittle_titleText" />
 
     <ProgressBar
         android:id="@+id/shopBoughtDialog_progressBar"
@@ -25,42 +25,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/acceptButton"
+        app:layout_constraintBottom_toTopOf="@id/shopBoughtDialog_acceptButton"
         android:visibility="visible" />
 
     <Button
-        android:id="@+id/acceptButton"
+        android:id="@+id/shopBoughtDialog_acceptButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/enjoy_your_reward"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_point_balance" />
+        app:layout_constraintTop_toBottomOf="@id/shopBoughtDialog_pointsText" />
 
     <TextView
-        android:id="@+id/new_point_balance"
+        android:id="@+id/shopBoughtDialog_pointsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/contentText"
-        app:layout_constraintTop_toBottomOf="@id/view1" />
+        app:layout_constraintStart_toEndOf="@id/shopBoughtDialog_newBalanceText"
+        app:layout_constraintTop_toBottomOf="@id/shopTooLittle_backgroundView" />
 
     <TextView
-        android:id="@+id/contentText"
+        android:id="@+id/shopBoughtDialog_newBalanceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/your_new_balance_is"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        app:layout_constraintEnd_toStartOf="@id/new_point_balance"
+        app:layout_constraintEnd_toStartOf="@id/shopBoughtDialog_pointsText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view1" />
+        app:layout_constraintTop_toBottomOf="@id/shopTooLittle_backgroundView" />
 
     <TextView
-        android:id="@+id/titleText"
+        android:id="@+id/shopTooLittle_titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

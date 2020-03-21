@@ -1,12 +1,10 @@
 package com.example.golie.ui.shop
 
-import android.content.ContentValues
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -37,20 +35,19 @@ class ShopFragment : Fragment() {
     private val userRepository = UserRepository()
     private val rewardRepository = RewardRepository()
     private lateinit var userId: String
+    private val empty = 0
+    private val half = 2
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(R.layout.shop_fragment, container, false)
-        val points = view.shop_balance
+        val points = view.shop_balanceText
 
-        userId = if (FirebaseAuth.getInstance().currentUser == null) {
-            getString(R.string.guest)
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            userId = getString(R.string.guest)
         }
         else {
-            FirebaseAuth.getInstance().currentUser!!.uid
+            userId = FirebaseAuth.getInstance().currentUser!!.uid
         }
 
         deleteIcon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_delete)!!
@@ -65,16 +62,15 @@ class ShopFragment : Fragment() {
                     view.shop_view.setHasFixedSize(true)
                     (view.shop_view.adapter as ShopAdapter).notifyDataSetChanged()
                 }
-                else {
-                    Log.d(ContentValues.TAG, "Could not find rewards!")
-                }
 
                 if (userId != getString(R.string.guest)) {
 
-                    val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+                    val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(empty, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
                         // This is only used for moving, but we don't use that.
-                        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean { return false }
+                        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                            return false
+                        }
 
                         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, position: Int) {
                             (view.shop_view.adapter as ShopAdapter).removeItem(viewHolder as ShopAdapter.CustomViewHolder, view)
@@ -93,9 +89,9 @@ class ShopFragment : Fragment() {
 
                             // calculate the distance between the top of the icon and the bottom of the recyclerview.
                             // so that we can get the icon to appear in the center of each item vertically.
-                            val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / 2
+                            val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / half
 
-                            if (dX > 0) {
+                            if (dX > empty) {
                                 swipeBackground.setBounds(itemView.left, itemView.top, dX.toInt(), itemView.bottom)
 
                                 deleteIcon.setBounds(itemView.left + iconMargin, itemView.top + iconMargin, itemView.left + iconMargin + deleteIcon.intrinsicWidth,
@@ -124,7 +120,7 @@ class ShopFragment : Fragment() {
                 // get points from the current user
                 getPoints(userId, points)
             }
-            .addOnFailureListener { exception ->
+            .addOnFailureListener {
                 Toast.makeText(context,getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                 view.shop_progressBar.visibility = View.GONE
             }
@@ -135,7 +131,7 @@ class ShopFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val buttonCreateReward = shop_floatingActionButton
+        val buttonCreateReward = shop_addRewardButton
 
         if (userId == getString(R.string.guest)) {
             buttonCreateReward.isVisible = false
@@ -154,25 +150,22 @@ class ShopFragment : Fragment() {
         super.onResume()
         requireView().shop_progressBar.visibility = View.VISIBLE
 
-        val points = shop_balance
-        getPoints(userId, points)
+        val pointsTextView = shop_balanceText
+        getPoints(userId, pointsTextView)
     }
 
     //Function that retrieves the amount of points from the user currently logged in
-    private fun getPoints(userId: String, points: TextView) {
+    private fun getPoints(userId: String, pointsTextView: TextView) {
         val view = requireView()
         userRepository.getUserById(userId)
             .addOnSuccessListener { document ->
 
                 if (document.exists()) {
-                    points.text = userDocumentToPoints(document).toString()
-                }
-                else {
-                    Log.d(ContentValues.TAG, "Could not find points!")
+                    pointsTextView.text = userDocumentToPoints(document).toString()
                 }
                 view.shop_progressBar.visibility = View.GONE
             }
-            .addOnFailureListener { exception ->
+            .addOnFailureListener {
                 Toast.makeText(context,getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                 view.shop_progressBar.visibility = View.GONE
             }

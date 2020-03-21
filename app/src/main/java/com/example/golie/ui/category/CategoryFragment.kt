@@ -2,7 +2,6 @@ package com.example.golie.ui.category
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -10,15 +9,11 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.golie.MainActivity
-
 import com.example.golie.R
-import com.example.golie.data.dataClasses.Category
 import com.example.golie.data.dataClasses.Goal
 import com.example.golie.data.documentToCategory
 import com.example.golie.data.documentsToGoals
@@ -29,13 +24,9 @@ import com.example.golie.data.userDocumentToFavoriteCategoryId
 import kotlinx.android.synthetic.main.category_fragment.*
 import kotlinx.android.synthetic.main.category_fragment.view.*
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.finished_goal_fragment.view.*
-import kotlinx.android.synthetic.main.goaldialog_fragment.view.*
-import kotlinx.android.synthetic.main.shop_boughtdialog_fragment.*
 
 class CategoryFragment : Fragment() {
 
-    private lateinit var viewModel: CategoryViewModel
     private lateinit var adapter: ArrayAdapter<Goal>
     private var activeAlertDialog = false
     lateinit var allGoals : MutableList<Goal>
@@ -52,7 +43,7 @@ class CategoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true) // This is used with the back button. Can now handle it with onOptionsItemSelected
+        setHasOptionsMenu(true)
 
         val view = inflater.inflate(R.layout.category_fragment, container, false)
         val context = requireContext()
@@ -68,13 +59,11 @@ class CategoryFragment : Fragment() {
             userId = FirebaseAuth.getInstance().currentUser!!.uid
         }
 
-
-        //////////// Check if we can here from Home, Favorite, or settings changed ////////////
+        //////////// Check if we can here from Home or Favorite ////////////
 
         // WE CAME HERE FROM HOME
         if(arguments != null){
 
-            // Setting categoryId:
             categoryId = requireArguments().getString("categoryId")!!
             displayCategory(categoryId, view)
 
@@ -86,39 +75,40 @@ class CategoryFragment : Fragment() {
         // WE CAME HERE FROM FAVORITE
         else {
             userRepository.getUserById(userId)
-                .addOnSuccessListener { document -> //Could get user document
+                .addOnSuccessListener { document ->
 
                     categoryId = userDocumentToFavoriteCategoryId(document)
                     categoryRepository.getCategoryById(userId, categoryId)
 
                         .addOnSuccessListener { category ->
 
-                            if (category.exists()) { // The id corresponds to an existing category, can go ahead an display it
+                            // The id corresponds to an existing category, can go ahead an display it
+                            if (category.exists()) {
                                 displayCategory(categoryId, view)
                             }
 
-                            else { // The id was found but there is no category with that id any more!
-                                val titleTextView = view.category_titleTextView
+                            // The id was found but there is no category with that id any more!
+                            else {
+                                val titleTextView = view.category_titleText
                                 titleTextView.text = getString(R.string.categoryFragment_deleted)
                                 val deleteButton = view.category_deleteCategoryButton
                                 deleteButton.isVisible = false
                             }
                         }
 
-                        .addOnFailureListener{ //Could not get category due to db error
-                            Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                        .addOnFailureListener{
+                            Toast.makeText(context, getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                             view.category_progressBar.visibility = View.GONE
                         }
 
                     view.category_progressBar.visibility = View.GONE
                 }
 
-                .addOnFailureListener{ //Could not get user document due to db error
-                    Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                .addOnFailureListener{
+                    Toast.makeText(context, getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                     view.category_progressBar.visibility = View.GONE
                 }
         }
-
         return view
     }
 
@@ -127,21 +117,18 @@ class CategoryFragment : Fragment() {
 
         val addGoalButton = category_addButton
 
-        //val categoryId : String  = (requireArguments().getString("categoryId"))!!
         if(userId == getString(R.string.guest)){
             addGoalButton.isVisible = false
         }
         else {
             addGoalButton.setOnClickListener {
 
-                // Here we cast main activity to the interface (below) and this is possible because
-                // main activity extends this interface
                 val navController = findNavController()
                 val args = Bundle().apply {
                     putString("categoryId", categoryId)
                     putString("userId", userId)
-                } // Send this to the next navigation object
-                navController.navigate(R.id.nav_addGoal, args) // Skicka med args - argument
+                }
+                navController.navigate(R.id.nav_addGoal, args)
             }
         }
     }
@@ -150,22 +137,14 @@ class CategoryFragment : Fragment() {
     fun displayCategory(categoryId: String, view: View) {
 
         val context = requireContext()
-
-        //Fetching all goals from database
-
         val goalRepository = GoalRepository()
 
 
         goalRepository.getAllGoalsWithinCategory(userId, categoryId)
             .addOnSuccessListener { documents ->
 
-                //casting documents into goal objects
-
                 allGoals = documentsToGoals(documents)
-
                 listView = view.category_listView
-
-                //Putting all goals in list view
 
                 adapter = CategoryAdapter(
                     context,
@@ -176,17 +155,14 @@ class CategoryFragment : Fragment() {
 
                 listView.adapter = adapter
 
-                //Enabling clicking one one list item
                 if(userId != getString(R.string.guest)) {
                     listView.setOnItemClickListener { parent, view, position, _ ->
-                        Log.d("show me the way", "${view.category_progressBar}")
 
-                        var clickedGoal = listView.adapter.getItem(position) as Goal
+                        val clickedGoal = listView.adapter.getItem(position) as Goal
                         goalId = clickedGoal.id
-
                         val goalDialogFragment = GoalDialogFragment()
 
-                        var args = Bundle().apply {
+                        val args = Bundle().apply {
                             putString("categoryId", categoryId)
                             putString("userId", userId)
                             putString("goalId", goalId)
@@ -195,13 +171,11 @@ class CategoryFragment : Fragment() {
 
                         goalDialogFragment.arguments = args
                         goalDialogFragment.show(childFragmentManager, "FragmentManager")
-
                     }
                 }
 
-                //Setting title
 
-                val titleTextView = view.category_titleTextView
+                val titleTextView = view.category_titleText
                 categoryRepository.getCategoryById(userId, categoryId)
                     .addOnSuccessListener { document ->
 
@@ -211,20 +185,17 @@ class CategoryFragment : Fragment() {
                     }
 
                     .addOnFailureListener {
-                        Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                         view.category_progressBar.visibility = View.GONE
                     }
 
 
-                //Accessing delete category button
                 val deleteCategoryButton = view.category_deleteCategoryButton
 
-                //Hiding delete category button if no user is logged in
                 if (userId == getString(R.string.guest)) {
                     deleteCategoryButton.isVisible = false
                 }
 
-                //Enabling clicking on delete category button
                 else {
                     deleteCategoryButton.setOnClickListener {
                         view.category_progressBar.visibility = View.VISIBLE
@@ -234,33 +205,26 @@ class CategoryFragment : Fragment() {
                 view.category_progressBar.visibility = View.GONE
             }
             .addOnFailureListener{
-                Toast.makeText(requireContext(),getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                 view.category_progressBar.visibility = View.GONE
-
             }
     }
 
     fun deleteGoal(position: Int){
-
         allGoals.removeAt(position)
         adapter.notifyDataSetChanged()
-
     }
 
     fun setBackgroundColor(position: Int, colorId: Int, init: Boolean){
         val view = requireView()
-
         val listItem = listView.getChildAt(position)
+
         goalRepository.updateColorId(userId, categoryId, allGoals[position].id, colorId)
             .addOnSuccessListener {
+
                 allGoals[position].colorId = colorId
                 adapter.notifyDataSetChanged()
-                if(colorId == -1) { // Came here from delete when next listItem isn't completed
-                    listItem.setBackgroundColor(requireContext().getColor(R.color.defaultBackground))
-                }
-                else{
-                    listItem.setBackgroundColor(requireContext().getColor(colorId))
-                }
+                listItem.setBackgroundColor(requireContext().getColor(colorId))
                 view.category_progressBar.visibility = View.GONE
             }
             .addOnFailureListener {
@@ -271,25 +235,17 @@ class CategoryFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+        // Check if adapter has been initialized to notify changes
         if(::adapter.isInitialized) {
             adapter.notifyDataSetChanged()
         }
-        else{
-            Log.d("State of adapter", "Adapter is not initialized")
-        }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(CategoryViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         super.onOptionsItemSelected(item)
         val navController = findNavController()
         navController.navigate(R.id.nav_home)
-
         return true
     }
 }

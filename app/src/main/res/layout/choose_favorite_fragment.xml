@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/chooseFavCategory_titleTextView"
+        android:id="@+id/chooseFavCategory_titleText"
         android:layout_width="368dp"
         android:layout_height="80dp"
         android:layout_marginTop="64dp"
@@ -36,7 +36,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chooseFavCategory_titleTextView"
+        app:layout_constraintTop_toBottomOf="@+id/chooseFavCategory_titleText"
         app:layout_constraintVertical_bias="0.941"
         tools:visibility="visible" />
 

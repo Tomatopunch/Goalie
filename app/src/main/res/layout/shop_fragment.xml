@@ -9,7 +9,7 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/shop_floatingActionButton"
+        android:id="@+id/shop_addRewardButton"
         android:layout_width="249dp"
         android:layout_height="0dp"
         android:layout_marginEnd="32dp"
@@ -21,7 +21,7 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
-        android:id="@+id/shop_title_hardcoded"
+        android:id="@+id/shop_yourPointsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="52dp"
@@ -33,7 +33,7 @@
 
 
     <TextView
-        android:id="@+id/shop_rewardText"
+        android:id="@+id/shop_titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
@@ -42,7 +42,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shop_title_hardcoded" />
+        app:layout_constraintTop_toBottomOf="@+id/shop_yourPointsText" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shop_view"
@@ -55,17 +55,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shop_rewardText" />
+        app:layout_constraintTop_toBottomOf="@+id/shop_titleText" />
 
     <TextView
-        android:id="@+id/shop_balance"
+        android:id="@+id/shop_balanceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="70dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/shop_title_hardcoded"
+        app:layout_constraintStart_toEndOf="@+id/shop_yourPointsText"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -25,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Setting the navView
         navView = findViewById(R.id.nav_view)
 
         //Disables back button in navbar fragments
@@ -44,54 +44,40 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-
         if (requestCode == RC_SIGN_IN) {
             val response = IdpResponse.fromResultIntent(data)
 
-            if (resultCode == Activity.RESULT_OK) {  // Successfully signed in!
+            // Successfully signed in!
+            if (resultCode == Activity.RESULT_OK) {
 
-                //Getting user id for current user and putting it in db
                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
                 val userRepository = UserRepository()
 
-                userRepository.getUserById(userId) // To check if that user exists or not
+                userRepository.getUserById(userId)
 
-                    .addOnSuccessListener { document ->//Either a user exist with this id OR it does not (and in that case we want to create one)
+                    .addOnSuccessListener { document ->
 
+                        // To check if that user exists or not
                         if(!document.exists()) {
                             userRepository.createUserWithData(userId, this)
                         }
-
                         else {
                             this.recreate()
                         }
                     }
 
                     .addOnFailureListener{
-                        Log.d("we are in failure", "oh no")
+                        Toast.makeText(this, getString(R.string.onDbFailureMessage), Toast.LENGTH_SHORT).show()
                     }
-            }
-
-            else {
-                if(response == null){ //User exited login by pressing back button, we want to show login again
-                    this.recreate()
-                }
-
-               else { //Login actually failed (eg wrong password or username) //do i need to do this???
-                    val errors = response.error!!.errorCode
-                }
             }
         }
     }
 
-
     companion object {
-
          private const val RC_SIGN_IN = 123
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     fun login() {
 
