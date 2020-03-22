@@ -21,12 +21,9 @@ import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.home_fragment.view.*
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class HomeFragment : Fragment() {
 
     private lateinit var adapter: ArrayAdapter<Category>
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -48,8 +45,6 @@ class HomeFragment : Fragment() {
             userNameTextView.text = FirebaseAuth.getInstance().currentUser!!.displayName
             view.home_guestText.isVisible = false
         }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // Setting up the list view with all its data and enabling clicking on one list item
 
@@ -85,8 +80,6 @@ class HomeFragment : Fragment() {
                 view.home_progressBar.visibility = View.GONE
             }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         val addCategoryButton = view.home_addCategoryButton
 
         if (userId == "Guest") {
@@ -99,8 +92,6 @@ class HomeFragment : Fragment() {
                 navController.navigate(nav_addCategory)
             }
         }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         val settingsButton = view.home_settingsButton
 
@@ -155,8 +146,6 @@ class HomeFragment : Fragment() {
         }
         return view
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private fun signOut() {
 

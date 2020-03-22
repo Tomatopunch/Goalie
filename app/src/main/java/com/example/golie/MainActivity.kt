@@ -20,8 +20,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var navView: BottomNavigationView
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -38,8 +36,6 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController,appBarConfiguration)
         navView.setupWithNavController(navController)
     }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -76,8 +72,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
          private const val RC_SIGN_IN = 123
     }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     fun login() {
 

@@ -106,7 +106,7 @@ class GoalDialogFragment : DialogFragment() {
                             navController.navigate(R.id.nav_finishedGoal, args)
 
                             dismiss()
-                            categoryFragment.setBackgroundColor(position, R.color.green, false)
+                            categoryFragment.setBackgroundColor(position, R.color.green)
                             view.goalDialog_progressBar.visibility = View.GONE
                         }
                         .addOnFailureListener{
@@ -122,7 +122,7 @@ class GoalDialogFragment : DialogFragment() {
 
 
         failedButton.setOnClickListener{
-            categoryFragment.setBackgroundColor(position, R.color.red, false)
+            categoryFragment.setBackgroundColor(position, R.color.red)
             dismiss()
         }
 

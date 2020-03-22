@@ -15,15 +15,10 @@ import com.example.golie.data.repositoryClasses.CategoryRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.add_category_fragment.view.*
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class AddCategoryFragment : Fragment() {
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     private val categoryRepository = CategoryRepository()
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -33,8 +28,6 @@ class AddCategoryFragment : Fragment() {
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
         val addCategoryButton = view.addCategory_createCategoryButton
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
         addCategoryButton.setOnClickListener {
@@ -68,7 +61,6 @@ class AddCategoryFragment : Fragment() {
         return view
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         super.onOptionsItemSelected(item)

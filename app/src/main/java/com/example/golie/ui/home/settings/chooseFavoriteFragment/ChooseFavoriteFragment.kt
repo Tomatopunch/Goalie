@@ -19,8 +19,6 @@ class ChooseFavoriteFragment : Fragment() {
 
     private lateinit var adapter: ArrayAdapter<Category>
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(R.layout.choose_favorite_fragment, container, false)
@@ -30,8 +28,6 @@ class ChooseFavoriteFragment : Fragment() {
 
         val listView = view.chooseFavCategory_allCategoriesListView
         var allCategories: MutableList<Category> = ArrayList()
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         categoryRepository.getAllCategories(userId)
             .addOnSuccessListener { documents ->

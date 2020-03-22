@@ -28,7 +28,6 @@ import com.google.firebase.auth.FirebaseAuth
 class CategoryFragment : Fragment() {
 
     private lateinit var adapter: ArrayAdapter<Goal>
-    private var activeAlertDialog = false
     lateinit var allGoals : MutableList<Goal>
     lateinit var userId: String
     lateinit var categoryId: String
@@ -215,7 +214,7 @@ class CategoryFragment : Fragment() {
         adapter.notifyDataSetChanged()
     }
 
-    fun setBackgroundColor(position: Int, colorId: Int, init: Boolean){
+    fun setBackgroundColor(position: Int, colorId: Int){
         val view = requireView()
         val listItem = listView.getChildAt(position)
 

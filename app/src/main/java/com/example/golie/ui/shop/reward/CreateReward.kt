@@ -18,10 +18,6 @@ import kotlinx.android.synthetic.main.create_reward_fragment.view.*
 
 class CreateReward : Fragment() {
 
-    companion object {
-        fun newInstance() = CreateReward()
-    }
-
     private lateinit var titleText: EditText
     private lateinit var pointContent: EditText
     private val rewardRepository = RewardRepository()
